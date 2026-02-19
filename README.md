@@ -7,4 +7,6 @@ Repository del corso Ingegneria dei Sistemi Software a.a. 2025/2026 - DISI - Uni
  *  [ConwayLife versione iniziale](conway26Java)
  *  [xxx](iss26Material/docs/build/html/index.html)
 
- 
+
+[demo](https://anatali.github.io/repository/index.html)
+
