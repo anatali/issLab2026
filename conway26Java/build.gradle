@@ -1,0 +1,62 @@
+plugins {
+    id 'application'
+    id 'java'
+    id 'eclipse'
+}
+
+version '1.0'
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
+
+repositories {
+    mavenCentral()
+    flatDir {   dirs '../unibolibs'    }
+}
+
+dependencies {
+
+    /* UNIBO ******************************* */
+    implementation name: 'uniboInterfaces'
+    implementation name: '2p301'
+    implementation name: 'unibo.basicomm23-1.0'
+
+}
+
+sourceSets {
+    main.java.srcDirs += 'src'
+    main.java.srcDirs += 'src/main/java'
+    main.java.srcDirs += 'src/main/kotlin'
+    main.java.srcDirs += 'src/main/resources'
+    test.java.srcDirs += 'src/main/java/test'         //test is specific
+    test.java.srcDirs += 'src/main/kotlin/test'
+}
+
+eclipse {
+    classpath {
+        sourceSets -= [sourceSets.main, sourceSets.test]
+    }
+}
+
+application {
+    //Define the main class for the application.
+    mainClassName    = 'conway26Java.HelloWorld'
+}
+
+jar {
+    println("building jar")
+    from sourceSets.main.allSource
+    from('./') {
+      include '*.pl'
+      include '*.json'
+    }
+    manifest {
+        attributes 'Main-Class': "$mainClassName"
+    }
+}
+
+task dovesiamo {
+    println("projectDir= $projectDir")
+    println("buildDir  = $buildDir")
+}
