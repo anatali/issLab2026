@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Project conway26Java &#8212; iss26 1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/custom.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Studenti2026" href="Studenti2026.html" />
+    <link rel="prev" title="TemaFinale25" href="TemaFinale25.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Studenti2026.html" title="Studenti2026"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="TemaFinale25.html" title="TemaFinale25"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">iss26 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Project conway26Java</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="project-conway26java">
+<h1>Project conway26Java<a class="headerlink" href="#project-conway26java" title="Permalink to this heading">¶</a></h1>
+<p><a class="reference external" href="_static/docs/Protobook.pdf#section.5.8">Costruiamo?</a>. Si veda
+<a class="reference external" href="_static/docs/Protobook.pdf#section.5.9">Processi di costruzione del software</a> .</p>
+<p>Seguendo quanto detto in
+<a class="reference external" href="_static/docs/Protobook.pdf#subsection.5.10.1">Il nostro metodo di lavoro</a>,
+consideriamo questo progetto come lo <em>Sprint1</em>
+per la costruzione incrementale ed evolutiva di un prodotto software.</p>
+<p>Si veda <a class="reference external" href="_static/docs/Protobook.pdf#chapter.6">GAME OF LIFE DI CONWAY</a></p>
+<p><strong>Creiamo il progetto e impostiamo in Eclipse</strong></p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 75%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>.</p>
+<a class="reference internal image-reference" href="_images/conway25JavaProjectEclipse.PNG"><img alt="_images/conway25JavaProjectEclipse.PNG" class="align-center" src="_images/conway25JavaProjectEclipse.PNG" style="width: 100%;" /></a>
+</td>
+<td><p>Inizializzazione</p>
+<ul class="simple">
+<li><p>definiamo una directory di lavoro (es. <strong>iss2026</strong>)</p></li>
+<li><p>copiamo in questa la directory <strong>unibolibs</strong> (dal sito del corso)</p></li>
+<li><p>creiamo la subdirectory <strong>iss2026/conway26Java</strong></p></li>
+<li><p>nella directory <strong>iss2026/conway26Java</strong> eseguire: <code class="docutils literal notranslate"><span class="pre">gradle</span> <span class="pre">init</span> <span class="pre">1</span> <span class="pre">2</span> <span class="pre">-</span> <span class="pre">-</span></code></p></li>
+<li><p>importiamo il progetto in un workspace eclipse</p></li>
+<li><p>definiamo il <a class="reference internal" href="#build-gradle-e-main-di-conway26java"><span class="std std-ref">build.gradle</span></a></p></li>
+<li><p>aggiungiamo <em>Java nature</em></p></li>
+<li><p>creiamo il source folder <span class="slide3">src</span></p></li>
+<li><p>eseguiamo da un termimale <code class="docutils literal notranslate"><span class="pre">gradlew</span> <span class="pre">eclipse</span></code> per generare i file per Eclipse</p></li>
+<li><p>scriviamo un file <strong>HelloWorld.java</strong> di prova</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>Esecuzione del prodotto</p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gradlew</span> <span class="pre">run</span></code>  o da Eclipse</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Settaggio filtri per redere visibili <strong>resources</strong> e <strong>Gradle build folder</strong></p>
+<blockquote>
+<div><a class="reference internal image-reference" href="_images/eclipseProjectFilers.png"><img alt="_images/eclipseProjectFilers.png" class="align-center" src="_images/eclipseProjectFilers.png" style="width: 40%;" /></a>
+</div></blockquote>
+<p>Parte applicativa: <span class="slide3">la fase di analisi e progettazione</span></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>leggiamo <a class="reference external" href="_static/docs/Protobook.pdf#section.6.4">Il gioco come caso di studio</a></p></li>
+<li><p>aggiungiamo <span class="slide3">folder userDocs</span> e al suo interno:</p>
+<ul>
+<li><p>il file di nome <code class="docutils literal notranslate"><span class="pre">conway26Java_v0.html</span></code> ricavato da <a class="reference external" href="_static/templateToFill.html">template</a>
+che ha il ruolo di un <cite>diario di bordo</cite> (con varie versioni)</p></li>
+<li><p>la subdirectory <code class="docutils literal notranslate"><span class="pre">userDocs/css</span></code> per gli stili usati dal diario</p></li>
+<li><p>la subdirectory <code class="docutils literal notranslate"><span class="pre">userDocs/img</span></code> per le immagini usate dal diario</p></li>
+</ul>
+</li>
+<li><p>riportiamo nel file <code class="docutils literal notranslate"><span class="pre">conway26Java_v0.html</span></code> i dati del progettista e
+scriviamo le sezioni <strong>Requirement analysis e Problem analysis</strong>
+con le opportune motivazioni</p></li>
+<li><p>pensiamo alle procedure di testing funzionale
+(si veda <a class="reference external" href="_static/docs/Protobook.pdf#section.5.10">procedure di testing funzionale</a>)
+e scriviamo la sezione <strong>Test plans</strong></p></li>
+<li><p>impostiamo il progetto e scriviamo la sezione <strong>Project</strong> (prima di scrivere il codice)</p></li>
+</ul>
+</div></blockquote>
+<p>Parte applicativa: <span class="slide3">la fase di realizzazione</span></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>aggiungiamo (se non esiste) come <cite>sourcefolder</cite>: <strong>src/main/java</strong>  e le altre directory
+specificate in <a class="reference internal" href="#build-gradle-e-main-di-conway26java"><span class="std std-ref">build.gradle</span></a></p></li>
+<li><p>aggiungiamo il <code class="docutils literal notranslate"><span class="pre">package</span> <span class="pre">conway</span></code></p></li>
+<li><p>procediamo con la produzione del codice</p></li>
+<li><p>aggiungiamo procedure di testing</p></li>
+</ul>
+</div></blockquote>
+<section id="build-gradle-e-main-di-conway26java">
+<h2>build.gradle e Main di conway26Java<a class="headerlink" href="#build-gradle-e-main-di-conway26java" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 70%" />
+<col style="width: 30%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plugins</span> <span class="p">{</span>
+    <span class="nb">id</span> <span class="s1">&#39;application&#39;</span>
+    <span class="nb">id</span> <span class="s1">&#39;java&#39;</span>
+    <span class="nb">id</span> <span class="s1">&#39;eclipse&#39;</span>
+<span class="p">}</span>
+
+<span class="n">version</span> <span class="s1">&#39;1.0&#39;</span>
+
+<span class="n">java</span> <span class="p">{</span>
+    <span class="n">toolchain</span><span class="o">.</span><span class="n">languageVersion</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">JavaLanguageVersion</span><span class="o">.</span><span class="n">of</span><span class="p">(</span><span class="mi">17</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="n">repositories</span> <span class="p">{</span>
+    <span class="n">mavenCentral</span><span class="p">()</span>
+    <span class="n">flatDir</span> <span class="p">{</span>   <span class="n">dirs</span> <span class="s1">&#39;../unibolibs&#39;</span>    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">dependencies</span> <span class="p">{</span>
+
+    <span class="o">/*</span> <span class="n">UNIBO</span> <span class="o">*******************************</span> <span class="o">*/</span>
+    <span class="n">implementation</span> <span class="n">name</span><span class="p">:</span> <span class="s1">&#39;uniboInterfaces&#39;</span>
+    <span class="n">implementation</span> <span class="n">name</span><span class="p">:</span> <span class="s1">&#39;2p301&#39;</span>
+    <span class="n">implementation</span> <span class="n">name</span><span class="p">:</span> <span class="s1">&#39;unibo.basicomm23-1.0&#39;</span>
+
+<span class="p">}</span>
+
+<span class="n">sourceSets</span> <span class="p">{</span>
+    <span class="n">main</span><span class="o">.</span><span class="n">java</span><span class="o">.</span><span class="n">srcDirs</span> <span class="o">+=</span> <span class="s1">&#39;src&#39;</span>
+    <span class="n">main</span><span class="o">.</span><span class="n">java</span><span class="o">.</span><span class="n">srcDirs</span> <span class="o">+=</span> <span class="s1">&#39;src/main/java&#39;</span>
+    <span class="n">main</span><span class="o">.</span><span class="n">java</span><span class="o">.</span><span class="n">srcDirs</span> <span class="o">+=</span> <span class="s1">&#39;src/main/kotlin&#39;</span>
+    <span class="n">main</span><span class="o">.</span><span class="n">java</span><span class="o">.</span><span class="n">srcDirs</span> <span class="o">+=</span> <span class="s1">&#39;src/main/resources&#39;</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">java</span><span class="o">.</span><span class="n">srcDirs</span> <span class="o">+=</span> <span class="s1">&#39;src/main/java/test&#39;</span>         <span class="o">//</span><span class="n">test</span> <span class="ow">is</span> <span class="n">specific</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">java</span><span class="o">.</span><span class="n">srcDirs</span> <span class="o">+=</span> <span class="s1">&#39;src/main/kotlin/test&#39;</span>
+<span class="p">}</span>
+
+<span class="n">eclipse</span> <span class="p">{</span>
+    <span class="n">classpath</span> <span class="p">{</span>
+        <span class="n">sourceSets</span> <span class="o">-=</span> <span class="p">[</span><span class="n">sourceSets</span><span class="o">.</span><span class="n">main</span><span class="p">,</span> <span class="n">sourceSets</span><span class="o">.</span><span class="n">test</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">application</span> <span class="p">{</span>
+    <span class="o">//</span><span class="n">Define</span> <span class="n">the</span> <span class="n">main</span> <span class="k">class</span> <span class="nc">for</span> <span class="n">the</span> <span class="n">application</span><span class="o">.</span>
+    <span class="n">mainClassName</span>    <span class="o">=</span> <span class="s1">&#39;conway26Java.HelloWorld&#39;</span>
+<span class="p">}</span>
+
+<span class="n">jar</span> <span class="p">{</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">&quot;building jar&quot;</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">sourceSets.main.allSource</span>
+    <span class="n">from</span><span class="p">(</span><span class="s1">&#39;./&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">include</span> <span class="s1">&#39;*.pl&#39;</span>
+      <span class="n">include</span> <span class="s1">&#39;*.json&#39;</span>
+    <span class="p">}</span>
+    <span class="n">manifest</span> <span class="p">{</span>
+        <span class="n">attributes</span> <span class="s1">&#39;Main-Class&#39;</span><span class="p">:</span> <span class="s2">&quot;$mainClassName&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">task</span> <span class="n">dovesiamo</span> <span class="p">{</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">&quot;projectDir= $projectDir&quot;</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">&quot;buildDir  = $buildDir&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
+<td><p>In questa versione <cite>vi sono dipendenze</cite> solo relative alla libreria JUnit per
+fare testing.</p>
+<p><strong>unibolibs</strong> contiene le librerie</p>
+<ul class="simple">
+<li><p>2p301.jar</p></li>
+<li><p>uniboInterfaces.jar</p></li>
+<li><p><a class="reference external" href="_static/docs/Protobook.pdf#unibo.basicomm23-1.0">unibo.basicomm23-1.0.jar</a>.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="conway26java-testing">
+<h2>conway26Java testing<a class="headerlink" href="#conway26java-testing" title="Permalink to this heading">¶</a></h2>
+<p>Si veda <a class="reference external" href="_static/docs/Protobook.pdf#section.5.10">Il testing</a></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">gradlew</span> <span class="pre">test</span></code> e aprire il file <code class="docutils literal notranslate"><span class="pre">build\reports\tests\test\index.html</span></code></dt><dd><p>per vedere il risultato del test</p>
+</dd>
+</dl>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gradlew</span> <span class="pre">run</span></code> per vedere il risultato dell’esecuzione del programma</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Project conway26Java</a><ul>
+<li><a class="reference internal" href="#build-gradle-e-main-di-conway26java">build.gradle e Main di conway26Java</a></li>
+<li><a class="reference internal" href="#conway26java-testing">conway26Java testing</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="TemaFinale25.html"
+                          title="previous chapter">TemaFinale25</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Studenti2026.html"
+                          title="next chapter">Studenti2026</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Project conway26Java.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Studenti2026.html" title="Studenti2026"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="TemaFinale25.html" title="TemaFinale25"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">iss26 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Project conway26Java</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, Antonio Natali.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    </div>
+  </body>
+</html>
