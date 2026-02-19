@@ -9,4 +9,4 @@ Repository del corso Ingegneria dei Sistemi Software a.a. 2025/2026 - DISI - Uni
 
 
 
-[Apri il modulo Architettura](https://unibo-nomecorso.github.io/static/docs/Protobook.pdf#page=15)
+https://cdn.jsdelivr.net/gh/user/repo@branch/path/to/Protobook.pdf#page=75
