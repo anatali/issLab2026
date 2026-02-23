@@ -1,6 +1,7 @@
 plugins {
     id 'application'
     id 'java'
+    id 'jacoco'
     id 'eclipse'
 }
 
@@ -12,7 +13,7 @@ java {
 
 repositories {
     mavenCentral()
-    flatDir {   dirs '../unibolibs'    }
+    flatDir {   dirs '../../unibolibs'    }
 }
 
 dependencies {
@@ -41,7 +42,8 @@ eclipse {
 
 application {
     //Define the main class for the application.
-    mainClassName    = 'conway26Java.HelloWorld'
+    //mainClassName    = 'conway26Java.HelloWorld'
+    mainClassName    = 'conway26Java.MainConwayLifeJava'
 }
 
 jar {
@@ -55,8 +57,18 @@ jar {
         attributes 'Main-Class': "$mainClassName"
     }
 }
-
+ 
 task dovesiamo {
     println("projectDir= $projectDir")
     println("buildDir  = $buildDir")
+}
+ 
+jacocoTestReport {
+    dependsOn test // Il report viene generato solo dopo l'esecuzione dei test
+
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('reports/jacoco')
+    }
 }
