@@ -10,6 +10,6 @@ Repository del corso Ingegneria dei Sistemi Software a.a. 2025/2026 - DISI - Uni
   * [Lectures HTML](https://anatali.github.io/issLab2026/LectureBologna2026.html)
 
 # Parte A: Dai programmi ai Sistemi a Microservizi
- *  [ConwayLife Sprint1](ConwayLife/Sprint1/conway26Java)
+ *  [ConwayLife Sprint1](ConwayLife/Sprint1/conway26Java) [ConwayLife Sprint1 docs] (ConwayLife/Sprint1/conway26Java/userDocs/conway26Java_v0.html)
 
 
