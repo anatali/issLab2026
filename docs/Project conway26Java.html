@@ -1,24 +1,27 @@
+
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="./">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Project conway26Java &#8212; iss26 1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=649a27d8" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css?v=34905f61" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=c3a2f58b" />
-    <script src="_static/documentation_options.js?v=29a6c3e3"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/custom.js?v=86b49eb6"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/custom.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="conway26Java-Chiesto a Gemini" href="conway26Java-Chiesto%20a%20Gemini.html" />
     <link rel="prev" title="TemaFinale25" href="TemaFinale25.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -41,8 +44,7 @@
           <div class="body" role="main">
             
   <section id="project-conway26java">
-<h1>Project conway26Java<a class="headerlink" href="#project-conway26java" title="Link to this heading">¶</a></h1>
-<p><a class="reference internal" href="#conway26java-dai-requisiti-al-deployment"><span class="std std-ref">conway26Java Dai requisiti al deployment</span></a></p>
+<h1>Project conway26Java<a class="headerlink" href="#project-conway26java" title="Permalink to this heading">¶</a></h1>
 <p><a class="reference external" href="_static/docs/Protobook.pdf#section.5.8">Costruiamo?</a>. Si veda
 <a class="reference external" href="_static/docs/Protobook.pdf#section.5.9">Processi di costruzione del software</a> .</p>
 <p>Seguendo quanto detto in
@@ -53,13 +55,12 @@ per la costruzione incrementale ed evolutiva di un prodotto software.</p>
 <p><strong>Creiamo il progetto e impostiamo in Eclipse</strong></p>
 <table class="docutils align-default" style="width: 100%">
 <colgroup>
-<col style="width: 25.0%" />
-<col style="width: 75.0%" />
+<col style="width: 25%" />
+<col style="width: 75%" />
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p>.</p>
-<a class="reference internal image-reference" href="_images/conway25JavaProjectEclipse.PNG"><img alt="_images/conway25JavaProjectEclipse.PNG" class="align-center" src="_images/conway25JavaProjectEclipse.PNG" style="width: 100%;" />
-</a>
+<a class="reference internal image-reference" href="_images/conway25JavaProjectEclipse.PNG"><img alt="_images/conway25JavaProjectEclipse.PNG" class="align-center" src="_images/conway25JavaProjectEclipse.PNG" style="width: 100%;" /></a>
 </td>
 <td><p>Inizializzazione</p>
 <ul class="simple">
@@ -86,8 +87,7 @@ per la costruzione incrementale ed evolutiva di un prodotto software.</p>
 </table>
 <p>Settaggio filtri per redere visibili <strong>resources</strong> e <strong>Gradle build folder</strong></p>
 <blockquote>
-<div><a class="reference internal image-reference" href="_images/eclipseProjectFilers.png"><img alt="_images/eclipseProjectFilers.png" class="align-center" src="_images/eclipseProjectFilers.png" style="width: 40%;" />
-</a>
+<div><a class="reference internal image-reference" href="_images/eclipseProjectFilers.png"><img alt="_images/eclipseProjectFilers.png" class="align-center" src="_images/eclipseProjectFilers.png" style="width: 40%;" /></a>
 </div></blockquote>
 <p>Parte applicativa: <span class="slide3">la fase di analisi e progettazione</span></p>
 <blockquote>
@@ -121,11 +121,11 @@ specificate in <a class="reference internal" href="#build-gradle-e-main-di-conwa
 </ul>
 </div></blockquote>
 <section id="build-gradle-e-main-di-conway26java">
-<h2>build.gradle e Main di conway26Java<a class="headerlink" href="#build-gradle-e-main-di-conway26java" title="Link to this heading">¶</a></h2>
+<h2>build.gradle e Main di conway26Java<a class="headerlink" href="#build-gradle-e-main-di-conway26java" title="Permalink to this heading">¶</a></h2>
 <table class="docutils align-default" style="width: 100%">
 <colgroup>
-<col style="width: 70.0%" />
-<col style="width: 30.0%" />
+<col style="width: 70%" />
+<col style="width: 30%" />
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plugins</span> <span class="p">{</span>
@@ -195,13 +195,41 @@ fare testing.</p>
 </tbody>
 </table>
 </section>
+<section id="il-file-readme-md">
+<h2>Il file README.md<a class="headerlink" href="#il-file-readme-md" title="Permalink to this heading">¶</a></h2>
+<p>Il file <strong>README.md</strong> di un sito GIT è molto più di un semplice file di testo:
+è il biglietto da visita e lo strumento di marketing delle nostre attività.</p>
+<p>Inoltre potrebbe fornire indicazioni utili come manuale d’uso delle applicazioni.</p>
+<p>Il file deve essere scritto usando il <a class="reference external" href="https://it.wikipedia.org/wiki/Markdown">Linguaggio Markdown</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># issLab2026
+ Laboratorio di &lt;b&gt;Ingegneria dei Sistemi Software&lt;/b&gt; a.a. 2025/2026 di Cognome Nome Matricola
+
+ [Testo di riferimento:](https://anatali.github.io/issLab2026/_static/docs/Protobook.pdf)
+ &lt;!-- comment: [ancora personalizzata] --&gt;
+
+ &lt;h2 id=&quot;ParteA&quot;&gt;Parte A: Dai programmi ai Sistemi a Microservizi&lt;/h2&gt;
+
+ ### Sistema ConwayLife in locale
+ [Riferimento: conway26Java Dai requisiti al deployment](https://anatali.github.io/issLab2026/Project%20conway26Java.html#conway26java-dai-requisiti-al-deployment)
+ * [ConwayLife Sprint1](ConwayLife/Sprint1/conway26Java): impostazione di un primo prototipo
+   in Java con dispositivi Mock di I/O. &lt;i&gt;Distribuzione&lt;/i&gt;: file jar.
+ * [ConwayLife Sprint2](ConwayLife/Sprint2/conway26Java): &lt;b&gt;evoluzione&lt;/b&gt; del primo prototipo
+   con un dispositivo di output realizzato in Swing. &lt;i&gt;Distribuzione&lt;/i&gt;: file jar
+ ### Sistemi come servizi
+ * ...
+ ### Sistema ConwayLife con pagine HTML
+ * [ConwayLife Sprint3(ConwayLife/Sprint3/conway26Java): evoluzione del sistema in locale
+   usando una pagina HTML come dispositivo di I/O. &lt;i&gt;Distribuzione&lt;/i&gt;: Docker yaml.
+</pre></div>
+</div>
+</section>
 </section>
 <section id="conway26java-dai-requisiti-al-deployment">
-<h1>conway26Java Dai requisiti al deployment<a class="headerlink" href="#conway26java-dai-requisiti-al-deployment" title="Link to this heading">¶</a></h1>
+<h1>conway26Java Dai requisiti al deployment<a class="headerlink" href="#conway26java-dai-requisiti-al-deployment" title="Permalink to this heading">¶</a></h1>
 <p><a class="reference external" href="_static/docs/Protobook.pdf#subsection.5.10.1">Il nostro metodo di lavoro</a> impone che si debba partire dai requisiti,
 che il committente ha specificato come segue:</p>
 <section id="conway26java-requirements">
-<span id="id2"></span><h2>conway26Java-Requirements<a class="headerlink" href="#conway26java-requirements" title="Link to this heading">¶</a></h2>
+<span id="id2"></span><h2>conway26Java-Requirements<a class="headerlink" href="#conway26java-requirements" title="Permalink to this heading">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Realizzare una versione in Java del gioco <strong>Life</strong> di Conway, come gioco zero-player.
 Il gioco consiste nell’introdurre una <strong>Griglia</strong> di <strong>Celle</strong>
@@ -221,7 +249,7 @@ il cui stato (cella ‘viva’ o cella ‘morta’) evolve come stabilito dallle
 sistema.</p>
 </section>
 <section id="conway26java-analisi-del-problema">
-<h2>conway26Java Analisi del problema<a class="headerlink" href="#conway26java-analisi-del-problema" title="Link to this heading">¶</a></h2>
+<h2>conway26Java Analisi del problema<a class="headerlink" href="#conway26java-analisi-del-problema" title="Permalink to this heading">¶</a></h2>
 <p>Una prima analisi del problema
 si può trovare in  <a class="reference external" href="_static/docs/Protobook.pdf#section.6.4">Analsi del problema GofLife</a>,
 mentre un primo schema organizzativo del sistema da realizzare
@@ -243,10 +271,9 @@ dettagli tecnologici dell’I/O definiìendo opportuni <strong>contratti</strong
 che i dispostivi dovrenno rispettare.</p></li>
 </ol>
 <section id="conway26java-architetturalogica">
-<span id="id3"></span><h3>conway26Java-ArchitetturaLogica<a class="headerlink" href="#conway26java-architetturalogica" title="Link to this heading">¶</a></h3>
+<span id="id3"></span><h3>conway26Java-ArchitetturaLogica<a class="headerlink" href="#conway26java-architetturalogica" title="Permalink to this heading">¶</a></h3>
 <blockquote>
-<div><a class="reference internal image-reference" href="_images/LifeGameJava+.jpg"><img alt="_images/LifeGameJava%2B.jpg" class="align-center" src="_images/LifeGameJava%2B.jpg" style="width: 55%;" />
-</a>
+<div><a class="reference internal image-reference" href="_images/LifeGameJava+.jpg"><img alt="_images/LifeGameJava+.jpg" class="align-center" src="_images/LifeGameJava+.jpg" style="width: 55%;" /></a>
 </div></blockquote>
 <p>Questo <span class="slide3">modello</span> è statto definito in fase di analisi del problema
 per delineare una <strong>architettura (logica)</strong> del sistema che:</p>
@@ -284,7 +311,7 @@ concentrati sulla <strong>classe Life</strong>, che definisce il <span class="re
 </ul>
 </section>
 <section id="conway26java-piani-di-testing-funzionale">
-<h3>conway26Java Piani di Testing funzionale<a class="headerlink" href="#conway26java-piani-di-testing-funzionale" title="Link to this heading">¶</a></h3>
+<h3>conway26Java Piani di Testing funzionale<a class="headerlink" href="#conway26java-piani-di-testing-funzionale" title="Permalink to this heading">¶</a></h3>
 <p>La introduzione di un <span class="remark">Piano di test funzionale</span> fin dalle fasi di analisi,
 è fondamentale per guidare la fase di realizzazione del codice. Ma sorge un problema:</p>
 <p><strong>come si fa a definire un piano di test funzionale se non si è ancora scritto una riga di codice?</strong></p>
@@ -313,7 +340,7 @@ esprimibile in modo formale mediante una <strong>sinterface</strong> Java:</p>
 <p>A questo punto, possiamo definire un <em>piano di test funzionale</em> per il sistema,
 basandoci sui requisiti del gioco e sulla logica del gioco stesso. Ad esempio:</p>
 <section id="conway26java-impostazione-testing">
-<h4>conway26Java-Impostazione Testing<a class="headerlink" href="#conway26java-impostazione-testing" title="Link to this heading">¶</a></h4>
+<h4>conway26Java-Impostazione Testing<a class="headerlink" href="#conway26java-impostazione-testing" title="Permalink to this heading">¶</a></h4>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ConwayLifeTest</span><span class="w"> </span><span class="p">{</span>
 
 <span class="w">    </span><span class="nd">@Before</span>
@@ -328,7 +355,7 @@ basandoci sui requisiti del gioco e sulla logica del gioco stesso. Ad esempio:</
 </div>
 </section>
 <section id="conway26java-testoscilla">
-<h4>conway26Java-testOscilla<a class="headerlink" href="#conway26java-testoscilla" title="Link to this heading">¶</a></h4>
+<h4>conway26Java-testOscilla<a class="headerlink" href="#conway26java-testoscilla" title="Permalink to this heading">¶</a></h4>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nd">@Test</span>
 <span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testOscilla</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">          </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;testOscilla ---------&quot;</span><span class="w">  </span><span class="p">);</span>
@@ -358,7 +385,7 @@ basandoci sui requisiti del gioco e sulla logica del gioco stesso. Ad esempio:</
 </div>
 </section>
 <section id="conway26java-testoscillafromfile">
-<h4>conway26Java-testOscillaFromFile<a class="headerlink" href="#conway26java-testoscillafromfile" title="Link to this heading">¶</a></h4>
+<h4>conway26Java-testOscillaFromFile<a class="headerlink" href="#conway26java-testoscillafromfile" title="Permalink to this heading">¶</a></h4>
 <p>Un test potrebbe anche essere impostato in modo <em>Data-Driven</em>, leggendo la configurazione
 iniziale da un file.</p>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="nd">@Test</span>
@@ -387,7 +414,7 @@ iniziale da un file.</p>
 </section>
 </section>
 <section id="conway26java-costruttori">
-<h2>conway26Java-Costruttori<a class="headerlink" href="#conway26java-costruttori" title="Link to this heading">¶</a></h2>
+<h2>conway26Java-Costruttori<a class="headerlink" href="#conway26java-costruttori" title="Permalink to this heading">¶</a></h2>
 <p>Scrivere un <em>TestPlan</em> prima che la classe <em>Life</em> esista potrebbe indurre a decidere subito:</p>
 <p>“Come passo la (specifica della) griglia? Con una matrice di booleani? Con un array di oggetti Cell?
 Come leggo il risultato?”.</p>
@@ -423,7 +450,7 @@ e le impacchetta in una nuova matrice bidimensionale (<code class="docutils lite
 </div>
 </section>
 <section id="conway26java-progettazione-realizzazione">
-<h2>conway26Java-Progettazione&amp;realizzazione<a class="headerlink" href="#conway26java-progettazione-realizzazione" title="Link to this heading">¶</a></h2>
+<h2>conway26Java-Progettazione&amp;realizzazione<a class="headerlink" href="#conway26java-progettazione-realizzazione" title="Permalink to this heading">¶</a></h2>
 <p>La  <a class="reference internal" href="#conway26java-architetturalogica"><span class="std std-ref">conway26Java-ArchitetturaLogica</span></a>, <em>Life</em> definisce la griglia
 come un oggetto di classe <code class="docutils literal notranslate"><span class="pre">Grid</span></code> che contiene al suo interno una array  (<code class="docutils literal notranslate"><span class="pre">Cell[][]</span> <span class="pre">gridrep</span></code>)
 di <code class="docutils literal notranslate"><span class="pre">Cell</span></code> che danno <strong>‘consistenza ontologica’</strong> alle celle, non più ‘ridotte’ ad array di
@@ -449,7 +476,7 @@ e non semplicemente da quanto la AI trova in rete.</p>
 <p>Per agevolare questa transizione, è disponibile un workspace di riferimento nella cartella
 <a class="reference external" href="https://github.com/anatali/issLab2026/tree/main/ConwayLife">ConwayLifeProject</a> (in <a class="reference external" href="https://github.com/anatali/issLab2026/tree/main/ConwayLife/Sprint1/conway26Java">ConwayLifeSprint1</a>).</p>
 <section id="conway26java-testreports">
-<h3>conway26Java-TestReports<a class="headerlink" href="#conway26java-testreports" title="Link to this heading">¶</a></h3>
+<h3>conway26Java-TestReports<a class="headerlink" href="#conway26java-testreports" title="Permalink to this heading">¶</a></h3>
 <p>Una volta definito il codice, le specifiche di testing possono essere eseguite come
 <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">As</span> <span class="pre">Junit</span> <span class="pre">Test</span></code> oppore attivando gradle:</p>
 <ul class="simple">
@@ -458,17 +485,17 @@ per vedere il risultato del test</p></li>
 </ul>
 </section>
 <section id="conway26java-javacodecoverage">
-<h3>conway26Java-JavaCodeCoverage<a class="headerlink" href="#conway26java-javacodecoverage" title="Link to this heading">¶</a></h3>
+<h3>conway26Java-JavaCodeCoverage<a class="headerlink" href="#conway26java-javacodecoverage" title="Permalink to this heading">¶</a></h3>
 <p>Aggingiamo nel file <em>build.gradle</em> il <strong>plugin JaCoCo</strong> e la configurazione del task <em>jacocoTestReport</em>:</p>
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">jacocoTestReport</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">dependsOn</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="c1">// Il report viene generato solo dopo l&#39;esecuzione dei test</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span>jacocoTestReport {
+  dependsOn test // Il report viene generato solo dopo l&#39;esecuzione dei test
 
-<span class="w">  </span><span class="n">reports</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">xml</span><span class="p">.</span><span class="na">required</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
-<span class="w">      </span><span class="n">csv</span><span class="p">.</span><span class="na">required</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
-<span class="w">      </span><span class="n">html</span><span class="p">.</span><span class="na">outputLocation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">layout</span><span class="p">.</span><span class="na">buildDirectory</span><span class="p">.</span><span class="na">dir</span><span class="p">(</span><span class="err">&#39;</span><span class="n">reports</span><span class="o">/</span><span class="n">jacoco</span><span class="err">&#39;</span><span class="p">)</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
+  reports {
+      xml.required = false
+      csv.required = false
+      html.outputLocation = layout.buildDirectory.dir(&#39;reports/jacoco&#39;)
+  }
+}
 </pre></div>
 </div>
 <p>Ora possiamo generare report che mostrano quali righe di codice sono state “visitate” dai test JUnit:</p>
@@ -484,7 +511,7 @@ giusti nel momento in cui JUnit esegue i test.</p>
 </div>
 </section>
 <section id="conway26java-esecuzione">
-<h3>conway26Java-Esecuzione<a class="headerlink" href="#conway26java-esecuzione" title="Link to this heading">¶</a></h3>
+<h3>conway26Java-Esecuzione<a class="headerlink" href="#conway26java-esecuzione" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>In <strong>build.gradle</strong> definiamo <code class="docutils literal notranslate"><span class="pre">mainClassName='conway26Java.MainConwayLifeJava'</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">gradlew</span> <span class="pre">run</span></code> per eseguire il sistema</p></li>
@@ -492,7 +519,7 @@ giusti nel momento in cui JUnit esegue i test.</p>
 </section>
 </section>
 <section id="conway26java-deployment">
-<h2>conway26Java-Deployment<a class="headerlink" href="#conway26java-deployment" title="Link to this heading">¶</a></h2>
+<h2>conway26Java-Deployment<a class="headerlink" href="#conway26java-deployment" title="Permalink to this heading">¶</a></h2>
 <p>Al monento ci limitiamo a generare un file jar:</p>
 <div class="admonition-il-file-jar admonition">
 <p class="admonition-title">Il file .jar</p>
@@ -514,13 +541,14 @@ un file “manifest” per definire la classe principale eseguibile.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <div>
     <h3><a href="index.html">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#">Project conway26Java</a><ul>
 <li><a class="reference internal" href="#build-gradle-e-main-di-conway26java">build.gradle e Main di conway26Java</a></li>
+<li><a class="reference internal" href="#il-file-readme-md">Il file README.md</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#conway26java-dai-requisiti-al-deployment">conway26Java Dai requisiti al deployment</a><ul>
@@ -565,7 +593,7 @@ un file “manifest” per definire la classe principale eseguibile.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -573,13 +601,13 @@ un file “manifest” per definire la classe principale eseguibile.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -596,8 +624,8 @@ un file “manifest” per definire la classe principale eseguibile.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2026, Antonio Natali.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+        &#169; Copyright 2026, Antonio Natali.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
     </div>
   </body>
 </html>
