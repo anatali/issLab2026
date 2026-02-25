@@ -100,7 +100,7 @@ sul nostro PC.</p>
 <li><p>creiamo la subdirectory <strong>iss2026/conway26Java</strong></p></li>
 <li><p>nella directory <strong>iss2026/conway26Java</strong> eseguire: <code class="docutils literal notranslate"><span class="pre">gradle</span> <span class="pre">init</span> <span class="pre">1</span> <span class="pre">2</span> <span class="pre">-</span> <span class="pre">-</span></code></p></li>
 <li><p>importiamo il progetto in un workspace eclipse</p></li>
-<li><p>definiamo il <a class="reference internal" href="#build-gradle-e-main-di-conway26java"><span class="std std-ref">build.gradle</span></a></p></li>
+<li><p>definiamo il <a class="reference internal" href="#conway26java-build-gradle"><span class="std std-ref">build.gradle</span></a></p></li>
 <li><p>aggiungiamo <em>Java nature</em></p></li>
 <li><p>creiamo il source folder <span class="slide3">src</span></p></li>
 <li><p>eseguiamo da un termimale <code class="docutils literal notranslate"><span class="pre">gradlew</span> <span class="pre">eclipse</span></code> per generare i file per Eclipse</p></li>
@@ -145,15 +145,15 @@ e scriviamo la sezione <strong>Test plans</strong></p></li>
 <blockquote>
 <div><ul class="simple">
 <li><p>aggiungiamo (se non esiste) come <cite>sourcefolder</cite>: <strong>src/main/java</strong>  e le altre directory
-specificate in <a class="reference internal" href="#build-gradle-e-main-di-conway26java"><span class="std std-ref">build.gradle</span></a></p></li>
+specificate in <a class="reference internal" href="#conway26java-build-gradle"><span class="std std-ref">build.gradle</span></a></p></li>
 <li><p>aggiungiamo il <code class="docutils literal notranslate"><span class="pre">package</span> <span class="pre">conway</span></code></p></li>
 <li><p>procediamo con la produzione del codice</p></li>
 <li><p>aggiungiamo procedure di testing</p></li>
 </ul>
 </div></blockquote>
 </section>
-<section id="build-gradle-e-main-di-conway26java">
-<h2>build.gradle e Main di conway26Java<a class="headerlink" href="#build-gradle-e-main-di-conway26java" title="Permalink to this heading">¶</a></h2>
+<section id="conway26java-build-gradle">
+<h2>conway26Java-build.gradle<a class="headerlink" href="#conway26java-build-gradle" title="Permalink to this heading">¶</a></h2>
 <table class="docutils align-default" style="width: 100%">
 <colgroup>
 <col style="width: 70%" />
@@ -471,6 +471,38 @@ un <a class="reference external" href="https://it.wikipedia.org/wiki/Factory_met
 <li><p>lette da un file di configurazione</p></li>
 <li><p>passate come parametri al metodo</p></li>
 </ul>
+<section id="mainconwaylifejava">
+<h3>MainConwayLifeJava<a class="headerlink" href="#mainconwaylifejava" title="Permalink to this heading">¶</a></h3>
+<p>Il Main (o <strong>Composition Root</strong>) è il luogo in cui la teoria dell’architettura incontra la pratica
+dell’esecuzione. In questa fase, invece di lasciare che le classi si istanzino tra loro
+(creando accoppiamento), è il programmatore a “iniettare” le dipendenze.</p>
+<p>Ecco come Gemini propone di assemblare il sistema seguendo il diagramma UML:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="k">class</span> <span class="nc">Main</span> <span class="p">{</span>
+    <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">//</span> <span class="mf">1.</span> <span class="n">Inizializziamo</span> <span class="n">il</span> <span class="n">Modello</span> <span class="p">(</span><span class="n">Il</span> <span class="s2">&quot;Cosa&quot;</span><span class="p">)</span>
+        <span class="o">//</span> <span class="n">Life</span> <span class="n">crea</span> <span class="n">internamente</span> <span class="n">la</span> <span class="n">sua</span> <span class="n">Grid</span> <span class="p">(</span><span class="n">Composizione</span><span class="p">)</span>
+        <span class="n">Life</span> <span class="n">gameModel</span> <span class="o">=</span> <span class="n">new</span> <span class="n">Life</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">);</span>
+
+        <span class="o">//</span> <span class="mf">2.</span> <span class="n">Inizializziamo</span> <span class="n">l</span><span class="s1">&#39;Output (Il &quot;Dove&quot;)</span>
+        <span class="o">//</span> <span class="n">Possiamo</span> <span class="n">decidere</span> <span class="n">qui</span> <span class="n">se</span> <span class="n">usare</span> <span class="n">la</span> <span class="n">Console</span> <span class="n">o</span> <span class="n">una</span> <span class="n">GUI</span>
+        <span class="n">IOutDev</span> <span class="n">outputDevice</span> <span class="o">=</span> <span class="n">new</span> <span class="n">OutDev</span><span class="p">();</span>
+
+        <span class="o">//</span> <span class="mf">3.</span> <span class="n">Inizializziamo</span> <span class="n">il</span> <span class="n">Controller</span> <span class="p">(</span><span class="n">Il</span> <span class="s2">&quot;Come&quot;</span><span class="p">)</span>
+        <span class="o">//</span> <span class="n">Iniettiamo</span> <span class="n">il</span> <span class="n">modello</span> <span class="n">e</span> <span class="n">l</span><span class="s1">&#39;output nel controller (Dependency Injection)</span>
+        <span class="n">GameController</span> <span class="n">lifeController</span> <span class="o">=</span> <span class="n">new</span> <span class="n">LifeController</span><span class="p">(</span><span class="n">gameModel</span><span class="p">,</span> <span class="n">outputDevice</span><span class="p">);</span>
+
+        <span class="o">//</span> <span class="mf">4.</span> <span class="n">Inizializziamo</span> <span class="n">l</span><span class="s1">&#39;Input (L&#39;</span> <span class="s2">&quot;Innesco&quot;</span><span class="p">)</span>
+        <span class="o">//</span> <span class="n">L</span><span class="s1">&#39;input comunica con il controller</span>
+        <span class="n">InputDev</span> <span class="n">inputDevice</span> <span class="o">=</span> <span class="n">new</span> <span class="n">InputDev</span><span class="p">(</span><span class="n">lifeController</span><span class="p">);</span>
+
+        <span class="o">//</span> <span class="mf">5.</span> <span class="n">Avvio</span> <span class="k">del</span> <span class="n">sistema</span>
+        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;Sistema S: Inizializzazione completata.&quot;</span><span class="p">);</span>
+        <span class="n">inputDevice</span><span class="o">.</span><span class="n">onStartButtonPressed</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
 <section id="conway26java-coding">
 <h3>conway26Java-Coding<a class="headerlink" href="#conway26java-coding" title="Permalink to this heading">¶</a></h3>
 <p>Il <strong>passaggio dal modello al codice</strong> richiede che quanto definito dall’analista sia
@@ -572,7 +604,7 @@ un file “manifest” per definire la classe principale eseguibile.</p>
     <ul>
 <li><a class="reference internal" href="#">Project conway26Java</a><ul>
 <li><a class="reference internal" href="#il-file-readme-md">Il file README.md</a></li>
-<li><a class="reference internal" href="#build-gradle-e-main-di-conway26java">build.gradle e Main di conway26Java</a></li>
+<li><a class="reference internal" href="#conway26java-build-gradle">conway26Java-build.gradle</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#conway26java-dai-requisiti-al-deployment">conway26Java Dai requisiti al deployment</a><ul>
@@ -589,6 +621,7 @@ un file “manifest” per definire la classe principale eseguibile.</p>
 </li>
 <li><a class="reference internal" href="#conway26java-costruttori">conway26Java-Costruttori</a></li>
 <li><a class="reference internal" href="#conway26java-progettazione-realizzazione">conway26Java-Progettazione&amp;realizzazione</a><ul>
+<li><a class="reference internal" href="#mainconwaylifejava">MainConwayLifeJava</a></li>
 <li><a class="reference internal" href="#conway26java-coding">conway26Java-Coding</a></li>
 <li><a class="reference internal" href="#uno-schema-per-partire">Uno schema per partire</a></li>
 <li><a class="reference internal" href="#conway26java-testreports">conway26Java-TestReports</a></li>
