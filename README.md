@@ -9,9 +9,7 @@ Repository del corso Ingegneria dei Sistemi Software a.a. 2025/2026 - DISI - Uni
 
   * [Lectures HTML](https://anatali.github.io/issLab2026/LectureBologna2026.html)
 
-# Chronicle
-
-  [index.html](https://anatali.github.io/issLab2026/chronicle)
+# Chronicle [index.html](https://anatali.github.io/issLab2026/chronicle/index.html)
 
 # Parte A: Dai programmi ai Sistemi a Microservizi
  * [ConwayLife Project](https://anatali.github.io/issLab2026/Project%20conway26Java.html) |
