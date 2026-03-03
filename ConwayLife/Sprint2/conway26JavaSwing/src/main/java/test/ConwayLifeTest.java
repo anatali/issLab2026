@@ -59,30 +59,6 @@ public class ConwayLifeTest {
 	}
 	
 	
-//	@Test
-//	public void testOscilla() {
-//		System.out.println("testOscilla ---------"  );
-//		// Configurazione orizzontale
-//	    lifemodel.setCell(2, 1, true); 
-//	    lifemodel.setCell(2, 2, true);
-//	    lifemodel.setCell(2, 3, true);
-//	    System.out.println("testOscilla | Stato Iniziale:\n" + lifemodel.getGrid());
-//
-//	    lifemodel.nextGeneration();
-//	    System.out.println("testOscilla | after 1 gen:\n" + lifemodel.getGrid());
-//	    // Verifica che sia diventato verticale
-//	    assertTrue(lifemodel.isAlive(1, 2)); 
-//	    assertTrue(lifemodel.isAlive(2, 2));
-//	    assertTrue(lifemodel.isAlive(3, 2));
-//	    assertFalse(lifemodel.isAlive(2, 1));
-//
-//	    lifemodel.nextGeneration();
-//	    System.out.println("testOscilla | after 2 gen :\n" + lifemodel.getGrid());
-//	    // Verifica che sia tornato orizzontale (Periodo 2)
-//	    assertTrue(lifemodel.isAlive(2, 1));
-//	    assertTrue(lifemodel.isAlive(2, 2));
-//	    assertTrue(lifemodel.isAlive(2, 3));
-//	}	
 
 	
 }

@@ -206,24 +206,20 @@ public class ConwayLifeGridClaude extends JFrame implements IOutDev {
     }
     
 
-	@Override
+	@Override //IOutDev
 	public void display(String msg) {
 		CommUtils.outyellow("GuiClaude | display  " + msg);
 		
 	}
 
  	
-	@Override
+	@Override //IOutDev
 	public void displayCell(IGrid grid, int x, int y) {
 		try {
 			ICell cell = grid.getCell(x, y);
 			//CommUtils.outyellow("GuiClaude | displayCell " + cell);
 			boolean value = cell.isAlive() ;
-//			int x = cell.getX()  ;  //mapping to GUI coords
-//			int y = cell.getY()  ;
 			String msg = "cell(" + y + "," + x + ","+ value + ")";		
-			//CommUtils.outcyan("                         displayCell "+ msg);
-			//display( msg );	
 			setCell(x,y,value);
 		} catch (Exception e) {
 			CommUtils.outred("GuiClaude | displayCell ERROR");
@@ -243,22 +239,8 @@ public class ConwayLifeGridClaude extends JFrame implements IOutDev {
 		}
 		return simplegrid;
 	}
-
- 
-//	public String gridRep( ) {
-//	return Arrays.stream(getGridReAsBoolArray()) // Stream di boolean[] (le righe)
-//	    .map(row -> {
-//	        // Trasformiamo ogni riga in una stringa di . e O
-//	        StringBuilder sb = new StringBuilder();
-//	        for (boolean cell : row) {
-//	            sb.append(cell ? "O " : ". ");
-//	        }
-//	        return sb.toString();
-//	    })
-//	    .collect(Collectors.joining("\n")); // Uniamo le righe con un a capo
-//	}	
 	
-	@Override
+	@Override //IOutDev
 	public void displayGrid(IGrid newGrid) {
 		displayGrid( gridAsBoolArray(newGrid) );
 //    	CommUtils.outcyan("displayGrid");
