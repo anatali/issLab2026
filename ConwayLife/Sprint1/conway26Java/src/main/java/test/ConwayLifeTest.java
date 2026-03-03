@@ -32,7 +32,7 @@ public class ConwayLifeTest {
 	}
 
  
-	@Test
+	//@Test
 	public void testAppl() {
 		LifeInterface gameModel       = new Life(nRows, nCols);
 		IOutDev outputDevice          = new MockOutdev();

@@ -18,15 +18,18 @@ public class MockOutdev implements IOutDev{
 	
 	@Override
 	public void displayGrid( IGrid grid ) {
-		int rows = grid.getRowsNum();
-		int cols = grid.getColsNum();
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				displayCell(grid,i,j);
-				//CommUtils.outcyan("cell x="+ i + "y="+j+ ":" +  getCellValue(i,j));
-			}
-			CommUtils.outcyan("\n");
-		}
+//		int rows = grid.getRowsNum();
+//		int cols = grid.getColsNum();
+//		for (int i = 0; i < rows; i++) {
+//			for (int j = 0; j < cols; j++) {
+//				displayCell(grid,i,j);
+//				//CommUtils.outcyan("cell x="+ i + "y="+j+ ":" +  getCellValue(i,j));
+//			}
+//			CommUtils.outcyan("\n");
+//		}
+		 System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"  );
+		 System.out.println(grid.toString());
+		 System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"  );
 	}
 
 	  
