@@ -1,7 +1,6 @@
 package main.java.conway.domain;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-
 import unibo.basicomm23.utils.CommUtils;
 
 public class Grid implements IGrid{
@@ -24,7 +23,7 @@ public class Grid implements IGrid{
 		    	 gridrep[i][j] = new Cell();
 		     }
 		  }
-		  CommUtils.outyellow("Grid | initGrid done");
+		  //CommUtils.outyellow("Grid | initGrid done");
 	  }	
 	  
 	  @Override

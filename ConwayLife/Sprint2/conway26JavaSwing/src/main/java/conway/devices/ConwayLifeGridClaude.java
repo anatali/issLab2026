@@ -175,7 +175,7 @@ public class ConwayLifeGridClaude extends JFrame implements IOutDev {
      */
      
     public void displayGrid(boolean[][] newGrid) {
-    	CommUtils.outcyan("displayGrid");
+    	//CommUtils.outcyan("displayGrid");
         if (newGrid != null && newGrid.length == GRID_SIZE && 
             newGrid[0].length == GRID_SIZE) {
             for (int row = 0; row < GRID_SIZE; row++) {
@@ -242,76 +242,12 @@ public class ConwayLifeGridClaude extends JFrame implements IOutDev {
 	
 	@Override //IOutDev
 	public void displayGrid(IGrid newGrid) {
-		displayGrid( gridAsBoolArray(newGrid) );
-//    	CommUtils.outcyan("displayGrid");
-//        if (newGrid != null && newGrid.length == GRID_SIZE &&  newGrid[0].length == GRID_SIZE) {
-//            for (int row = 0; row < GRID_SIZE; row++) {
-//                System.arraycopy(newGrid[row], 0, gridRep[row], 0, GRID_SIZE);
-//            }
-//            gridPanel.repaint();
-//        }
-		
+		displayGrid( gridAsBoolArray(newGrid) );	
 	}	
-/*
-Copies an array from the specified source array, beginning at thespecified position, 
-to the specified position of the destination array.A subsequence of array components 
-are copied from the sourcearray referenced by src to the destination arrayreferenced by dest. 
-The number of components copied isequal to the length argument. 
-The components atpositions srcPos through srcPos+length-1 in the source array 
-are copied intopositions destPos through destPos+length-1, respectively, of the destinationarray. 
-
-If the src and dest arguments refer to thesame array object, then the copying is performed 
-as if thecomponents at positions srcPos through srcPos+length-1 were first copied to 
-a temporaryarray with length components and then the contents of the temporary array 
-were copied into positions destPos through destPos+length-1 of thedestination array. 
-
-If dest is null, then a NullPointerException is thrown. 
-
-If src is null, then a NullPointerException is thrown and the destinationarray is not modified. 
-
-Otherwise, if any of the following is true, an ArrayStoreException is thrown and the destination isnot modified: 
-•The src argument refers to an object that is not anarray. 
-•The dest argument refers to an object that is not anarray. 
-•The src argument and dest argument referto arrays whose component types are different primitive types. 
-•The src argument refers to an array with a primitivecomponent type and the dest argument refers 
- to an arraywith a reference component type. 
-•The src argument refers to an array with a referencecomponent type and the dest argument refers 
- to an arraywith a primitive component type. 
-
-Otherwise, if any of the following is true, an IndexOutOfBoundsException isthrown and 
-the destination is not modified: 
-•The srcPos argument is negative. 
-•The destPos argument is negative. 
-•The length argument is negative. 
-•srcPos+length is greater than src.length, the length of the source array. 
-•destPos+length is greater than dest.length, the length of the destination array. 
-
-Otherwise, if any actual component of the source array fromposition srcPos through 
-srcPos+length-1 cannot be converted to the componenttype of the destination array by assignment conversion, 
-an ArrayStoreException is thrown. 
-In this case, let k be the smallest nonnegative integer less thanlength such that 
-src[srcPos+k]cannot be converted to the component type of the destinationarray; 
-when the exception is thrown, source array components frompositions srcPos through 
-srcPos+k-1will already have been copied to destination array positions destPos 
-through destPos+k-1 and no otherpositions of the destination array will have been modified.
-(Because of the restrictions already itemized, thisparagraph effectively applies only 
-to the situation where botharrays have component types that are reference types.)
-
-Parameters:
-src the source array.srcPos starting position in the source array.
-dest the destination array.destPos starting position in the destination data.
-length the number of array elements to be copied.
-Throws:IndexOutOfBoundsException - if copying would causeaccess of data outside array bounds.ArrayStoreException - 
-if an element in the srcarray could not be stored into the dest arraybecause of a type 
-mismatch.NullPointerException - if either src or dest is null.
-
-
-*/
 	
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 	}
 
 	

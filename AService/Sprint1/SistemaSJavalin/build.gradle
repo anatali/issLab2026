@@ -19,7 +19,6 @@ repositories {
 
 dependencies {
     /* JSON ********************************************************************************* */
-    // https://mvnrepository.com/artifact/org.json/json
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation group: 'org.json', name: 'json', version: '20180130'
 
@@ -27,10 +26,18 @@ dependencies {
     implementation name: 'uniboInterfaces'
     implementation name: '2p301'
     implementation name: 'unibo.basicomm23-1.0'
+ 
+ 
+ 	/* javalin ******************************* */
+ 	implementation 'io.javalin:javalin-bundle:6.1.3'
+
+    /* websocket ***************************** */
+ 	  implementation group: 'org.java-websocket', name: 'Java-WebSocket', version: '1.6.0'
+
+	 /* HTTP  ******************************** */
+    implementation 'org.apache.httpcomponents:httpclient:4.5'
     
-    /* conway ******************************* */
-    implementation name: 'conway26Java-1.0'
-}
+ }
 
 sourceSets {
     main.java.srcDirs += 'src'
@@ -49,16 +56,12 @@ eclipse {
 
 application {
     //Define the main class for the application.
-    mainClassName    = 'main.java.conway.MainConwayLifeJava'
+    mainClassName    = ''
 }
 
 jar {
     println("building jar")
     from sourceSets.main.allSource
-    from('./') {
-      include '*.pl'
-      include '*.json'
-    }
     manifest {
         attributes 'Main-Class': "$mainClassName"
     }

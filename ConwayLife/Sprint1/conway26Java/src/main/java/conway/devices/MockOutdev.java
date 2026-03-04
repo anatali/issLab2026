@@ -7,7 +7,7 @@ public class MockOutdev implements IOutDev{
 
 	@Override
 	public void display(String msg) {
-		CommUtils.outblue(msg);
+		//CommUtils.outblue(msg);
 		
 	}
 

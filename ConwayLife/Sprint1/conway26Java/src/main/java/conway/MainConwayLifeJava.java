@@ -1,7 +1,7 @@
 package main.java.conway;
 import main.java.conway.devices.MockOutdev;
 import main.java.conway.domain.*;
-import unibo.basicomm23.utils.CommUtils;
+//import unibo.basicomm23.utils.CommUtils;
 public class MainConwayLifeJava  {
 
 	public void configureTheSystemWitMockOutdev() {
@@ -27,7 +27,7 @@ public class MainConwayLifeJava  {
         // 5. Avvio del sistema (simula l'esistenza di un input dev)
         System.out.println("MainConwayLifeJava: Inizializzazione completata.");  
         lifeController.onStart();
-        CommUtils.delay(2000);
+        //CommUtils.delay(2000);
         lifeController.onStop();
         lifeController.onClear();
         

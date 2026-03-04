@@ -141,15 +141,6 @@ public class Life implements LifeInterface{
 		return gridA.getCellValue(row, col);
 	}
 
-//	@Override
-//	public int getRows() {
-// 		return 0;
-//	}
-//
-//	@Override
-//	public int getCols() {
-// 		return 0;
-//	}
  
 }
 

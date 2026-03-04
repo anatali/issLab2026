@@ -4,7 +4,9 @@ import org.junit.After;
 import org.junit.Before;
 import main.java.conway.domain.LifeInterface;
  
-
+/*
+ * TEST PLAN
+ */
 public class LifeTest {
 private LifeInterface lifeModel;
 
