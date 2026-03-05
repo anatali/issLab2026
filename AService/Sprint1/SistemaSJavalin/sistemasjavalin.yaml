@@ -1,0 +1,16 @@
+services:
+
+  sistemasjavalin:
+    container_name: sistemasjavalin
+    #image: docker.io/natbodocker/robotoutgui25:1.0
+    image: sistemasjavalin-1.0
+    ports:
+      - 8080:8080/tcp 
+##    networks:
+##      - iss-network
+
+##networks:
+##  iss-network:
+##    external: true
+
+## docker-compose -f sistemasjavalin.yaml  up
