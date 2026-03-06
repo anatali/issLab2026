@@ -89,7 +89,7 @@ task jarfat(type: Jar) {
     //Gestisci i file duplicati (evita errori di build)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
-//jar xf conway26Java-1.0.jar META-INF/MANIFEST.MF per vedere MANIFEST.MF
+//jar xf conway26JavaFat-1.0.jar META-INF/MANIFEST.MF per vedere MANIFEST.MF
 
 // Task per copiare le dipendenze nella cartella build/libs/lib
 task copyDeps(type: Copy) {

@@ -134,7 +134,7 @@ public class Life implements LifeInterface{
     @Override
     public void setCell(int r, int c, boolean state) { gridA.setCellValue(r,c,state); } 
     @Override
-    public Grid getGrid() { return gridA; }
+    public IGrid getGrid() { return gridA; }
 
 	@Override
 	public boolean isAlive(int row, int col) {

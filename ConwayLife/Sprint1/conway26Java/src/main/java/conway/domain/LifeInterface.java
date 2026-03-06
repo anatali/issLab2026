@@ -18,7 +18,7 @@ public interface LifeInterface {
     ICell getCell(int x, int y);
     
     /** Restituisce la grid */
-    Grid getGrid();
+    IGrid getGrid();
     
     /** pulisce */
     void resetGrids();
