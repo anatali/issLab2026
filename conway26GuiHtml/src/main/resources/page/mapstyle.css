@@ -1,0 +1,21 @@
+body {
+    padding: 20px;
+    background-color: #e6ffe6;
+}
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(20, 15px);
+            grid-gap: 1px;
+            justify-content: left;
+            margin-top: 20px;
+        }
+        .cell {
+            width: 15px;
+            height: 15px;
+            text-align: center;
+            line-height: 15px;
+            font-weight: bold;
+            color: white;
+        }
+        .live { background-color: #28a745; }
+        .dead { background-color: #dc3545; }

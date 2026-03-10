@@ -33,6 +33,7 @@ public class LifeController implements GameController {
 	public void switchCellState(int x, int y) {
 		ICell c = life.getCell(x, y); 
 		c.switchCellState( );   
+		//Perchè non:  outdev.displayCell(life.getGrid(),x,y)  ?
 		if( outdev != null ) outdev.displayGrid(life.getGrid());
 	}
 	
