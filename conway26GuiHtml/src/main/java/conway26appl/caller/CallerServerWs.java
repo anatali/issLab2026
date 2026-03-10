@@ -21,51 +21,51 @@ import java.net.http.WebSocket;
  */
 
 public class CallerServerWs  {  
-	private IApplMessage reqmsg  = CommUtils.buildRequest("clientjava", "eval", "CELL", "server"  );
-	private IApplMessage setctrl = CommUtils.buildRequest("clientjava", "eval", "setcontroller", "server"  );
+	private IApplMessage reqmsg    = CommUtils.buildRequest("clientjava", "eval", "CELL", "server"  );
+	private IApplMessage setctrl   = CommUtils.buildRequest("clientjava", "eval", "setcontroller", "server"  );
 	// Un latch per evitare che il programma termini prima di ricevere la risposta
 	protected CountDownLatch latch = new CountDownLatch(1); //Inizializzo a 1 perché aspetto UNA risposta dal server
-    protected HttpClient client = HttpClient.newHttpClient();  
+    protected HttpClient client    = HttpClient.newHttpClient();  
     protected String name;
     
     public CallerServerWs( ) throws Exception {
-//    	this.name = name;
-    	setUp1( );
-        //doJob();    	
+    	//sendRawMessage( );
+    	sendCellChange( );
     }
 
-    protected void setUp1( ) throws InterruptedException {
-    	HttpClient client = HttpClient.newHttpClient();
+    protected void sendRawMessage( ) throws InterruptedException {
+    	//HttpClient client = HttpClient.newHttpClient();
         
         WebSocket webSocket = client.newWebSocketBuilder()
             .buildAsync(URI.create("ws://localhost:8080/chat"), new WebSocketListener(latch))
             .join();
 
         // Invio di un messaggio al server
-        //webSocket.sendText(setctrl.toString(), true);
+        webSocket.sendText(setctrl.toString(), true);
         
-        webSocket.sendText("ciao valeria", true);
+       // webSocket.sendText("ciao valeria", true);
         
 //        String c56 = reqmsg.toString().replace("CELL", "cell(5,6)");
 //        webSocket.sendText(c56, true);
 
         // Aspetta che la connessione venga chiusa o interrotta
         latch.await();
-        CommUtils.outred("setup1 finito");
+        CommUtils.outred("CallerServerWs | setup1 finito");
    }     
 
     
-    protected void setUp( ) throws InterruptedException {
-    	HttpClient client = HttpClient.newHttpClient();
+    protected void sendCellChange( ) throws InterruptedException {
+    	//HttpClient client = HttpClient.newHttpClient();
         
         WebSocket webSocket = client.newWebSocketBuilder()
             .buildAsync(URI.create("ws://localhost:8080/eval"), new WebSocketListener(latch))
             .join();
 
         // Invio di un messaggio al server
-        webSocket.sendText(setctrl.toString(), true);
+        // webSocket.sendText(setctrl.toString(), true);
         
-        String c56 = reqmsg.toString().replace("CELL", "cell(5,6)");
+        String c56 = reqmsg.toString().replace("CELL", "cell(5,6,1)");
+        CommUtils.outmagenta("CallerServerWs | send " + c56);
         webSocket.sendText(c56, true);
 
         // Aspetta che la connessione venga chiusa o interrotta
@@ -83,7 +83,7 @@ public class CallerServerWs  {
 
         @Override
         public void onOpen(WebSocket webSocket) {
-            System.out.println("--- Connessione aperta ---");
+            System.out.println("CallerServerWs | --- Connessione aperta ---");
             WebSocket.Listener.super.onOpen(webSocket);
         }
 
@@ -95,7 +95,7 @@ public class CallerServerWs  {
          */
         @Override
         public CompletionStage<?> onText(WebSocket webSocket, CharSequence data, boolean last) {
-            System.out.println("Messaggio ricevuto dal server: " + data);
+            CommUtils.outmagenta("CallerServerWs | Messaggio ricevuto dal server: " + data);
             return WebSocket.Listener.super.onText(webSocket, data, last);
             //non fa "nulla" di operativo, ma serve a gestire il flusso dei dati (backpressure).
             /*
@@ -128,7 +128,7 @@ public class CallerServerWs  {
 
         @Override
         public CompletionStage<?> onClose(WebSocket webSocket, int statusCode, String reason) {
-            System.out.println("--- Connessione chiusa: " + reason + " ---");
+            System.out.println("CallerServerWs | --- Connessione chiusa: " + reason + " ---");
             latch.countDown();
             return WebSocket.Listener.super.onClose(webSocket, statusCode, reason);
         }
@@ -141,32 +141,11 @@ public class CallerServerWs  {
     }
 
     
-//    protected void sendToServer() {
-//    	client.send("0.0");
-//    }
-    
-//    public void doJob() {
-//        try {
-//            System.out.println("connect: "  );
-//            client.connect();
-//            while( ! client.isOpen() ) {
-//            	CommUtils.outblue("waiting connections ...");
-//            	CommUtils.delay(500);
-//            }
-//            sendToServer( );   //reqmsg.toJsonString()        
-//            latch.await();
-//            client.close();        
-//            //System.exit(0);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }   	
-//    }
   
     
     public static void main(String[] args) throws Exception {
     	System.out.println("Java.version="+ System.getProperty("java.version"));
     	CallerServerWs client = new CallerServerWs();
-//				URI.create("ws://localhost:8080/eval"));
      }
 }
 

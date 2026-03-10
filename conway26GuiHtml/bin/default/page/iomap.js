@@ -26,6 +26,7 @@ function createMapRep(){
 
 
     function updateCellColor(newX, newY,color) {
+		if( color == undefined ) return;
        const cellxy = document.getElementById(`cell(${newY},${newX})`);
 	   console.log("updating cell-" + newY + "-" + newX + " to color " + color );
       if( cellxy.classList.contains("live") ){
