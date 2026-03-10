@@ -1,4 +1,4 @@
-package main.java; 
+package main.java.javalin; 
 import java.util.Map;
 import org.json.simple.JSONObject;
 import io.javalin.Javalin;
@@ -82,11 +82,22 @@ public class SistemaSJavalinBetter {
     	setUpServer( false ); //per HTTP
     	app.get("/", ctx -> ctx.result("Hello World via HTTP/1.1")); 
         
-        app.get("/eval", ctx -> {
-	          double x = Double.parseDouble(ctx.queryParam("x"));
-              double r = eval( x );
-              ctx.json(Map.of("fullUrl", ctx.fullUrl(), "result", r));
-	          });
+    	app.get("/eval/{n}", ctx -> {
+    		System.out.println("Ricevuta richiesta per il valore: " + ctx.pathParam("n"));
+    		//ctx.result("Valutato: " + 20);
+    		String numeroStr = ctx.pathParam("n");
+    		double valore    = Double.parseDouble(numeroStr);
+    		double r         = eval( valore );
+    		System.out.println("Risultatoe: " + r);
+    		//ctx.json(Map.of("fullUrl", ctx.fullUrl(), "result", r));
+    		ctx.result("Valutato: " + r);
+    	});
+    	
+//        app.get("/eval", ctx -> {
+//	          double x = Double.parseDouble(ctx.queryParam("x"));
+//              double r = eval( x );
+//              ctx.json(Map.of("fullUrl", ctx.fullUrl(), "result", r));
+//	     });
               
         app.post("/evaluate", ctx -> {  //Warning: check CORS
     	  		 String result = handlerHTTP( ctx );

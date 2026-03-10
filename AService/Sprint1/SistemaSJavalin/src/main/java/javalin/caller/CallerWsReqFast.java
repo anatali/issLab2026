@@ -1,4 +1,4 @@
-package main.java.caller;
+package main.java.javalin.caller;
 import unibo.basicomm23.interfaces.IApplMessage;
 import unibo.basicomm23.msg.ApplMessage;
 import unibo.basicomm23.utils.CommUtils;
@@ -76,7 +76,7 @@ public class CallerWsReqFast  {
             	CommUtils.outblue("waiting connections ...");
             	CommUtils.delay(500);
             }
-            sendToServer( );   //reqmsg.toJsonString()        
+            sendToServer( );          
             latch.await();
             client.close();        
             //System.exit(0);

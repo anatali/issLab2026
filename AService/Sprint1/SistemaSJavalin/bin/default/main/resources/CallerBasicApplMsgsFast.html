@@ -1,0 +1,70 @@
+<html>
+	
+<script>
+  
+/*
+Questo client invia  messaggi ApplMessage espressi in Json
+*/ 
+ 
+var msgfast = '{"msgId":"eval","msgType":"request","msgSender":"client","msgReceiver": "server","msgContent":"4.0","msgNum":"0"}'
+
+ function  callWS(msg){
+ /*1*/const socketWS = 
+   new WebSocket("ws://localhost:8080/eval");
+
+ /*2*/socketWS.onopen = () => {
+     console.log("callWS | Connesso a eval");
+     socketWS.send( msg );
+   }
+
+ /*3*/socketWS.onmessage = (event) => {
+     console.log("callWS | perceives:",event.data);
+   }
+ }//callWS
+
+
+  
+ async function testHTTPGet() {
+   try {
+     const url = 'http://localhost:8080/eval?x=-4';
+     const response = await fetch(url);
+     // Controlla se il server ha risposto con un errore (es. 404 o 500)
+     if (!response.ok) {
+       throw new Error(`Errore del server: ${response.status}`);
+     }
+     const data = await response.json(); // Converte la risposta da JSON a oggetto JS
+     console.log('testHTTPGet | Dati ricevuti con successo:', data);
+   } catch (error) {
+     console.error('testHTTPGet | Errore:', error);
+   }
+ }
+ 
+ async function testHTTPPost() {
+     try {
+		 const url = 'http://localhost:8080/evaluate';
+         const response = await fetch(url, {
+             method: 'POST', // Specifica il metodo
+             headers: {
+                 'Content-Type': 'application/json' // Dice al server che stiamo inviando JSON
+                 // 'Authorization': 'Bearer IL_TUO_TOKEN' // Aggiungi questo se serve autenticazione
+             },
+             body: msgfast
+         });
+		 console.log('testHTTPPost | Sent:' );		 
+         const result = await response.json();
+         console.log('testHTTPPost |  result=', result);
+     } catch (error) {
+         console.error('testHTTPPost | Errore durante il caricamento:', error);
+     }
+ }
+ 
+ 
+ callWS(msgfast)
+ //testHTTPGet()
+ testHTTPPost()  //interferisce con callHttp1
+
+  
+</script>
+	
+	
+</html>
