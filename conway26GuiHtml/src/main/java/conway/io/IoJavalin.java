@@ -35,7 +35,7 @@ public class IoJavalin {
         app.get("/greet/{name}", ctx -> {
             String name = ctx.pathParam("name");
             ctx.result("Hello, " + name + "!");
-        }); //http://localhost:7070/greet/Alice
+        }); //http://localhost:8080/greet/Alice
         
         app.get("/api/users", ctx -> {
             Map<String, Object> user = Map.of("id", 1, "name", "Bob");

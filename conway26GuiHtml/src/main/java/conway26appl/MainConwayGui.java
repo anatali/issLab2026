@@ -9,11 +9,10 @@ public class MainConwayGui  {
     public static void main(String[] args) {
 	    System.out.println("MainConway | STARTS " );  
 	    
-		var resource = MainConwayGui.class.getResource("/");
+		var resource = MainConwayGui.class.getResource("/page");
 		CommUtils.outgreen("DEBUG: La cartella /page si trova in: " + resource);
 
 	    MainConwayGui app = new MainConwayGui();
-	   // app.configureTheSystemWithHtmlWs(true);
 	    System.out.println("MainConway | ENDS " );  
     }
 

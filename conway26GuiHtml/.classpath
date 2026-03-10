@@ -1,6 +1,292 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17/"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17/">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.googlecode.json-simple/json-simple/1.1.1/c9ad4a0850ab676c5c64461a05ca524cdfff59f1/json-simple-1.1.1.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.googlecode.json-simple/json-simple/1.1.1/15bba08e3a239d54b68209c001f9c911559d2fed/json-simple-1.1.1-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.json/json/20180130/26ba2ec0e791a32ea5dfbedfcebf36447ee5b12c/json-20180130.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.json/json/20180130/66ab57acbb9086d16201c2eafa2145d2b914bb26/json-20180130-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Didattica2026/issLab2026/unibolibs/uniboInterfaces.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Didattica2026/issLab2026/unibolibs/2p301.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Didattica2026/issLab2026/unibolibs/unibo.basicomm23-1.0.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.javalin/javalin-bundle/6.1.3/d0376c698b74173c0cdd7f578b430b5a4e87c7e0/javalin-bundle-6.1.3.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.javalin/javalin-bundle/6.1.3/e7439b73fdcf4bb1b07c6677de93a8293187ce71/javalin-bundle-6.1.3-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/junit/junit/4.10/e4f1766ce7404a08f45d859fb9c226fc9e41a861/junit-4.10.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/junit/junit/4.10/6c98d6766e72d5575f96c9479d1c1d3b865c6e25/junit-4.10-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.javalin/javalin-context-mock/6.1.3/3cbdb4f923428e6c73631ee73fa9b6bd325cbcee/javalin-context-mock-6.1.3.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.javalin/javalin-context-mock/6.1.3/79dbc57c721289a8242828ccafe6595a1d96f29b/javalin-context-mock-6.1.3-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.javalin/javalin-testtools/6.1.3/629bb5a97f7154e0ff04a0a355037acac11ab60a/javalin-testtools-6.1.3.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.javalin/javalin-testtools/6.1.3/48d5c153e7d98d6f5d416d731c4314f58a2f8269/javalin-testtools-6.1.3-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.javalin/javalin/6.1.3/5d0819858df60fce6991c06775edabd6d3b379d3/javalin-6.1.3.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.javalin/javalin/6.1.3/3851bfebf1219ba8c22edc6890801d245f86c559/javalin-6.1.3-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.javalin/javalin-micrometer/6.1.3/ba2859c754c00b37bc8ce86450b654ec3cdd28fd/javalin-micrometer-6.1.3.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.javalin/javalin-micrometer/6.1.3/fec0e4612692a2f42d7f6f006d05aba54012a935/javalin-micrometer-6.1.3-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.datatype/jackson-datatype-jsr310/2.16.1/36a418325c618e440e5ccb80b75c705d894f50bd/jackson-datatype-jsr310-2.16.1.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.datatype/jackson-datatype-jsr310/2.16.1/5392cace4c894fdb83e76044919ea19711e43d77/jackson-datatype-jsr310-2.16.1-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.16.1/fd441d574a71e7d10a4f73de6609f881d8cdfeec/jackson-annotations-2.16.1.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.16.1/980f63c6ea050aca8c9a47f7643fb183b5d7143c/jackson-annotations-2.16.1-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.16.1/9456bb3cdd0f79f91a5f730a1b1bb041a380c91f/jackson-core-2.16.1.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.16.1/13883e6b942fe5991477befedf3af8a7a82b3e32/jackson-core-2.16.1-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.module/jackson-module-kotlin/2.16.1/1e762d7056f7dc368af3854f2992b82206d39ed4/jackson-module-kotlin-2.16.1.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.module/jackson-module-kotlin/2.16.1/8193565d5a83c57a8e8a32c94e3f207b7cf9dc0/jackson-module-kotlin-2.16.1-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.16.1/2a16efeb840c45af1e2f31753dfe76795278b73/jackson-databind-2.16.1.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.16.1/49d81b4832bc388e38901b9d6cf0f8a170820849/jackson-databind-2.16.1-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.aayushatharva.brotli4j/brotli4j/1.16.0/990e983bb462867d036c7c243c6566f65fdca68f/brotli4j-1.16.0.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.aayushatharva.brotli4j/brotli4j/1.16.0/3404222a7d706bd2728433989c516f5ba2d8fcf5/brotli4j-1.16.0-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.http2/http2-server/11.0.20/19c0fdc45b6d9c7f23439cf5ccb5808a667831d/http2-server-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.http2/http2-server/11.0.20/4ab874d14313d3ea5f5f3f375b632967c12ec620/http2-server-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-alpn-conscrypt-server/11.0.20/d7cc6dc3944e7f0e9db929195b81bc624a863e5f/jetty-alpn-conscrypt-server-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-alpn-conscrypt-server/11.0.20/c28685b8bc481f23453cce10f9b89ad16bb7a542/jetty-alpn-conscrypt-server-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.5.1/2dc0efdaaef2f94fbc3ebf9c24c1937cef50f99/logback-classic-1.5.1.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.5.1/60eab48d4aaba1ce683f657293009ed5a4472edc/logback-classic-1.5.1-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/4.12.0/2f4525d4a200e97e1b87449c2cd9bd2e25b7e8cd/okhttp-4.12.0.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/4.12.0/ae6ec072a7ddfd4e225a36de1c185e76ebc7348d/okhttp-4.12.0-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.6.21/5dc3574d9b7bebfcb4ec6b10ada4aaa9e140bd0b/kotlin-reflect-1.6.21.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.6.21/5204ed68de68e013fa21f41fec37ea38d213b78/kotlin-reflect-1.6.21-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.9.22/c4b17283ad7939e778989663f8301d871987fa5e/kotlin-stdlib-jdk7-1.9.22.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.9.22/19a55005faf474d4021b61d617693e462c17aa54/kotlin-stdlib-jdk7-1.9.22-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio-jvm/3.6.0/5600569133b7bdefe1daf9ec7f4abeb6d13e1786/okio-jvm-3.6.0.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio-jvm/3.6.0/5b1761b9f5cd934db274cf972582e3dd6b267272/okio-jvm-3.6.0-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.9.22/d6c44cd08d8f3f9bece8101216dbe6553365c6e3/kotlin-stdlib-1.9.22.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.9.22/d1b45176c0aeb15a309a4f4a7cd160d4b3c8b733/kotlin-stdlib-1.9.22-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.9.22/dea0c11e2fa503ab891c8a090e3b54754472975d/kotlin-stdlib-jdk8-1.9.22.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.9.22/114750c3625f9fdfb6dd568add7b3629d2c52627/kotlin-stdlib-jdk8-1.9.22-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.1/860340562250678d1a344907ac75754e259cdb14/hamcrest-core-1.1.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.1/2ccf1154d1a8936042a8a742dc3e611d02ac7213/hamcrest-core-1.1-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-jetty11/1.12.3/3fe26cce8a07b09ead48f9506c56a19671c2c166/micrometer-jetty11-1.12.3.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-jetty11/1.12.3/f751808ed55e7516bbbd06f7c2b206aa0274dbe3/micrometer-jetty11-1.12.3-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-alpn-server/11.0.20/1f6e4dfb08bac425eafa2116e6f89e15122a7287/jetty-alpn-server-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-alpn-server/11.0.20/c21ce9286e81cb2c1dee8bba734fa4368c7b97d1/jetty-alpn-server-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-jetty-server/11.0.20/db8c847c95d5b4bf88def60f6b59059ae39195bb/websocket-jetty-server-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-jetty-server/11.0.20/235ade428e0e09165607bb6ee1e131696638b58d/websocket-jetty-server-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-webapp/11.0.20/4507aeddff9b0230ce7cd53d439cb8425e1f6301/jetty-webapp-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-webapp/11.0.20/546d7fc782e12eb61d69093f6222b5af6435d09c/jetty-webapp-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-servlet/11.0.20/52063835e0649dca3a776ecce99b21fafaee21e1/websocket-servlet-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-servlet/11.0.20/c167bd5cd3c173cc8bc87c003fa1aa2af8417ac4/websocket-servlet-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-servlet/11.0.20/a1d845eb6cec5d4667daffd0028a642fb3a9103c/jetty-servlet-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-servlet/11.0.20/61ff906fa41d8fe313148c32ed7af4750bfed989/jetty-servlet-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-security/11.0.20/610df128b530f3edde46f784b42aa60bd46375c5/jetty-security-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-security/11.0.20/21c82fbce2ddc9cf0e5bdd2de31e99312079b44c/jetty-security-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-core-server/11.0.20/e36ce1405f083a4aef306af965389716bbc4565f/websocket-core-server-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-core-server/11.0.20/df8f49768ca33ef3298e41760eed267b5515ec2a/websocket-core-server-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-server/11.0.20/4b42686cc172c2dc68014ae62800ba49cef1fc68/jetty-server-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-server/11.0.20/9df80a893fa573e0b1d4d186bf73db6966f26f64/jetty-server-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.http2/http2-common/11.0.20/de042fd9975f62dfcdafc9bedcf77800ed8e7a27/http2-common-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.http2/http2-common/11.0.20/dbe24e0cd160d85844608f0d2b0f16a4e4003334/http2-common-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.http2/http2-hpack/11.0.20/865a6e6d2961342ad84e63429e3f9ab2dcb526aa/http2-hpack-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.http2/http2-hpack/11.0.20/103325f9a40dc9dfe97da5d863dafa494956d616/http2-hpack-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-jetty-common/11.0.20/f5785ae8f6197dcee717aa6147616892070f15c3/websocket-jetty-common-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-jetty-common/11.0.20/8ddf486bf3b2de735ace5fd6e44d9c77ffa01a3e/websocket-jetty-common-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-core-common/11.0.20/88795d13078a5f60958fe9cedd9eec3446bfad82/websocket-core-common-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-core-common/11.0.20/6136d4ea7660cddea71a0000896f4707bac112b7/websocket-core-common-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-http/11.0.20/1673815598a7932110813edbcd9b5be6f354937b/jetty-http-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-http/11.0.20/d75c02dedd8bc91cc8ab5a175c7b4157d86d3996/jetty-http-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-io/11.0.20/2095d70a6089a6af5ad22d3c8ea0887e3d56f776/jetty-io-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-io/11.0.20/cfd54d4686deb71272af25f01f150f035cf7e206/jetty-io-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-xml/11.0.20/ac9b0f48800c5809e735366e70ff6fff0935579e/jetty-xml-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-xml/11.0.20/e1fda7e3344e9a5ee5b5410d5fb627d916e30093/jetty-xml-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-util/11.0.20/6b72e01745c0fa15037d034ae699b059180862d9/jetty-util-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty/jetty-util/11.0.20/7dfc8ca46ba4f92a14a74d20f7c5842122da797f/jetty-util-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/2.0.12/48f109a2a6d8f446c794f3e3fa0d86df0cdfa312/slf4j-api-2.0.12.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/2.0.12/c2824e780c88689134cb99fb33c8a4ed3de0f406/slf4j-api-2.0.12-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.toolchain/jetty-jakarta-servlet-api/5.0.2/27fce6d666a203526236d33d00e202a4136230f/jetty-jakarta-servlet-api-5.0.2.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.toolchain/jetty-jakarta-servlet-api/5.0.2/5c422e5d952ab9d79a3f8ffdddf238e822c96409/jetty-jakarta-servlet-api-5.0.2-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-core/1.12.3/9cb0cf6994e12aaa9a756864705c10d9e0af7428/micrometer-core-1.12.3.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-core/1.12.3/726cb532d34a5cc4275a526a5e4236947d4505b4/micrometer-core-1.12.3-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.aayushatharva.brotli4j/service/1.16.0/bd45e3f5a7165e190ea759abf220ce87d5f59103/service-1.16.0.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/com.aayushatharva.brotli4j/service/1.16.0/c2ea9319e1a21d73e2e8d7166279bcc218403d11/service-1.16.0-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.conscrypt/conscrypt-openjdk-uber/2.5.2/d858f142ea189c62771c505a6548d8606ac098fe/conscrypt-openjdk-uber-2.5.2.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.conscrypt/conscrypt-openjdk-uber/2.5.2/d8290a2f7b28ee0e92efaafbae528577fee6fdee/conscrypt-openjdk-uber-2.5.2-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-core/1.5.1/69f2cdf08c29a4abe93302afa372d5714df2da68/logback-core-1.5.1.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-core/1.5.1/b804994dfae49581731891c8d6095802295d7312/logback-core-1.5.1-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-jetty-api/11.0.20/47dbf269df3a0a9100e8309e44552c3be222c0ab/websocket-jetty-api-11.0.20.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-jetty-api/11.0.20/ba8537a5e9f15888e4cdab726aee74247ae8eba8/websocket-jetty-api-11.0.20-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-observation/1.12.3/105f768c211564fcebe4d79419bda4ebef0d0ac7/micrometer-observation-1.12.3.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-observation/1.12.3/8aeac366ae3ac29958335b06801f163c06ec39d0/micrometer-observation-1.12.3-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-commons/1.12.3/83add2dda5cdc811fefb83e858c7412a176fe5b1/micrometer-commons-1.12.3.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-commons/1.12.3/1da4cccb967f16fbd175ea2bbddd2985e01774d5/micrometer-commons-1.12.3-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/5991ca87ef1fb5544943d9abc5a9a37583fabe03/annotations-13.0-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.hdrhistogram/HdrHistogram/2.1.12/6eb7552156e0d517ae80cc2247be1427c8d90452/HdrHistogram-2.1.12.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.hdrhistogram/HdrHistogram/2.1.12/d8cf7bad79ef75fd41395c5f464ea38777463d95/HdrHistogram-2.1.12-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.latencyutils/LatencyUtils/2.0.3/769c0b82cb2421c8256300e907298a9410a2a3d3/LatencyUtils-2.0.3.jar" sourcepath="C:/Users/anatali/.gradle/caches/modules-2/files-2.1/org.latencyutils/LatencyUtils/2.0.3/fbc38259e2077a428984637d811dac542a6a913e/LatencyUtils-2.0.3-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin/default"/>
 </classpath>

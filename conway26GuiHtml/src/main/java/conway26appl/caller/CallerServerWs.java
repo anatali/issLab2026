@@ -25,7 +25,7 @@ public class CallerServerWs  {
 	private IApplMessage setctrl = CommUtils.buildRequest("clientjava", "eval", "setcontroller", "server"  );
 	// Un latch per evitare che il programma termini prima di ricevere la risposta
 	protected CountDownLatch latch = new CountDownLatch(1); //Inizializzo a 1 perché aspetto UNA risposta dal server
-    protected HttpClient client = HttpClient.newHttpClient(); //WebSocketClient client;
+    protected HttpClient client = HttpClient.newHttpClient();  
     protected String name;
     
     public CallerServerWs( ) throws Exception {
@@ -38,18 +38,21 @@ public class CallerServerWs  {
     	HttpClient client = HttpClient.newHttpClient();
         
         WebSocket webSocket = client.newWebSocketBuilder()
-            .buildAsync(URI.create("ws://localhost:7070/chat"), new WebSocketListener(latch))
+            .buildAsync(URI.create("ws://localhost:8080/chat"), new WebSocketListener(latch))
             .join();
 
         // Invio di un messaggio al server
-        webSocket.sendText(setctrl.toString(), true);
+        //webSocket.sendText(setctrl.toString(), true);
+        
+        webSocket.sendText("ciao valeria", true);
         
 //        String c56 = reqmsg.toString().replace("CELL", "cell(5,6)");
 //        webSocket.sendText(c56, true);
 
         // Aspetta che la connessione venga chiusa o interrotta
         latch.await();
-    }     
+        CommUtils.outred("setup1 finito");
+   }     
 
     
     protected void setUp( ) throws InterruptedException {
