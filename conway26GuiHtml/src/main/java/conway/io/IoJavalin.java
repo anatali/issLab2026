@@ -1,5 +1,6 @@
 package conway.io;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
@@ -31,11 +32,18 @@ public class IoJavalin {
  * --------------------------------------------
  */
         app.get("/", ctx -> {
-    		Path path = Path.of("./src/main/resources/page/ConwayInOutPage.html");   
-		    if (Files.exists(path)) {
-		        // Usiamo Files.newInputStream che è più moderno di FileInputStream
-		        ctx.contentType("text/html").result(Files.newInputStream(path));
-		    } else {
+    		//Path path = Path.of("./src/main/resources/page/ConwayInOutPage.html");    		    
+        	/*
+        	 * Java cercherà il file all'interno del Classpath 
+        	 * (dentro il JAR o nelle cartelle dei sorgenti di Eclipse), 
+        	 * rendendo il codice universale
+         	 */
+        	var inputStream = getClass().getResourceAsStream("/page/ConwayInOutPage.html");       	
+        	if (inputStream != null) {
+        		// Trasformiamo l'inputStream in stringa (o lo mandiamo come stream)
+        	    String content = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        	    ctx.html(content);
+        	} else {
 		        ctx.status(404).result("File non trovato nel file system");
 		    }
 		    //ctx.result("Hello from Java!"));  //la forma più semplice di risposta

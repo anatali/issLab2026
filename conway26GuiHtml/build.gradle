@@ -36,11 +36,22 @@ dependencies {
 }
 
 sourceSets {
-    //main.java.srcDirs += 'src'
-    main.java.srcDirs += 'src/main/java'
-    main.java.srcDirs += 'src/main/resources'
-    test.java.srcDirs += 'src/main/java/test'         //test is specific
-}
+main {
+        java {
+            // Rimuovi 'src' generico, usa i percorsi specifici
+            srcDirs = ['src/main/java'] 
+        }
+        resources {
+            // Qui dice a Gradle dove cercare i file statici (HTML, ecc.)
+            srcDirs = ['src/main/resources' ]
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test/java', 'src/main/java/test']
+        }
+    }
+  }
 
 eclipse {
     classpath {
