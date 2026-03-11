@@ -60,7 +60,7 @@ public class CallerServerWs  {
         WebSocket webSocket = client.newWebSocketBuilder()
             .buildAsync(URI.create("ws://localhost:8080/eval"), new WebSocketListener(latch))
             .join();
-
+        
         // Invio di un messaggio al server
         // webSocket.sendText(setctrl.toString(), true);
         
