@@ -117,9 +117,13 @@ public class IoJavalin {
                 try {
                 	IApplMessage m = new ApplMessage(message);
                     CommUtils.outblue("IoJavalin |  eval:" + m.msgContent() );
-                    if( m.msgContent().equals("ready")) { pageCtx = ctx; }
-                    else if( m.msgContent().contains("cell(")) { pageCtx.send( m.msgContent()); }
-                    else ctx.send(m.msgContent());
+                    if( m.msgContent().equals("ready")) { 
+                    	pageCtx = ctx;  //memorizzo connession pagina
+                    }else if( m.msgContent().contains("cell(")) { 
+                    	//Funziona se arriva da CallerServerWs es. cell(5,6,1)
+                    	pageCtx.send( m.msgContent()); 
+                    	//TODO: inviare a LifeController
+                    }else ctx.send(m.msgContent());
                 }catch(Exception e) {
                 	CommUtils.outred("IoJavalin |  error:" + e.getMessage());
                 }               
