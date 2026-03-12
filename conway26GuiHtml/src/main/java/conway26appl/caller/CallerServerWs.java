@@ -12,7 +12,7 @@ import java.net.http.HttpClient;
 import java.net.http.WebSocket;
  
 /*
- * PREMESSA: lanciare SistemaSJavalApplMsgsQueued
+ * PREMESSA: lanciare MainConwayGui
  *  
  * Componente che usa un WebSocketClient
  * per inviare messaggi su una WebSocket
