@@ -1,0 +1,16 @@
+services:
+
+  sistemasjavalin:
+    container_name: gui26htmlalone
+    #image: docker.io/natbodocker/gui26htmlalone:1.0
+    image: gui26htmlalone:1.0
+    ports:
+      - 8080:8080/tcp 
+##    networks:
+##      - iss-network
+
+##networks:
+##  iss-network:
+##    external: true
+
+## docker-compose -f conway26GuiAlone.yaml  up down

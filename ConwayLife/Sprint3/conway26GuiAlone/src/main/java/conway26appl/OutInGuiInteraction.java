@@ -25,6 +25,7 @@ public class OutInGuiInteraction implements IOutDev, IObserver{
     public void setController(GameController controller) {
     	CommUtils.outgreen(name + " | setController: " + controller);
     	lifecontroller = controller;
+     	lifecontroller.onClear();
     	CommUtils.delay(300000);  //dura  
     	CommUtils.outgreen(name + " | BYE "  );
     }
@@ -37,6 +38,10 @@ public class OutInGuiInteraction implements IOutDev, IObserver{
 	     	IApplMessage cmdmsg = CommUtils.buildDispatch("lifectrl", "setcontroller", "set", "guiserver"  );
 	     	CommUtils.outblue("LifeGameInteraction | forward " + cmdmsg);
 	     	conn.forward(cmdmsg);
+	     	//Poi invio grid iniziale
+	     	
+	     	//lifecontroller.onClear();
+	     	
 		} catch (Exception e) {
  			e.printStackTrace();
 		}		
@@ -84,15 +89,6 @@ public class OutInGuiInteraction implements IOutDev, IObserver{
 			} catch (Exception e) {
 	 			e.printStackTrace();
 			}
-			/*}else {
-	 		int rows = grid.getRowsNum();
-			int cols = grid.getColsNum();
-			for (int i = 0; i < rows; i++) {
-				for (int j = 0; j < cols; j++) {
-					displayCell( grid, i,j ); 
-	 			}			
-			}			
- 		}*/
 	}
 
 /*
@@ -106,7 +102,9 @@ public class OutInGuiInteraction implements IOutDev, IObserver{
 
 	@Override
 	public void update(String value) {
-		CommUtils.outblue(name + " | update "  + value);	
+		//Evito di visualizzare la canvas rep
+		if( ! value.contains("[[")) 
+			CommUtils.outblue(name + " | update "  + value);	
 		try {
 		IApplMessage msg = new ApplMessage( value );
 			if( msg.msgContent().contains("cell(")){
