@@ -1,0 +1,49 @@
+	<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>ConwayInOutPage</title></head>
+    <link rel="stylesheet" href="mapstyle.css">
+</head>    
+<body>
+  <h1>ConwayInOutPage</h1>
+<hr/>
+
+<!--  INPUT AREA   -->
+  <button onClick="sendCmdToServer('start'); return false">START</button>
+  <button onClick="sendCmdToServer('stop');  return false">STOP</button>
+  <button onClick="sendCmdToServer('clear'); return false">CLEAR</button>
+  <button onClick="sendCmdToServer('exit');  return false">EXIT</button>
+
+  
+<!-- MAP AREA -->
+ 
+    <div >
+      <h3 class="text-center">Life Grid Map</h3>
+      <div id="map" class="grid"></div> 
+    </div>
+
+	
+	<!--  OUTPUT AREA -->
+	  <ol id="msgslist"></ol>
+
+	  <button type="button" onclick=clearOutArea()>Remove Messages</button>
+
+ <!--
+	        <h4>MessageArea</h4>
+	    &nbsp;&nbsp;&nbsp;
+	<div class="info">
+	    <button type="button" onclick=clear_messageArea()>Clear</button>
+	    
+	    <textarea id="messageArea" name="messageArea" font="Arial" style="font-size:10pt" rows="15" cols="85"></textarea>
+	</div>
+    -->
+
+	<script src="iomap.js"></script>
+	<script src="outArea.js"></script>	   
+    <script src="wscontrol.js"></script>  
+
+	
+</body>
+</html>
+
+ 

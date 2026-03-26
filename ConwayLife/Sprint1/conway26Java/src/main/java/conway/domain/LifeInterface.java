@@ -9,10 +9,6 @@ public interface LifeInterface {
 
     /** Imposta lo stato di una cella */
     void setCell(int row, int col, boolean alive);
-
-    /** Restituisce il numero di righe e colonne */
-//    int getRows();
-//    int getCols();
     
     /** Restituisce la Cella */
     ICell getCell(int x, int y);
@@ -23,6 +19,13 @@ public interface LifeInterface {
     /** pulisce */
     void resetGrids();
     
+    /**
+     * ADDED AS UTILITY METHODS
+     */
     /** Restituisce una rappresentazione grafica testuale della grglia*/
     //public String gridRep( );
+    
+	 //boolean gridEmpty();
+	 //sboolean gridStable();
+
 }

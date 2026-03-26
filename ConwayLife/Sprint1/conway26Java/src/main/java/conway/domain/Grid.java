@@ -72,37 +72,18 @@ public class Grid implements IGrid{
 	        .collect(Collectors.joining("\n")); // Uniamo le righe con un a capo  
 	  }
 	   
+/*
+ * UTILITY METHODS (for gui canvas)
+ */
+		public boolean[][] repAsBoolArray( ) {
+			boolean[][] gridasboool = new boolean[rows][cols];
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
+					gridasboool[i][j] = getCell(i, j).isAlive();
+				}
+			}
+			return gridasboool;
+		}
+		
 }
 
-//public void printGrid() {
-//	for (int i = 0; i < rows; i++) {
-//		for (int j = 0; j < cols; j++) {
-//			CommUtils.outcyan("cell x="+ i + "y="+j+ ":" +  getCellValue(i,j));
-//		}
-//		CommUtils.outblack("\n");
-//	}
-//	}
-
-//protected boolean[][] getGridReAsBoolArrayp() {
-//boolean[][] simplegrid = new boolean[rows][cols];
-//for (int i = 0; i < rows; i++) {
-//	for (int j = 0; j < cols; j++) {
-//		simplegrid[i][j] = gridrep[i][j].isAlive();
-//	}
-//}
-//return simplegrid;
-//}
-
-//@Override
-//public String gridRep( ) {
-//return Arrays.stream(getGridReAsBoolArrayp()) // Stream di boolean[] (le righe)
-//    .map(row -> {
-//        // Trasformiamo ogni riga in una stringa di . e O
-//        StringBuilder sb = new StringBuilder();
-//        for (boolean cell : row) {
-//            sb.append(cell ? "O " : ". ");
-//        }
-//        return sb.toString();
-//    })
-//    .collect(Collectors.joining("\n")); // Uniamo le righe con un a capo
-//}

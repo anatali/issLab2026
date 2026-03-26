@@ -7,4 +7,5 @@ public interface IGrid {
 	  public ICell getCell(int x, int y);
 	  public boolean getCellValue(int x, int y);
 	  public void reset();
+	  public boolean[][] repAsBoolArray();  //Utility for canvas
 }
