@@ -77,6 +77,7 @@ public class ProtoActorContext26 {
                	CommUtils.outyellow("			---- ProtoActorContext26 reply " + answer);
                	if( am.isRequest() && answer != null ) ctx.send(answer.toString());
             });
+            
             ws.onClose(ctx -> { //ctx di tipo `io.javalin.websocket.WsCloseContext`
             	   //emitInfo(name + " | ws: connection closed:" + allConns.size() );
             	System.out.println("Sorgente chiusura: " + (ctx.status() == 1006 ? "Anomala/Timeout" : "Volontaria"));
@@ -98,7 +99,10 @@ public class ProtoActorContext26 {
     			IApplMessage answer = pactor.execMsg( am );
     			return answer;
     		}
-    		else return am;   	
+    		else {
+    			CommUtils.outyellow(name + " elabMsg : " + am.msgReceiver() + " not found"); 
+    			return am;   	
+    		}
         }
 		         
 		        
