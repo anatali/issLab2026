@@ -11,7 +11,7 @@ import unibo.basicomm23.interfaces.IApplMessage;
 import unibo.basicomm23.msg.ApplMessage;
 import unibo.basicomm23.utils.CommUtils;
 
-public class ProtoActorContext26 {
+public class ProtoActorContext26 implements ProtoActorContextInterface{
 	private String name;
 	private int port;
 	private  Javalin server                    = null;
@@ -24,6 +24,7 @@ public class ProtoActorContext26 {
 		configureTheSystem();		
 	}
 	
+	@Override
 	public void register( AbstractProtoactor26 pactor) {
 		protoactors.put(pactor.name, pactor );
 		CommUtils.outgreen("registered " + pactor.name + " in " + name );
@@ -38,6 +39,10 @@ public class ProtoActorContext26 {
 	    	setUpServer(   );
  		    setWorkWS( );   
  	    }
+	    
+	    public Javalin getServer() {
+	    	return server;
+	    }
 
 		protected void setUpServer(   ) {
  			if( server == null ) server = Javalin.create(config -> {
@@ -68,21 +73,19 @@ public class ProtoActorContext26 {
 
             
             ws.onMessage(ctx -> { //ctx di tipo `io.javalin.websocket.WsMessageContext`
-     
-//            	emitInfo( "new request info event" );
             	IApplMessage am = readInputWS( ctx.message() );
-            	CommUtils.outyellow("			---- ProtoActorContext26 onMessage " + am);
+//            	CommUtils.outyellow("			---- ProtoActorContext26 onMessage " + am);
 
             	IApplMessage answer = elabMsg( am,ctx );
-               	CommUtils.outyellow("			---- ProtoActorContext26 reply " + answer);
+//              CommUtils.outyellow("			---- ProtoActorContext26 reply " + answer);
                	if( am.isRequest() && answer != null ) ctx.send(answer.toString());
             });
             
             ws.onClose(ctx -> { //ctx di tipo `io.javalin.websocket.WsCloseContext`
             	   //emitInfo(name + " | ws: connection closed:" + allConns.size() );
-            	System.out.println("Sorgente chiusura: " + (ctx.status() == 1006 ? "Anomala/Timeout" : "Volontaria"));
-                System.out.println("Codice Status: " + ctx.status());
-                System.out.println("Motivo: " + ctx.reason());
+//            	System.out.println("Sorgente chiusura: " + (ctx.status() == 1006 ? "Anomala/Timeout" : "Volontaria"));
+//                System.out.println("Codice Status: " + ctx.status());
+//                System.out.println("Motivo: " + ctx.reason());
                 CommUtils.outmagenta(name + " | ws: connection closed from " + ctx.host() ); 
               });
             });
@@ -92,15 +95,39 @@ public class ProtoActorContext26 {
          * Individua il protoactor destinatario e gli fa accodare 
          * il task appropriato di elaborazione-messaggio 
          */
-        public IApplMessage elabMsg(IApplMessage am, WsMessageContext ctx) {
-        	CommUtils.outyellow(name + " elabMsg : " + am + " ctx null:" + (ctx==null)); 
+        @Override
+        public IApplMessage elabMsg( IApplMessage am ) {
+        	CommUtils.outyellow(name + " elabMsg : " + am  ); 
+        	String dest = am.msgReceiver();
     		AbstractProtoactor26 pactor=protoactors.get(am.msgReceiver());     		
     		if( pactor != null ) {
     			IApplMessage answer = pactor.execMsg( am );
     			return answer;
     		}
-    		else {
-    			CommUtils.outyellow(name + " elabMsg : " + am.msgReceiver() + " not found"); 
+    		else{ //ADDED MARCH 19
+    			//dest non è un pactor locale => assumo sia remoto su una delle conn correnti
+    			allConns.forEach( conn -> {
+    				CommUtils.outyellow("invio a dest remoto:" + am);
+    				sendsafe(conn, am.toString()); 
+    			});
+    			return am;   	
+    		}
+        }
+        
+        protected IApplMessage elabMsg(IApplMessage am, WsMessageContext ctx) {
+        	CommUtils.outyellow(name + " elabMsg : " + am + " ctx null:" + (ctx==null)); 
+        	String dest = am.msgReceiver();
+    		AbstractProtoactor26 pactor=protoactors.get(am.msgReceiver());     		
+    		if( pactor != null ) {
+    			IApplMessage answer = pactor.execMsg( am );
+    			return answer;
+    		}
+    		else{ //ADDED MARCH 19
+    			//dest non è un pactor locale => assumo sia remoto su una delle conn correnti
+    			allConns.forEach( conn -> {
+    				CommUtils.outyellow("invio a dest remoto:" + am);
+    				sendsafe(conn, am.toString()); 
+    			});
     			return am;   	
     		}
         }
@@ -126,8 +153,8 @@ public class ProtoActorContext26 {
 		        }
 		     
 /* Utility */
-		        
-		        protected void emitInfo(IApplMessage event) {
+		        @Override
+		        public void emitInfo(IApplMessage event) {
 		        	//CommUtils.outcyan("			emitInfo " + s);
  		        	//Invio a tutti i componenti esterni
 		        	allConns.forEach( (conn) -> {

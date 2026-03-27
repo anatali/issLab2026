@@ -2,6 +2,8 @@ package protoactor26;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
+
+import io.javalin.Javalin;
 import unibo.basicomm23.interfaces.IApplMessage;
 import unibo.basicomm23.utils.CommUtils;
 
@@ -10,8 +12,9 @@ import unibo.basicomm23.utils.CommUtils;
 	public abstract class AbstractProtoactor26 {
 	
 		protected String name ;
-		protected ProtoActorContext26 context;
- 		//protected IApplMessage reply; //see request
+		//protected ProtoActorContext26 context;
+		protected ProtoActorContextInterface context;
+// 		protected Javalin server;
 		protected ScheduledExecutorService msgexecutor  = Executors.newSingleThreadScheduledExecutor();
 	
 //	protected record WorkTask(
@@ -19,10 +22,11 @@ import unibo.basicomm23.utils.CommUtils;
 //    	 CompletableFuture<IApplMessage> future // Il "canale" di ritorno
 //    ) {}
  	
-	public AbstractProtoactor26(String name, ProtoActorContext26 ctx) {
+	public AbstractProtoactor26(String name, ProtoActorContextInterface  ctx) { //ProtoActorContext26
 		this.name     = name;
 		this.context  = ctx;
-		ctx.register(this); 
+//		server        = ctx.getServer();
+		context.register(this); 
 		proactiveJob(  );
 	}
 
@@ -79,7 +83,7 @@ import unibo.basicomm23.utils.CommUtils;
         	IApplMessage r = elabRequest(am);
         	CommUtils.outyellow("AbstractProtoactor26 request r=" + r  );
         	//dico al contesto che deve elaborare la reply
-        	context.elabMsg( r,null );
+        	context.elabMsg( r  );
         });
         return null;
     }
@@ -111,12 +115,12 @@ import unibo.basicomm23.utils.CommUtils;
     
     protected void forward(IApplMessage msg) {
     	//CommUtils.outyellow(name + " forward "+ msg);    	
-    	context.elabMsg(msg,null);
+    	context.elabMsg( msg );
      }
      
 	protected IApplMessage request(IApplMessage msg)   {
      	//CommUtils.outyellow(name + " doing request "+ msg);
-    	IApplMessage answer = context.elabMsg(msg,null);   
+    	IApplMessage answer = context.elabMsg( msg );   
     	//CommUtils.outyellow(name + " answer to request: "+ answer);
 		return answer;
 	}
