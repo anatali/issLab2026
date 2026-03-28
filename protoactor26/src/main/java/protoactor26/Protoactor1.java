@@ -29,8 +29,8 @@
             CommUtils.outmagenta(name + " | got reply: " + reply);
 
             //Invio di una request sincrona a sè stesso
-//            IApplMessage reply1 = request( autoreq );   
-//            CommUtils.outmagenta(name + " | got reply: " + reply1);
+            IApplMessage reply1 = request( autoreq );   
+            CommUtils.outmagenta(name + " | got reply: " + reply1);
            
         }
         

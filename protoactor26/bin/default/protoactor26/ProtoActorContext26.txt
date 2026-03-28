@@ -1,0 +1,221 @@
+package protoactor26;
+
+import java.time.Duration;
+import java.util.Map;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
+import org.json.simple.JSONObject;
+import io.javalin.Javalin;
+import io.javalin.websocket.WsConnectContext;
+import io.javalin.websocket.WsContext;
+import io.javalin.websocket.WsMessageContext;
+import unibo.basicomm23.interfaces.IApplMessage;
+import unibo.basicomm23.msg.ApplMessage;
+import unibo.basicomm23.utils.CommUtils;
+
+public class ProtoActorContext26 {
+	private String name;
+	private int port;
+	private  Javalin server                    = null;
+	private  Vector<WsConnectContext> allConns = new Vector<WsConnectContext>();
+	private Map<String, AbstractProtoactor26> protoactors = new ConcurrentHashMap<>();
+
+	public ProtoActorContext26(String name, int port) {
+		this.name = name;
+		this.port = port;
+		configureTheSystem();		
+	}
+	
+	public void register( AbstractProtoactor26 pactor) {
+		protoactors.put(pactor.name, pactor );
+		CommUtils.outgreen("registered " + name  );
+	}
+
+	/*
+	 * -----------------------------------------
+	 * Supporti per le connessione 
+	 * -----------------------------------------
+	 */
+
+		protected void setUpServer( boolean forWS ) {
+			CommUtils.outmagenta("setUpServer forWS=" + forWS );
+			if (forWS ) {
+				if( server == null ) server = Javalin.create(config -> {
+		            // In Javalin 6 si usa modifyWebSocketServletFactory
+		            config.jetty.modifyWebSocketServletFactory(factory -> {
+		                factory.setIdleTimeout(Duration.ofMinutes(30)); 
+		            	//factory.setIdleTimeout(Duration.ofSeconds(3)); //Just to test ...
+		            });
+		        }).start(port);
+			}
+		}
+
+		/*
+		 * ----------------------------------------------------
+		 * PARTE HTTP  - Stile funzionale
+		 * ----------------------------------------------------
+		 */
+		 
+		    protected double readInputHTTP(JSONObject b) throws NumberFormatException{
+		        String xs = ""+b.get("msgContent");
+		        double x  = Double.parseDouble(xs);
+		        CommUtils.outblue("x="+x  );
+		        return x;
+		    }
+		    
+		 
+		    
+		    protected void setWorkHTTP( ) {
+		    	setUpServer( false ); //per HTTP
+		    	//Le pagine vengono erogate dalle specializzazione (e.g. LifeControllerProtoactor)	
+		     }
+		    
+		    /*
+		     * ----------------------------------------------------
+		     * PARTE WS - Stile funzionale
+		      * ----------------------------------------------------
+		     */
+		         
+		        
+		        protected IApplMessage readInputWS(String message) throws Exception{
+		        	CommUtils.outyellow(	"readInputWS message=" + message  );
+		        	try {
+		    			IApplMessage m = new ApplMessage(message);  
+		    			return m;
+		    		} catch (Exception e) {
+		    			try {
+		    				//CommUtils.outred("readInputWS retrying after error e=" + e.getMessage());
+		    				IApplMessage m = ApplMessage.cvtJson(message);
+		    				return m;
+		    			} catch (Exception e2) {
+		    				//CommUtils.outred("readInputWS 2nd ERROR e2=" + e2.getMessage());
+		    				//CommUtils.outred("readInputWS ERROR for message=" + message + " e=" + e.getMessage());
+		    				IApplMessage ev = CommUtils.buildEvent("under","input",message );
+		    				return ev;
+		    			}
+		     		}
+		        }
+		     
+		       
+		        protected void emitEvent(String s, WsConnectContext ctx){
+		            //String event = "{\"msg\" : \"EV\" }".replace("EV",s);
+		            if (ctx.session.isOpen()) ctx.send( s  );  //sendsafe(ctx, s); ???
+		        }
+		        
+		        protected void emitInfo(String s) {
+		        	//CommUtils.outcyan("			emitInfo " + s);
+		        	//allConns.forEach( (conn) -> {if( conn.session.isOpen() ) conn.send(s); });
+		        	allConns.forEach( (conn) -> {if( conn.session.isOpen() ) sendsafe(conn, s); });
+		        }
+
+		        protected void sendsafe(WsContext ctx, String msg) {
+		        	synchronized (ctx.session) { 
+		                if (ctx.session.isOpen()) {
+		                    ctx.send(msg);
+		                }
+		            }
+		        }
+		        
+		        protected void setWorkWS( ) {
+		           	/*2*/ setUpServer( true ); //per WS
+
+		            /*3*/ server.ws("/eval", 
+		            /*4*/  ws -> {  //ws di tipo `io.javalin.websocket.WsConfig`		            
+		            /*5*/   ws.onConnect( ctx -> {  //ctx di tipo `io.javalin.websocket.WsConnectContext`
+		             			allConns.add(ctx);
+		             			CommUtils.outgreen(name + " | ws: connection   " + "" + " Nconn=" + allConns.size()); 	             			 
+		                // Ogni 20 secondi invia un segnale per "svegliare" i proxy
+//		            	heartbeatTask = executor.scheduleAtFixedRate(
+//		                    () -> { if(ctx.session.isOpen()) sendsafe(ctx,"PING");}, //lambda // CommUtils.outcyan("PING");
+//		                            20,  //QUANTO ASPETTARE LA PRIMA VOLTA. Se 0, il primo PING parte istantaneamente (inutile)
+//		                            20,  //OGNI QUANTO RIPETERE
+//		                            TimeUnit.SECONDS
+//		                    );
+		            });//ws.onConnect
+		            
+
+		            
+		            /*6*/   ws.onMessage(ctx -> { //ctx di tipo `io.javalin.websocket.WsMessageContext`
+		     
+//		            	emitInfo( "new request info event" );
+		            	IApplMessage am = readInputWS( ctx.message() );
+		            	CommUtils.outcyan("			---- ProtoActorContext26 onMessage " + am);
+		            	//if( am.isRequest() ) am.setConn(null);
+		            	elabMsg( am,ctx );
+		            	/*
+		            	if( am.isRequest() || am.isDispatch() ) {
+		            		AbstractProtoactor26 pactor=protoactors.get(am.msgReceiver());
+		            		if( pactor != null ) pactor.elabMsg( am );
+		            		else CommUtils.outred("actor unknown:" + am.msgReceiver());
+		            	}else if( am.isEvent() ) {
+		            		protoactors.forEach((id, pactor) -> {
+		            		    pactor.elabMsg( am ); //invio evento a tutti
+		            		});
+		            	}
+		            	 */
+		            	});
+		            /*8*/ ws.onClose(ctx -> { //ctx di tipo `io.javalin.websocket.WsCloseContext`
+		            	   //emitInfo(name + " | ws: connection closed:" + allConns.size() );
+		            	System.out.println("Sorgente chiusura: " + (ctx.status() == 1006 ? "Anomala/Timeout" : "Volontaria"));
+		                System.out.println("Codice Status: " + ctx.status());
+		                System.out.println("Motivo: " + ctx.reason());
+		                CommUtils.outmagenta(name + " | ws: connection closed from " + ctx.host() ); 
+		            	//allConns.remove(ctx);  //tipo non corretto
+/*
+ * 		            	if(heartbeatTask !=null ) heartbeatTask.cancel(true); 
+ * 						connectionClosed();
+ */
+		            	
+		            	//se no, l'Executor continua a provare a inviare "PING" a una connessione morta.      	   
+//		            	if( ctx.session == firstctx.session ) lastwishes();
+		              });
+		            });//server.ws
+		         }
+		
+		        
+		        public void elabMsg(IApplMessage am, WsMessageContext ctx) {
+		        	CommUtils.outred("elabMsg: " + am);
+
+            		AbstractProtoactor26 pactor=protoactors.get(am.msgReceiver());
+            		if( pactor == null ) {
+            		   if( am.isReply() ) {
+            			   CommUtils.outred("actor external:" + am.msgReceiver() );
+            			   ctx.send(am.toString());
+            		   }
+            		   return;
+            		}
+	            	if( am.isDispatch() ) {
+	            		pactor.elabMsg( am );
+	            	}else if( am.isRequest()  ) {
+	            		doRequestMsg( pactor,am,ctx );
+	            	}else if( am.isReply() ){
+	            		CommUtils.outred("replyto:" + pactor.name);
+	            		pactor.elabReply(am);
+	            	}else if( am.isEvent() ) {
+	            		protoactors.forEach((id, pa) -> {
+	            		    pa.elabMsg( am ); //invio evento a tutti
+	            		});
+	            	}		        	
+		        }
+		        
+		        public void doRequestMsg(AbstractProtoactor26 pactor, IApplMessage am, WsMessageContext ctx) {
+		        	IApplMessage r = pactor.elabRequest(am);
+		        	CommUtils.outcyan("reply ... "+r + " to:" + r.msgReceiver());
+		        	elabMsg(r,ctx);
+		        }
+	/*
+	 * ----------------------------------------------------
+	 * CNFIGURAZIONE DEL SISTEMA
+	 * ----------------------------------------------------
+	 */ 
+	    protected void configureTheSystem() {  
+	         
+//	    	if( ! ProtoActorContext2626.configured ) {
+		    	setWorkHTTP();
+		     	setWorkWS( );   
+		        CommUtils.outblue("server avviato su  " + port);
+//		        ProtoActorContext2626.configured = true;
+//	    	}
+	    }
+	
+}

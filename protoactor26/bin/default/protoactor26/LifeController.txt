@@ -5,7 +5,7 @@ import unibo.basicomm23.interfaces.Interaction;
 import unibo.basicomm23.utils.CommUtils;
 import unibo.basicomm23.ws.WsConnection;
 
-public class LifeController extends AbstractProtoactor26{
+public class LifeController {
 	private Interaction conn ;
 	private String name;
 	
