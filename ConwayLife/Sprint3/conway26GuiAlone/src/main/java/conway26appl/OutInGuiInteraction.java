@@ -35,7 +35,7 @@ public class OutInGuiInteraction implements IOutDev, IObserver{
 		try {
 			CommUtils.outgreen(name + " | connectToServer ..................... :");
 			conn = WsConnection.create("localhost:8080", "eval",this);
-	     	IApplMessage cmdmsg = CommUtils.buildDispatch("lifectrl", "setcontroller", "set", "guiserver"  );
+	     	IApplMessage cmdmsg = CommUtils.buildDispatch("lifectrl", "setcontroller", "set(lifectrl,ws,0)", "guiserver"  );
 	     	CommUtils.outblue("LifeGameInteraction | forward " + cmdmsg);
 	     	conn.forward(cmdmsg);
 	     	//Poi invio grid iniziale

@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import alice.tuprolog.Struct;
+import alice.tuprolog.Term;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.websocket.WsConnectContext;
@@ -23,7 +26,12 @@ public class IoJavalin {
 	private WsMessageContext pageCtx, lifeCtrlCtx ;
 	private String name;
 	private String firstCaller        = null;
-	protected Vector<WsConnectContext> allConns = new Vector<WsConnectContext>();
+	private String controllerName     = null;
+	private String controllerProtocol = null;
+	private String controllerPort     = null;
+	private Interaction controllerconn= null;
+	
+	private Vector<WsConnectContext> allConns = new Vector<WsConnectContext>();
 
 	public IoJavalin(String name) { //name="guiserver"
 		this.name = name;
@@ -115,16 +123,33 @@ public class IoJavalin {
                     	CommUtils.outmagenta(name + " |  memorizzo pageCtx:" + pageCtx);
                     	return;
                     }		                	
-            		if( m.msgSender().equals("lifectrl") ) {
+            		//if( m.msgSender().equals("lifectrl") ) {
             			if( m.msgReceiver().equals(name) && m.msgId().contains("setcontroller")) { 
-            		       	lifeCtrlCtx = ctx; //memorizzo connessione controller
-            	        	CommUtils.outmagenta(name + " |  memorizzo lifeCtrlCtx:" + lifeCtrlCtx );
+            				//setcontroller(name,protocol,port)
+            				Struct payload = (Struct) Term.parse(m.msgContent());
+            				CommUtils.outcyan(name + " | payload=" + payload );
+            				if( payload != null ) {
+            					controllerName     = payload.getArg(0).toString();
+            					controllerProtocol = payload.getArg(1).toString();
+            					controllerPort     = payload.getArg(2).toString().replace("'", "");
+            				}
+            	        	CommUtils.outcyan(name + " | controllerPort=" + controllerPort );
+            	        	if( controllerPort.equals("0")) {
+	           		       	    lifeCtrlCtx = ctx; //memorizzo connessione controller
+	            	        	CommUtils.outmagenta(name + " |  memorizzo lifeCtrlCtx:" + lifeCtrlCtx );
+            	        	}else {
+            	        		CommUtils.outmagenta("todo: set connection to " + controllerName);
+            	        		if( controllerProtocol.equals("ws")) {
+            	        			controllerconn =  WsConnection.create( controllerPort, "eval",null);
+            	        		}else {
+            	        			CommUtils.outmagenta("sorry, only ws supported  "  );
+            	        		}
+            	        	}
+            	        	return;
             			}
-            			else hanleMsgFromAppl(m);
-                	}
-                	else if( m.msgSender().equals(firstCaller)  ) {
-                		hanleMsgFromPage(m);
-                	}
+            	    if( m.msgSender().equals(controllerName) ) hanleMsgFromAppl(m);
+                	//}
+                	else if( m.msgSender().equals(firstCaller)  ) hanleMsgFromPage(m);
              });
         });        
 	}
@@ -132,12 +157,27 @@ public class IoJavalin {
 	
 	protected void hanleMsgFromPage(IApplMessage m) {
 		if( m.msgContent().contains("cell(") ) {
-     		CommUtils.outmagenta("send cell cmd to lifeCtrlCtx " + m);
-    		if( lifeCtrlCtx != null ) sendsafe( lifeCtrlCtx, m.toString() );
+     		CommUtils.outmagenta("send cell cmd to controller " + m);
+    		//if( lifeCtrlCtx != null ) sendsafe( lifeCtrlCtx, m.toString() );
+     		sendMsgToController(m);
 		}else if( m.msgReceiver().equals("lifectrl") ) {
 			//Giro il messaggio al livello applicativo
-    		if( lifeCtrlCtx != null ) 
-    			sendsafe( lifeCtrlCtx, m.toString() );			
+    		//if( lifeCtrlCtx != null )  sendsafe( lifeCtrlCtx, m.toString() );		
+			sendMsgToController(m);
+		}
+	}
+	
+	protected void sendMsgToController( IApplMessage msg ) {
+		if( lifeCtrlCtx != null ) sendsafe( lifeCtrlCtx,msg.toString() );
+		else 
+		if( controllerconn != null ) {
+ 			try {
+				controllerconn.forward( msg );
+			} catch (Exception e) {
+				CommUtils.outred("sendMsgToController ERROR: " + e.getMessage());
+			}
+		}else {
+			CommUtils.outred("ERROR: non connection to the controller");
 		}
 	}
 	
