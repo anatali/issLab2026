@@ -1,0 +1,98 @@
+plugins {
+    id 'application'
+    id 'java'
+    id 'jacoco'
+    id 'eclipse'
+}
+
+version '1.0'
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
+
+repositories {
+    mavenCentral()
+    flatDir {   dirs './libs'          }
+    flatDir {   dirs '../unibolibs'    } 
+}
+
+dependencies {
+    /* JSON ******************************************** */
+    // https://mvnrepository.com/artifact/org.json/json
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    implementation group: 'org.json', name: 'json', version: '20180130'
+
+    /* UNIBO ******************************* */
+    implementation name: 'uniboInterfaces'
+    implementation name: '2p301'
+    implementation name: 'unibo.basicomm23-1.0'
+    
+ 
+    /* javalin ******************************* */
+	implementation 'io.javalin:javalin-bundle:6.1.3'
+
+    /*  MQTT ********************************  */
+     implementation group: 'org.eclipse.paho', name: 'org.eclipse.paho.client.mqttv3', version: '1.2.5'
+
+   /*  Conway ********************************  */
+     implementation name: 'conway26Java-1.0'
+
+   /*  Protoactors ********************************  */
+     implementation name: 'protoactor26-1.0'
+}
+
+sourceSets {
+main {
+        java {
+            // Rimuovi 'src' generico, usa i percorsi specifici
+            srcDirs = ['src/main/java'] 
+        }
+        resources {
+            // Qui dice a Gradle dove cercare i file statici (HTML, ecc.)
+            srcDirs = ['src/main/resources' ]
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test/java', 'src/main/java/test']
+        }
+    }
+  }
+
+eclipse {
+    classpath {
+        sourceSets -= [sourceSets.main, sourceSets.test]
+    }
+}
+
+application {
+    //Define the main class for the application.
+    mainClassName    = 'conway26appl.protoactors.LifeGameProtoactors'
+}
+
+jar {
+    println("building jar")
+    from sourceSets.main.allSource
+ 
+    manifest {
+        attributes 'Main-Class': "$mainClassName"
+    }
+    //Gestisci i file duplicati (evita errori di build)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+ 
+task dovesiamo {
+    println("projectDir= $projectDir")
+    println("buildDir  = $buildDir")
+}
+ 
+jacocoTestReport {
+    dependsOn test // Il report viene generato solo dopo l'esecuzione dei test
+
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('reports/jacoco')
+    }
+}
