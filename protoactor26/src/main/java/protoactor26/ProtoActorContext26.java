@@ -76,7 +76,7 @@ public class ProtoActorContext26 implements ProtoActorContextInterface{
             	IApplMessage am = readInputWS( ctx.message() );
 //            	CommUtils.outyellow("			---- ProtoActorContext26 onMessage " + am);
 
-            	IApplMessage answer = elabMsg( am,ctx );
+            	IApplMessage answer = elabMsg( am ); //elabMsg2( am,ctx );
 //              CommUtils.outyellow("			---- ProtoActorContext26 reply " + answer);
                	if( am.isRequest() && answer != null ) ctx.send(answer.toString());
             });
@@ -95,9 +95,9 @@ public class ProtoActorContext26 implements ProtoActorContextInterface{
          * Individua il protoactor destinatario e gli fa accodare 
          * il task appropriato di elaborazione-messaggio 
          */
-        @Override
+        @Override 
         public IApplMessage elabMsg( IApplMessage am ) {
-        	CommUtils.outyellow(name + " elabMsg : " + am  ); 
+        	CommUtils.outyellow(name + " elabMsg : " + am.msgId() + " from " + am.msgSender() + " to " + am.msgReceiver()   ); 
         	String dest = am.msgReceiver();
     		AbstractProtoactor26 pactor=protoactors.get(am.msgReceiver());     		
     		if( pactor != null ) {
@@ -114,24 +114,6 @@ public class ProtoActorContext26 implements ProtoActorContextInterface{
     		}
         }
         
-        protected IApplMessage elabMsg(IApplMessage am, WsMessageContext ctx) {
-        	CommUtils.outyellow(name + " elabMsg : " + am + " ctx null:" + (ctx==null)); 
-        	String dest = am.msgReceiver();
-    		AbstractProtoactor26 pactor=protoactors.get(am.msgReceiver());     		
-    		if( pactor != null ) {
-    			IApplMessage answer = pactor.execMsg( am );
-    			return answer;
-    		}
-    		else{ //ADDED MARCH 19
-    			//dest non è un pactor locale => assumo sia remoto su una delle conn correnti
-    			allConns.forEach( conn -> {
-    				CommUtils.outyellow("invio a dest remoto:" + am);
-    				sendsafe(conn, am.toString()); 
-    			});
-    			return am;   	
-    		}
-        }
-		         
 		        
 		        protected IApplMessage readInputWS(String message) throws Exception{
 		        	CommUtils.outyellow(	"readInputWS message=" + message  );
