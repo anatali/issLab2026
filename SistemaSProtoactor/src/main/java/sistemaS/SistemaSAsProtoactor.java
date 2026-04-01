@@ -13,10 +13,10 @@ import unibo.basicomm23.interfaces.IApplMessage;
 import unibo.basicomm23.utils.CommUtils;
 
 public class SistemaSAsProtoactor extends AbstractProtoactor26{
-	
+    protected ScheduledExecutorService proactiveJobExecutor;
+
 	public SistemaSAsProtoactor(String name, ProtoActorContext26 context) {
 		super(name, context);
-//		prepareCmdHTTP();
 	}
 
 	protected void lastwishes() {}
@@ -42,7 +42,7 @@ public class SistemaSAsProtoactor extends AbstractProtoactor26{
     
 	@Override
     protected void elabEvent(IApplMessage ev ) {
-		CommUtils.outblue(name + " | elabEvent:" + ev);
+		CommUtils.outblue(name + " | perceives:" + ev);
 	}
  
 	@Override
@@ -79,23 +79,22 @@ public class SistemaSAsProtoactor extends AbstractProtoactor26{
 
 	@Override
 	protected void proactiveJob() {
-		// TODO Auto-generated method stub
+ 		proactiveJobExecutor = Executors.newSingleThreadScheduledExecutor();
+		Future<?>  playTask = proactiveJobExecutor.submit( () -> proactiveTask() );	
 		
 	}
 	
 	protected void proactiveTask() {
-//		CommUtils.outgreen(name + " | proactiveTask doing nothing ....."  );
 		CommUtils.outgreen(name + " | proactiveTask started ....."  );
 		for(int i=1; i<=5; i++) {
-			CommUtils.delay(4000);
-//			if( allConns.size() > 0) {
 				String time = LocalTime.now().getMinute() + ":"  + LocalTime.now().getSecond();
-				CommUtils.outyellow(name + " | emitInfo "  + time);						
-//				emitInfo( time );				
-//			}
+				CommUtils.outyellow(name + " | emitInfo "  + time);	
+				IApplMessage evtime = CommUtils.buildEvent(name, "info", time);
+				emitInfo( evtime );				
+				CommUtils.delay(2000);
 		} 
 		CommUtils.outgreen(name + " | proactiveTask ENDS "  );
-//		if(myLocalTask !=null) myLocalTask.cancel(true);
+//		if(playTask !=null) playTask.cancel(true);
 	}
 
 	

@@ -31,8 +31,8 @@ public class CallerAsProactor extends AbstractProtoactor26{
 
 	@Override
 	protected void elabEvent(IApplMessage ev) {
-		// TODO Auto-generated method stub
-		
+		CommUtils.outmagenta(name + " perceives " + ev);
+ 		
 	}
 
 	@Override
