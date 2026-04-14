@@ -14,7 +14,7 @@ public class GuiServer extends AbstractProtoactor26 {
 	private IoJavalin jvlnserver;
  	protected ScheduledExecutorService readexecutor = Executors.newSingleThreadScheduledExecutor();
 	protected CountDownLatch latchInput      = new CountDownLatch(1);
- 	protected String MqttBroker              = "tcp://localhost:1883"; //"tcp://broker.hivemq.com"; 
+ 	protected String MqttBroker;             // = "tcp://localhost:1883"; //"tcp://broker.hivemq.com"; 
  	protected MqttSupport  mqttsupport       = new MqttSupport( ); 
  	
  	/*
@@ -29,8 +29,11 @@ public class GuiServer extends AbstractProtoactor26 {
 		super(name, ctx);
 		jvlnserver = new IoJavalin("javaliniserver", this);
 		
-		mqttsupport.connectToBroker(name,MqttBroker);
-		mqttsupport.cleartopic("lifeGameIn");
+		if( ! MainGuiServer.workingForPolling ) {
+			MqttBroker = "tcp://localhost:1883";
+			mqttsupport.connectToBroker(name,MqttBroker);
+			mqttsupport.cleartopic("lifeGameIn");		
+		}
 	}
 
 	/*
@@ -88,8 +91,10 @@ public class GuiServer extends AbstractProtoactor26 {
 	 * Called by jvlnserver. Perceived by LifeGamePactorCmdEvent
 	 */
 	public void answerToReadEvent(IApplMessage m) {
-		CommUtils.outmagenta(name + " | answerToReadEvent from jvlnserver publish: " + m );
-		mqttsupport.publish(  "lifegameIn",m.toString(),1,false );  //last arg: retained
+		String payload = m.msgContent()+"(do)";
+		IApplMessage ev = CommUtils.buildEvent(name, m.msgContent(), payload);
+		CommUtils.outmagenta(name + " | answerToReadEvent from jvlnserver publish on lifegameIn: " + ev );
+		mqttsupport.publish(  "lifegameIn",ev.toString(),1,false );  //last arg: retained
 	}
 	
 

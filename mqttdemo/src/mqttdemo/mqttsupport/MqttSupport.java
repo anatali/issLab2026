@@ -131,6 +131,14 @@ protected String brokerAddr;
 			ColorsOut.outerr("MqttSupport | subscribe Error:" + e.getMessage());
 		}
 	}
+	
+	public void subscribe (String topic, IMqttMessageListener messageListener) {
+		try {			 
+			client.subscribe( topic, messageListener);
+		} catch (MqttException e) {
+			ColorsOut.outerr("MqttSupport | subscribe Error:" + e.getMessage());
+		}
+	}
 
 	public void unsubscribe( String topic ) {
 		try {

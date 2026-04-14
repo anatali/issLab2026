@@ -23,9 +23,9 @@ public class MqttPublisher {
      options.setCleanSession(true);
      options.setAutomaticReconnect(true);
      
-     System.out.println("Connessione a: " + broker);
+     System.out.println(clientId + " | Connessione a: " + broker);
      client.connect(options);
-     System.out.println("Connesso!");
+     System.out.println(clientId + " | Connesso!");
  }
  
  public void publish(String topic, String payload, int qos) throws MqttException {
@@ -33,7 +33,7 @@ public class MqttPublisher {
      message.setQos(qos);
      //message.setRetained(true);
      client.publish(topic, message);
-     System.out.println("Pubblicato su " + topic + ": " + payload);
+     System.out.println(clientId + " | Pubblicato su " + topic + ": " + payload);
  }
  
  public void disconnect() throws MqttException {
@@ -45,8 +45,8 @@ public class MqttPublisher {
  }
  
  public static void main(String[] args) {
-     String broker   = "tcp://broker.hivemq.com:1883";
-     String clientId = "Publisher_" + System.currentTimeMillis();
+     String broker   = "tcp://localhost:1883"; //"tcp://broker.hivemq.com:1883";
+     String clientId = "Publisher_" ; //+ System.currentTimeMillis();
      
      try {
          MqttPublisher publisher = new MqttPublisher(broker, clientId);

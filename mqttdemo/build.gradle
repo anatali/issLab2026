@@ -13,8 +13,7 @@ java {
 
 repositories {
     mavenCentral()
-    //flatDir {   dirs './libs'    }
-    flatDir {   dirs '../unibolibs'    } 
+    flatDir {   dirs '../unibolibs'  } 
 }
 
 dependencies {
@@ -28,44 +27,35 @@ dependencies {
     implementation name: '2p301'
     implementation name: 'unibo.basicomm23-1.0'
     
-    /* conway ******************************* */
-    //implementation name: 'conway26Java-1.0'
-
-    /* javalin ******************************* */
-	implementation 'io.javalin:javalin-bundle:6.1.3'
-
     /*  MQTT *******************************************************************************  */
      implementation group: 'org.eclipse.paho', name: 'org.eclipse.paho.client.mqttv3', version: '1.2.5'
 
 }
 
-sourceSets {
-main {
-        java {
-            // Rimuovi 'src' generico, usa i percorsi specifici
-            srcDirs = ['src/main/java'] 
-        }
-        resources {
-            // Qui dice a Gradle dove cercare i file statici (HTML, ecc.)
-            srcDirs = ['src/main/resources' ]
-        }
-    }
-    test {
-        java {
-            srcDirs = ['src/test/java', 'src/main/java/test']
-        }
-    }
-  }
+/*
+Se è una cartella normale (gialla): Eclipse non la riconosce. 
+Cliccaci sopra col destro -> Build Path -> Use as Source Folder.
 
+Se i file hanno una "J" grigia: Significa che sono esclusi dal build.
+*/
+sourceSets {
+    main {
+        java {
+             srcDir 'src/mqttdemo'            
+        }
+    }
+}
+
+/*
 eclipse {
     classpath {
         sourceSets -= [sourceSets.main, sourceSets.test]
     }
 }
-
+*/
 application {
     //Define the main class for the application.
-    mainClassName    = 'mqttdemo.MqttDemoEssential'
+    mainClassName    = 'usingSupport.MainUseSupport'
 }
 
 jar {
