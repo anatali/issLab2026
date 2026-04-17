@@ -1,0 +1,112 @@
+System -msglog  qakdemo26   
+/*
+ * File demo0.qak
+ * Ogni attore definisce (erdeitando da ActorBasicFsm):
+ *  val logger = org.slf4j.LoggerFactory.getLogger(name)
+ *  var currentState : State
+ *  var currentMsg   : IApplMessage 
+ * 
+ */    
+ 
+Dispatch msg1 : msg1(ARG)       "da sender a receiver"
+Dispatch msg2 : msg2(ARG) 		"da sender a receiver"
+Event alarm   : alarm(KIND)     "emesso da sender" 
+  
+Context ctxqakdemo26 ip [host="localhost" port=8095]
+  
+QActor receiver context ctxqakdemo26{
+		[#  
+		   clearlog("./logs/qakdemo26.log") 	//vedi src/main/resources/logback.xml
+		#]
+	   
+	State s0 initial { 	    
+		//printCurrentMessage color black
+		discardMsg Off  //Off is default: memorizzo i messaggi non attesi 	
+//		[# sysUtil.logMsgs=true #]	
+//		[# val logger = LoggerFactory.getLogger("createexecutor_actor") 
+//		   clearlog("./logs/xxx.log") 	
+//		#]
+		  
+ 	}      
+ 	Goto waitForMsgs  
+ 	
+ 	State waitForMsgs{
+  		printCurrentMessage color blue
+ 	}
+ 	Transition t0 whenMsg msg1 -> s2
+ 				  whenMsg msg2 -> s3 
+
+ 	State s2{ 
+ 		printCurrentMessage color blue
+ 		[#  
+ 		   logger.info(  "${currentState.stateName} handling $currentMsg"  )
+ 		#]
+ 		onMsg( msg1:msg1(ARG) ){
+ 			println("$name in s2 | msg1:msg1(${payloadArg(0)})") color blue
+ 			delay 1000  
+ 		}
+   	}   
+ 	Transition t0 whenMsg msg2 -> s3
+
+ 	State s3{ 
+ 		printCurrentMessage color blue	//msg is received but not elaborated
+  		[#  
+ 		   logger.info(  "${currentState.stateName} handling $currentMsg"  )
+ 		#]
+ 		onMsg( msg2:msg2(1) ){ 
+ 			println("$name in s3 | msg2:msg2(${payloadArg(0)})") color blue
+ 		} 
+   	}
+    Goto waitForMsgs      
+}    
+      
+QActor sender context ctxqakdemo26{
+	[# var emitEvents = true   
+	   var DT         = 1000L; 
+ 	#]
+	State s0 initial { 	
+		//printCurrentMessage color black
+		println( "$name sends msg1: msg1(1)... ") color green
+		[# logger.info(  "${currentState.stateName} sending msg1:msge1(1)"  ) #]
+ 		forward receiver -m msg1 : msg1(1)
+		delay 300
+		println( "$name sends msg1: msg1(2)... ") color green
+		[# logger.info(  "${currentState.stateName} sending msg1:msge1(2)"  ) #]
+		forward receiver -m msg1 : msg1(2)
+	} 
+	Transition t0 
+		whenTimeVar  DT -> sendothermsgs
+	
+	State sendothermsgs{
+		println( "$name sends msg2 after $DT ... ") color green
+		[# logger.info(  "${currentState.stateName} sending msg2:msg2(1)"  ) #]
+		forward receiver -m msg2 : msg2(1)		  	 
+		if [# emitEvents #] {
+			[# logger.info(  "${currentState.stateName} emits alarm"  ) #]
+			emit alarm : alarm( fire )
+		}
+	}
+}
+
+QActor perceiver context ctxqakdemo26{
+	State s0 initial { 	
+		//printCurrentMessage color black
+	}
+	Goto waitForEvents
+	
+	State waitForEvents{
+		printCurrentMessage color magenta
+	}
+	Transition t0  
+		whenEvent alarm -> handleEvent
+	
+	State handleEvent{
+		printCurrentMessage color magenta
+		[# logger.info(  "${currentState.stateName} perceives $currentMsg"  ) #]
+		println("perceiver ENDS THE SYSTEM") color magenta
+		[# System.exit(0) #]
+	}
+	Goto waitForEvents
+}  
+
+ 
