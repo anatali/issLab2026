@@ -1,0 +1,82 @@
+System /*-msglog*/  qakdemo26   
+/*
+ * -----------------------------------
+ * demoUsingObjects.qak
+ * -----------------------------------
+ */
+ 
+ Dispatch eval : arg(V)
+ Request  eval : arg(V)
+ Reply evalResult : value(V) for eval
+  
+ Context ctxqakdemo26 ip [host="localhost" port=8010]
+ 
+ 
+ QActor sistemas context ctxqakdemo26
+ 	withobj f using "qakdemo26.FunToEval()" {
+ 	State s0 initial{
+	 [#  
+		 clearlog("./logs/qakdemo26.log") 	//vedi src/main/resources/logback.xml
+	 #]
+	 //Just to test ...
+	 println("$name | ${f.eval(2.0)}")
+ 	}
+ 	Goto work
+ 	
+ 	State work{
+ 		
+ 	}
+ 	Transition t0 
+ 		whenMsg eval -> handleEvalCmd
+ 		whenRequest eval -> handleEvelRequest
+ 		
+ 		
+ 	State handleEvalCmd{
+ 		printCurrentMessage 
+ 		onMsg( eval : arg(X) ){
+ 			[# logger.info(  "${currentState.stateName} $currentMsg"  ) #]
+ 			[# var V = payloadArg(0).toDouble() #]
+ 			println("$name | eval $V")
+ 			[# var R = f.eval(V) #]
+ 			[# logger.info(  "${currentState.stateName} result=$R"  ) #]
+ 			println("$name | R=$R")
+ 		}
+ 	}
+ 	Goto work
+ 	
+ 	State handleEvelRequest{
+ 		printCurrentMessage
+ 		onMsg( eval : arg(X) ){
+ 			[# logger.info(  "${currentState.stateName} $currentMsg"  ) #]
+ 			[# var V = payloadArg(0).toDouble() #]
+ 			println("$name | eval $V")
+ 			[# var R = f.eval(V) #]
+ 			println("$name | request result R=$R")
+ 			[# logger.info(  "${currentState.stateName} replies=$R"  ) #]
+ 			replyTo eval with evalResult : value($R)
+ 		}
+ 	}
+ 	Goto work
+ }
+ 
+ QActor callermock context ctxqakdemo26{
+ 	State s0 initial{
+ 		[# var V = "2.0" #]
+ 		[# logger.info(  "${currentState.stateName} forward $V"  ) #]
+ 		forward sistemas -m eval : arg($V)
+ 		[# logger.info(  "${currentState.stateName} request $V"  ) #]
+ 		request sistemas -m eval : arg($V)
+ 	}
+ 	Transition t0
+ 		whenReply evalResult -> handleEvalResult
+ 		
+ 	State handleEvalResult{
+ 		printCurrentMessage color magenta
+ 		onMsg( evalResult : value(X) ){
+ 			[# var R = payloadArg(0) #]
+ 			println("$name | result R=$R") color magenta
+ 			[# logger.info(  "${currentState.stateName} answer $R"  ) #]
+ 		}
+ 		[# System.exit(0) #]
+ 	}
+ }

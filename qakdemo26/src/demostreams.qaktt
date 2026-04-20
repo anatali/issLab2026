@@ -1,0 +1,115 @@
+System /*-msglog*/ qakdemo26
+/*
+ * -----------------------------------
+ * demostreams.qak
+ * -----------------------------------
+ */  
+Event  data  : value(V)     "emesso da datasource "
+     
+Context ctxqakdemo26 ip [host="localhost" port=8045]
+    
+/*
+ * Sorgente di eventi data
+ */
+QActor datasource context ctxqakdemo26{
+	[# var N = 10 #]
+	State s0 initial{
+		[# logger.info(  "${currentState.stateName} starts"  ) #]
+		 [#  
+			 clearlog("./logs/qakdemo26.log") 	//vedi src/main/resources/logback.xml
+		 #]
+		delay 1000
+	}
+	Goto work
+	
+	State work{
+		println("$name emitlocalstream $N") color green
+		[# logger.info(  "${currentState.stateName} emitlocalstream data:value($N)"  ) #]
+		emitlocalstream  data : value($N)
+		[# N = N + 10 #]
+		delay 500
+	}
+	Goto work  if [# N < 80 #] else endOWork
+	
+	State endOWork{
+		println("$name ENDS") color green
+		delay 1000
+		[# logger.info(  "${currentState.stateName} exit"  ) #]
+		[# System.exit(0) #]
+	}
+	 
+}
+
+/*
+ * Attore che propaga solo gli eventi data  con valori inferiori a 40  
+ */
+QActor filter context ctxqakdemo26{
+[# var V = 0 #]
+	 
+	State s0 initial{
+		[# logger.info(  "${currentState.stateName} subscribeTo datasource for data"  ) #]
+		subscribeTo datasource for data		  
+	} 
+	Transition t0 whenEvent data -> handleData
+	
+	State handleData{
+		//printCurrentMessage color magenta
+		onMsg( data : value(V)){
+			[# logger.info(  "${currentState.stateName}  perceives data value=${payloadArg(0)}"  ) #]
+			[#  V = payloadArg(0).toInt() #]
+			println("$name handles $V") color magenta
+			if [# V < 40  #] {
+				[# logger.info(  "${currentState.stateName}  emitlocalstream data:value($V)"  ) #]
+				emitlocalstream  data : value($V)
+			}
+		} 
+	}    
+	Transition t0 
+		whenEvent data -> handleData
+}
+
+/*
+ * Attore interessato a eventi data opportunamente filtrati
+ */    
+QActor sink context ctxqakdemo26{ 
+ 
+	State s0 initial{
+        [# logger.info(  "${currentState.stateName} subscribeTo datasource for data"  ) #]
+        subscribeTo filter for data
+	}   
+	Transition t0 whenEvent data -> handleData
+	
+	State handleData{	
+		[# logger.info(  "${currentState.stateName} $currentMsg"  ) #]	
+		println("$name handles ${currentMsg.msgContent()}") color blue
+	}
+	Transition t0 
+		whenEvent data -> handleData
+}
+
+/* 
+ * Attore interessato a event data che decide di perecpire dopo 3sec
+ */
+QActor busy context ctxqakdemo26{
+	State s0 initial{
+		println("$name STARTS") color blue
+		[# logger.info(  "${currentState.stateName} subscribeTo datasource for data"  ) #]
+		subscribeTo datasource for data		  
+	} 
+	Transition t0 
+		whenTime 3000 -> work
+	
+	State work{
+		println("$name PAY ATTENTION") color blue
+		[# logger.info(  "${currentState.stateName} pay attention for data"  ) #]
+	}
+	Transition t0 
+		whenEvent data -> handleData
+	
+	State handleData{
+		[# logger.info(  "${currentState.stateName}  perceives $currentMsg"  ) #]
+		printCurrentMessage color blue
+	}    
+	Transition t0 
+		whenEvent data -> handleData
+}

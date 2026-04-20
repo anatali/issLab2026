@@ -1,0 +1,128 @@
+System  qakdemo26
+/*
+ * -----------------------------------
+ * demodelegate.qak
+ * -----------------------------------
+ */    
+Request r1 : r1(X)
+Reply rr1 : rr1(X) for r1
+ 
+Request r2 : r2(X)
+Reply rr2 : rr2(X) for r2 
+
+Dispatch cmd : cmd(X)
+ 
+Context ctxqakdemo26 ip [host="localhost" port=8045]
+
+/*
+ * Un server che delega comandi cmd e richieste r2
+ * a serveralias
+ */
+QActor server context ctxqakdemo26{
+	State s0 initial{
+	 [#  
+		 clearlog("./logs/qakdemo26.log") 	//vedi src/main/resources/logback.xml
+	 #]
+	 delay 200 
+	 [# logger.info(  "${currentState.stateName} delegate r2 to serveralias"  ) #]
+	 delegate r2 to serveralias   
+	 [# logger.info(  "${currentState.stateName} delegate cmd to serveralias"  ) #]
+	 delegate cmd to serveralias
+	} 
+	Goto work	
+	
+	State work{
+		println("$name working ...") color blue
+	}
+	Transition t0 whenRequest r1 -> handle_r1
+	
+	State handle_r1{
+		printCurrentMessage color blue
+		[# logger.info(  "${currentState.stateName} repplyTo r1 "  ) #]
+		[# var A = "answerTo_${currentMsg.msgContent() }"#]
+		replyTo r1 with rr1 : rr1($A)
+	} 
+	Goto work
+}
+
+/*
+ * Lavora per gestire comandi cmd e richieste r2
+ * inviati al server e da questi delegati
+ */
+QActor serveralias context ctxqakdemo26{
+	State s0 initial{
+		//delay 1000
+	}
+	Goto work
+	
+	State work{
+		
+	}
+	Transition t0 
+		whenRequest r2 -> handle_r2
+		whenMsg cmd    -> handlecmd
+	
+	
+	State handle_r2{
+		printCurrentMessage color cyan
+		[# logger.info(  "${currentState.stateName} doing $currentMsg "  ) #]
+		[# logger.info(  "${currentState.stateName} repplyTo r2 "  ) #]		
+		replyTo r2 with rr2 : rr2(answer)
+	}
+	Goto work
+	
+	
+	State handlecmd{
+		printCurrentMessage color blue
+		[# logger.info(  "${currentState.stateName} handlecmd $currentMsg "  ) #]		
+		//[# System.exit(0) #]
+	}
+	Goto work
+} 
+
+/*
+ * Invia al server la rcihietsa r1
+ * gestita direttemente dal server
+ */
+QActor calleractor1 context ctxqakdemo26{
+	State s0 initial{
+		delay 500
+		println("$name request r1") color green
+		[# logger.info(  "${currentState.stateName} request r1:r1(10) ro server "  ) #]
+		 request server -m r1 : r1(10)  
+	} 
+	Transition t0 
+		whenReply rr1 -> handleReply
+	
+	State handleReply{
+		printCurrentMessage color green
+		[# logger.info(  "${currentState.stateName} doing $currentMsg "  ) #]
+	}
+}
+
+/*
+ * Invia al server la rcihietsa r2 e il comando cmd
+ * che server il server delega a serveralias
+ * Il sender della reply rr2 e appunto serveralias
+ */
+QActor calleractor2 context ctxqakdemo26{
+	State s0 initial{
+		delay 1000
+		println("$name request r2")    color magenta
+		[# logger.info(  "${currentState.stateName} request r2:r2(a) ro server "  ) #]
+		request server -m r2 : r2(a)  
+	}
+	Transition t0 
+		whenReply rr2 -> handleReply
+	
+	State handleReply{
+		printCurrentMessage color magenta
+		[# logger.info(  "${currentState.stateName} doing $currentMsg"  ) #]
+		delay 1000
+		println("$name dispatch cmd")    color magenta
+		[# logger.info(  "${currentState.stateName} forward cnd:cmd(stop) to server"  ) #]
+		forward server -m cmd : cmd(stop)
+        delay 1500
+        [# System.exit(0) #]
+	}
+}

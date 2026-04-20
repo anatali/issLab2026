@@ -1,0 +1,100 @@
+System /*-msglog  -trace */ qakdemo26
+/*
+ * -----------------------------------
+ * demoasktocallert.qak
+ * -----------------------------------
+ */
+Request r1 : r1(X) "da caller a called"
+Request r2 : r2(X) 	
+Reply   a1 : a1(X) for r1
+Reply   a2 : a2(X) for r2 
+
+Context ctxqakdemo26 ip [host="localhost" port=8014]    //for first run (debug)
+
+QActor caller context ctxqakdemo26 {
+	State init initial {
+	 [#  
+		 clearlog("./logs/qakdemo26.log") 	//vedi src/main/resources/logback.xml
+	 #]
+		delay 500
+		println("	caller request r1(10)") color blue
+		[# logger.info(  "${currentState.stateName} sending r1(10)"  ) #]
+		request called -m r1 : r1(10)
+		delay 1000
+		println("	caller request r1(20)") color blue
+		[# logger.info(  "${currentState.stateName} sending r1(20)"  ) #]
+		request called -m r1 : r1(20)
+	}
+	Goto work 
+	
+	State work{
+		//println("	caller work")
+	}
+	Transition t0 
+		whenReply   a1 -> handleReply
+		whenReply   a2 -> handleReply
+		whenRequest r2 -> handleAskFromCalled
+	
+	State handleReply{
+		//printCurrentMessage
+		println("	$name handleReply $currentMsg") color blue
+	}
+	Goto work 
+	 
+	State handleAskFromCalled{
+		onMsg( r2 : r2(X) ) {
+			[# logger.info(  "${currentState.stateName} elab r2 "  ) #]
+			println("	$name receives ask from called r2(${payloadArg(0)})") color blue
+			println("	$name replies with a2(90)") color blue
+			[# logger.info(  "${currentState.stateName} replyTo r2"  ) #]
+			replyTo r2 with a2: a2(90)
+		}
+	}
+	Goto work
+}  
+
+QActor called context ctxqakdemo26 {
+[# var RequestArg = "0" #]
+	State init initial {
+		//println("	$name init") color magenta
+	}
+	Transition t0 
+		whenRequest r1 -> handleRequest
+	 
+	 
+	State handleRequest{
+		//println("	$name handleRequest") color magenta 
+		onMsg( r1 : r1(10) ){
+			[# logger.info(  "${currentState.stateName} elab r1(10)"  ) #]	
+			[# RequestArg = payloadArg(0) #]
+			println("	$name receives request r1($RequestArg)") color magenta
+			println("	$name askfor r2(theta)") color magenta
+			[# logger.info(  "${currentState.stateName} ask r2"  ) #]
+			ask  r2 : r2(theta)  forrequest r1 //request r1 : r2(theta)   //r2 is the new request
+ 		}	
+ 		onMsg( r1 : r1(20) ){	
+ 			[# logger.info(  "${currentState.stateName} elab r1(20)"  ) #]	
+ 			[# RequestArg = payloadArg(0) #]
+ 			println("	$name receives the request r1(${payloadArg(0)})") color magenta
+ 			[# val R = "${RequestArg}_${payloadArg(0)}" #]
+ 			[# logger.info(  "${currentState.stateName} replyto r1 with a1($R)"  ) #]
+ 			replyTo r1 with a1 : a1( $R )  
+ 		}
+	} 
+	Transition t0
+		 whenTime 1000 -> init
+		 whenReply a2 -> answerAfterAsk
+
+	State answerAfterAsk{  
+//		printCurrentMessage		  
+ 		onMsg( a2 : a2(X) ){ 
+ 			[# logger.info(  "${currentState.stateName} elab a2"  ) #]	
+ 			println("	$name receives answer to ask a1(${payloadArg(0)})") color magenta
+ 			[# val R = "${RequestArg}_${payloadArg(0)}" #]
+ 			println("	$name replies to orginal request with a1($R)") color magenta
+ 			[# logger.info(  "${currentState.stateName} replyto r1 with a1($R)"  ) #]
+			replyTo r1 with a1 : a1( $R )  
+ 		}
+	} 
+	Goto init   
+}  

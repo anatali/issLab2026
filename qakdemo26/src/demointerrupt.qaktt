@@ -1,0 +1,81 @@
+System  qakdemo26
+/*
+ * -----------------------------------
+ * demointerrupt.qak
+ * -----------------------------------
+ */ 
+Dispatch cmd   : cmd(X)
+Event    alarm : alarm(X)
+
+Context ctxqakdemo26 ip [host="localhost" port=8045]
+
+QActor worker context ctxqakdemo26{
+	State s0 initial{
+		[#  
+			 clearlog("./logs/qakdemo26.log") 	//vedi src/main/resources/logback.xml
+		#]
+		[# logger.info(  "${currentState.stateName} starts"  ) #]
+		println("$name STARTS") color blue
+	}	
+	Goto work 
+	 
+	State work{
+		println("$name WORKING ... ") color blue
+		delay 1000  //simulate some job
+		[# logger.info(  "${currentState.stateName} here still working"  ) #]
+		println("$name hee still WORKING ... ") color blue
+	}
+	Transition t0
+	    whenMsg cmd               -> handlecmd
+		whenInterruptEvent  alarm -> handlealarm
+	
+	State handlecmd{
+		[# logger.info(  "${currentState.stateName} $currentMsg"  ) #]
+		printCurrentMessage color blue
+	}
+	Goto work 
+	
+	State handlealarm{
+		printCurrentMessage color black
+		[# logger.info(  "${currentState.stateName} $currentMsg"  ) #]
+		if[# currentMsg.msgContent() == "alarm(tsunami)" #]{
+			println("$name | WARNING : tsunami ... ") color red
+			delay 1000
+			[# logger.info(  "${currentState.stateName} exit since tsunami"  ) #]
+			[# System.exit(0) #]
+		}
+		else{ 
+			[# logger.info(  "${currentState.stateName} returnFromInterrupt"  ) #]
+			returnFromInterrupt
+		}
+	}
+}
+
+QActor user context ctxqakdemo26{
+	State s0 initial{
+		delay 500
+		println("$name forward  cmd(10) ") color cyan
+		[# logger.info(  "${currentState.stateName} forward cmd(10) to worker"  ) #]
+		forward worker -m cmd : cmd(10)
+		delay 500
+		println("$name forward  cmd(20) ") color cyan
+		[# logger.info(  "${currentState.stateName} forward cmd(20) to worker"  ) #]
+		forward worker -m cmd : cmd(20)
+		[# logger.info(  "${currentState.stateName} ENDS"  ) #]
+		println("$name ENDS") color cyan
+	}		
+}
+
+
+QActor sentinel context ctxqakdemo26{
+	State s0 initial{
+		delay 300
+		println("$name emits alarm(fire)") color magenta
+		[# logger.info(  "${currentState.stateName} emit alarm(fire)"  ) #]
+		emit alarm : alarm(fire)
+		delay 300
+		println("$name emits alarm(tsunami)") color magenta
+		[# logger.info(  "${currentState.stateName} emit alarm(tsunami)"  ) #]
+		emit alarm : alarm(tsunami)
+	}	
+}

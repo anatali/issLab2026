@@ -1,0 +1,43 @@
+System  /* -trace  -msglog */ qakdemo24
+
+Event sonardata : sonardata(D) 
+
+Context ctxmqtt  ip [host="localhost" port=8920     ]
+
+QActor publisher context ctxmqtt{
+	State s0 initial{
+		//connectToMqttBroker "wss://test.mosquitto.org:8081"  //EXPERIMENTAL
+		connectToMqttBroker "tcp://broker.hivemq.com:1883"
+		//subscribe "sonardatatopic"  //se uncommented, percepisce anche lui sonardata
+		delay 1000
+		println("$name| publish ") color blue
+		publish "sonardatatopic" -m sonardata : sonardata(10)
+		emit sonardata : sonardata(10)
+	} 
+	Transition t0 whenEvent sonardata -> handlesonardata
+	
+	State handlesonardata{
+		onMsg( sonardata : sonardata(D)){
+			println("$name| sonar distance ${payloadArg(0)}") color blue
+		}
+	}
+}
+
+QActor subscriber context ctxmqtt{
+	State s0 initial{
+		//connectToMqttBroker "wss://test.mosquitto.org:8081" //EXPERIMENTAL
+		connectToMqttBroker "tcp://broker.hivemq.com:1883"
+		subscribe "sonardatatopic"		
+	}
+	Transition t0 whenEvent sonardata -> handlesonardata
+	
+	State handlesonardata{
+		printCurrentMessage color cyan
+		onMsg( sonardata : sonardata(D)){
+			println("$name| sonar distance ${payloadArg(0)}") color magenta
+		}
+		delay 2000
+				[# System.exit(0) #]
+	}
+	Transition t0 whenEvent sonardata -> handlesonardata
+}

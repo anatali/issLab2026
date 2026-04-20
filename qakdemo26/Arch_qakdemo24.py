@@ -21,11 +21,11 @@ evattr = {
     'color': 'darkgreen',
     'style': 'dotted'
 }
-with Diagram('qakdemo26Arch', show=False, outformat='png', graph_attr=graphattr) as diag:
+with Diagram('qakdemo24Arch', show=False, outformat='png', graph_attr=graphattr) as diag:
   with Cluster('env'):
      sys = Custom('','./qakicons/system.png')
 ### see https://renenyffenegger.ch/notes/tools/Graphviz/attributes/label/HTML-like/index
-     with Cluster('ctxqakdemo26', graph_attr=nodeattr):
+     with Cluster('ctxcreate', graph_attr=nodeattr):
           creator=Custom('creator','./qakicons/symActorWithobjSmall.png')
           producer=Custom('producer','./qakicons/symActorDynamicWithobj.png')
           consumer=Custom('consumer','./qakicons/symActorWithobjSmall.png')

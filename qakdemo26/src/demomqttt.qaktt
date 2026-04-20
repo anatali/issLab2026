@@ -1,0 +1,55 @@
+System  /* -trace  -msglog */ qakdemo26
+mqttBroker "192.168.1.132" : 1883 eventTopic "mqttdemotopic" //"broker.hivemq.com" 
+/*
+ * ----------------------------------- 
+ * demomqtt.qak
+ * -----------------------------------
+ */ 
+Event sonardata : sonardata(D)  
+ 
+Context ctxqakdemo26  ip [host="localhost" port=8920     ]
+ 
+QActor publisher context ctxqakdemo26{
+	State s0 initial{
+		[# logger.info(  "${currentState.stateName} starts"  ) #]
+		 [#  
+			 clearlog("./logs/qakdemo26.log") 	//vedi src/main/resources/logback.xml
+		 #]
+	 	delay 1000
+	 	println("$name| emit sonardata(10)") color blue
+	    [# logger.info(  "${currentState.stateName} emit sonardata(10)"  ) #]
+		emit sonardata : sonardata(10)
+	}
+	Transition t0 
+		whenEvent sonardata -> handlesonardata
+	
+	State handlesonardata{ 
+		printCurrentMessage color blue
+		
+		onMsg( sonardata : sonardata(D) ){
+			println("$name| perceives sonar distance ${payloadArg(0)}") color blue
+			[# logger.info(  "${currentState.stateName}  perceives sonar distance ${payloadArg(0)}"  ) #]
+			println("$name| emit sonardata(20)") color blue
+		    [# logger.info(  "${currentState.stateName} emit sonardata(20)"  ) #]
+			emit sonardata : sonardata(20) 
+		}
+	}
+}
+
+QActor subscriber context ctxqakdemo26{
+	State s0 initial{
+		[# logger.info(  "${currentState.stateName} starts"  ) #]
+	}
+	Transition t0 
+		whenEvent sonardata -> handlesonardata
+	
+	State handlesonardata{
+		printCurrentMessage color cyan
+		onMsg( sonardata : sonardata(D)){
+			[# logger.info(  "${currentState.stateName}  perceives sonar distance ${payloadArg(0)}"  ) #]
+			println("$name|  perceives sonar distance ${payloadArg(0)}") color magenta
+		}
+	}
+	Transition t0 
+		whenEvent sonardata -> handlesonardata
+}

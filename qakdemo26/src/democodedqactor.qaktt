@@ -1,0 +1,56 @@
+System /*-trace*/ qakdemo26
+/*
+ * -----------------------------------
+ * democodedqactor.qak
+ * -----------------------------------
+ */   
+ 
+Dispatch start   : start( ARG )
+Event alarm      : alarm( DATA )   
+ 
+ 
+Context ctxqakdemo26 ip [host="localhost" port=8065]
+
+  CodedQActor w1  context ctxqakdemo26 className "qakdemo26.workactor"
+//  CodedQActor w2  context ctxqakdemo26 className "qakdemo26.workactor"
+//  CodedQActor w3  context ctxqakdemo26 className "qakdemo26.workactor"
+  
+  QActor datahandler context ctxqakdemo26{
+  	[# var StartTime = 0L #]
+     State s0 initial { 	  
+   	 	[#  
+		 clearlog("./logs/qakdemo26.log") 	//vedi src/main/resources/logback.xml
+	 	#]
+ 		printCurrentMessage 
+ 		//[# val cpus = Runtime.getRuntime().availableProcessors() #]
+ 		//println("cpus= $cpus") color red
+ 		memoCurrentTime StartTime 		 
+ 		//forward sonargen -m start : start(do)
+ 		[# logger.info(  "${currentState.stateName} forward start to w1"  ) #]
+ 		forward w1 -m start : start(do)
+// 		forward w2 -m start : start(do)
+// 		forward w3 -m start : start(do)
+    }    
+    Transition t0 whenEvent alarm -> handleAlarm
+     
+          
+    State handleAlarm { 
+    	printCurrentMessage color cyan
+    	[# var Elapsed = 0L #]
+    	setDuration Elapsed from StartTime
+    	memoCurrentTime StartTime
+    	[# logger.info(  "${currentState.stateName} perceives alarm after $Elapsed"  ) #]
+    	println("$name alarm after $Elapsed") color magenta
+    }
+    Transition t0 whenTime 2500 -> end  
+    			  whenEvent alarm -> handleAlarm
+    			 
+    State end{
+    	[# var Elapsed = 0L #]
+    	setDuration Elapsed from StartTime
+    	[# logger.info(  "${currentState.stateName} ends after $Elapsed"  ) #]
+    	println("$name ENDS duration=$Elapsed") color magenta
+    } 
+  }  
+  
+  

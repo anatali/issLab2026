@@ -1,0 +1,49 @@
+System qakdemo26 
+/*
+ * -----------------------------------
+ * demoautoobserver.qak
+ * -----------------------------------
+ */
+Dispatch coapUpdate : changed( TERM )
+ 
+Context ctxqakdemo26 ip [host="localhost" port=8004]
+
+QActor autoobserver context ctxqakdemo26 {
+  State s0 initial{
+	 [#  
+		 clearlog("./logs/qakdemo26.log") 	//vedi src/main/resources/logback.xml
+	 #]
+	 [# logger.info(  "${currentState.stateName} observeResource $name"  ) #]
+    observeResource autoobserver 
+    println("$name | updateResource hello_1") color blue 
+    [# logger.info(  "${currentState.stateName} updateResource hello_1"  ) #]
+    updateResource [# "hello_1" #]  //una sorta di automessage?
+    println("$name | updateResource hello_2") color blue 
+    [# logger.info(  "${currentState.stateName} updateResource hello_2"  ) #]
+    updateResource [# "hello_2" #]
+  }
+  Transition t0 
+  		whenMsg coapUpdate -> handleUpdate
+  
+  State handleUpdate{ 
+    //printCurrentMessage
+    //println("$currentMsg") color blue 
+    onMsg( coapUpdate : changed(TERM)){
+       [# logger.info(  "${currentState.stateName} $currentMsg"  ) #]
+     	
+      [#  
+        val infoMsg = payloadArg(0)
+        val INFO    = "$infoMsg "
+      #]
+      println("$name: I'm doing: $INFO") color magenta
+    }
+  }
+  Transition t0 
+  	whenMsg coapUpdate -> handleUpdate
+
+
+
+} 
+ 
+
+ 

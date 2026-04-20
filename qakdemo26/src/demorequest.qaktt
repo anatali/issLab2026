@@ -1,0 +1,62 @@
+System  qakdemo26
+/*
+ * -----------------------------------
+ * demorequest.qak
+ * -----------------------------------
+ */ 
+Request r1 : r1(X) "richiesta del caller"
+Reply   a1 : a1(X)   for r1
+ 
+Context ctxqakdemo26 ip [host="localhost" port=8010]    
+ 
+QActor caller context ctxqakdemo26 { 
+	State init initial { 
+   	 [#  
+		 clearlog("./logs/qakdemo26.log") 	//vedi src/main/resources/logback.xml
+	 #]
+		println("caller starts") color blue 
+		delay 100 //give time to start called ...
+		[# logger.info(  "${currentState.stateName} sending r1"  ) #]
+		request called -m r1 : r1(hello(world))
+ 	}  
+	Goto work    
+	 
+	State work{
+       //printCurrentMessage color blue
+       [# logger.info(  "${currentState.stateName} waits "  ) #]
+	}
+	Transition t0 whenReply   a1 -> handleReply
+	
+	State handleReply{
+		printCurrentMessage color blue
+		[# logger.info(  "${currentState.stateName} handling $currentMsg "  ) #]
+ 		onMsg( a1:a1(ARG) ){
+ 			println("answer=${payloadArg(0)}") color blue
+ 			delay 1000  
+ 		} 	
+ 		[# System.exit(0) #]
+ 	}
+	//Goto work	
+} 
+ 
+ 
+QActor called context ctxqakdemo26 {
+ 
+	State init initial {
+ 		println("called waits ...") color green
+ 		[# logger.info(  "${currentState.stateName} waits "  ) #]
+	}
+	Transition t0  
+		whenRequest r1 -> handleRequest
+   
+	State handleRequest{  
+		printCurrentMessage	color green	 
+		[# logger.info(  "${currentState.stateName} handling $currentMsg "  ) #]
+ 		onMsg( r1 : r1(X) ){  
+ 			[# val Answer = "${getName()}_${currentMsg.msgSender()}_${payloadArg(0)}" #]
+ 			[# logger.info(  "${currentState.stateName} reply $Answer"  ) #]
+ 			replyTo r1 with a1 : a1( $Answer )  
+ 		} 
+	}  
+	Goto init   
+}   

@@ -1,0 +1,52 @@
+System qakdemo26
+/*
+ * -----------------------------------
+ * demoobserver.qak
+ * -----------------------------------
+ */
+
+Dispatch info : changed(SOURCE,TERM)  "inviata senza forward (con updateResource)"
+
+Context ctxqakdemo26 ip [host="localhost" port=8004]
+
+QActor observer context ctxqakdemo26 {
+  State s0 initial{
+	 [#  
+		 clearlog("./logs/qakdemo26.log") 	//vedi src/main/resources/logback.xml
+	 #]
+    delay 500 //Give time for worker to start WARNING: to do better
+    [# logger.info(  "${currentState.stateName}  observeResource worker for info"  ) #]
+    observeResource worker msgid info
+  }
+  Transition t0 
+  	whenMsg info -> handleinfo
+
+  State handleinfo{
+    //printCurrentMessage
+    println("$name | handleinfo $currentMsg") color blue
+    onMsg( info : changed( SOURCE,TERM ) ){  
+      [# val Source = payloadArg(0)
+        val infoMsg = payloadArg(1) 
+        val M       = "$infoMsg from $Source"
+      #]
+      [# logger.info(  "${currentState.stateName} elab $infoMsg from $Source"  ) #]
+      println("$M") color magenta
+    }
+  }
+  Transition t0 whenMsg info -> handleinfo
+}
+
+QActor worker context ctxqakdemo26{
+  State s0 initial{
+    [# var n = 1 #]   
+    delay 1000 //Give time for observer to setup. WARNING: to do better
+    println("$name | update hello_${n}") color green
+    [# logger.info(  "${currentState.stateName} updateResource: $name,hello_${n}"  ) #]
+    updateResource [# "$name, hello_${n}" #]
+    [# n++ #]
+    delay 2000
+    [# logger.info(  "${currentState.stateName} updateResource: $name,hello_${n}"  ) #]
+    println("$name | update hello_${n}") color green
+    updateResource [# "$name, hello_${n}" #]
+  }
+}
