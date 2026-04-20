@@ -1,0 +1,112 @@
+System  qakdemo26
+/*
+ * -----------------------------------
+ * democreate.qak
+ * -----------------------------------
+ */ 
+Request  distance : distance(D)
+Reply distanceack : ack(D) for distance
+    
+Request r2 : r2(X)
+Reply rr2  : rr2(X) for r2
+   
+Context ctxqakdemo26 ip [host="localhost" port=8045]
+
+QActor creator context ctxqakdemo26{
+	State s0 initial{ 
+   	 	[#  
+		 clearlog("./logs/qakdemo26.log") 	//vedi src/main/resources/logback.xml
+	 	#]
+		delay 500 
+		[# logger.info(  "${currentState.stateName} cretes producer_p1"  ) #]
+		create producer _"p1" 
+		[# logger.info(  "${currentState.stateName} cretes producer_p2"  ) #]
+		create producer _"p2"
+		delay 2000 //Avoid premature exit
+		[# System.exit(0) #]
+	}
+}   
+
+/*
+ * Created by the creator
+ */
+
+QActor producer context ctxqakdemo26 dynamicOnly {
+	State s0 initial{ 
+		[# logger.info(  "${currentState.stateName} starts"  ) #]
+		println("$name request distance") color blue
+		[# logger.info(  "${currentState.stateName} request distance to consumer"  ) #]
+		request consumer -m distance : distance($MyName)
+		delay 500
+		println("$name request r2 ") color blue
+		[# logger.info(  "${currentState.stateName} request r2(10) e to consumer"  ) #]
+		request consumer -m r2:r2(10)
+		delay 500
+		println("$name request r2 ") color blue
+		[# logger.info(  "${currentState.stateName} request r2(20) e to consumer"  ) #]
+		request consumer -m r2:r2(20)
+	}
+	Transition t0 
+		whenReply distanceack -> handleAnswer
+		whenReply rr2         -> handleAnswer
+	
+	State handleAnswer{
+		printCurrentMessage color blue
+	}
+	Transition t0 
+		whenReply distanceack -> handleAnswer
+		whenReply rr2         -> handleAnswer
+} 
+
+QActor consumer context ctxqakdemo26 {
+	State s0 initial{
+		println("$name STARTS") color green
+		[# logger.info(  "${currentState.stateName} starts"  ) #]
+	}
+	Transition t0  
+	        whenRequest distance -> handleRequest
+	        whenRequest r2       -> handleRequest
+	 
+	State handleRequest{
+		printCurrentMessage color green
+		[# logger.info(  "${currentState.stateName} $currentMsg"  ) #]
+		if [# currentMsg.msgId() == "r2" #]{
+			[# logger.info(  "${currentState.stateName} delegates r2 to consumer"  ) #]
+			 delegateCurrentMsgTo consumerhelper 
+		}
+		onMsg( distance : distance(D)){
+			[# logger.info(  "${currentState.stateName} reply to distance"  ) #]
+			[# var D = payloadArg(0) #]
+			replyTo distance with distanceack : ack( $payloadArg(0) )
+		}		
+	} 
+	Transition t0  
+	       whenRequest distance -> handleRequest
+	       whenRequest r2       -> handleRequest
+}
+
+QActor consumerhelper context ctxqakdemo26 dynamicOnly {
+	State s0 initial{
+		println("$name STARTS") color magenta
+		[# logger.info(  "${currentState.stateName} starts"  ) #]
+	}
+	Transition t0 whenRequest r2 -> handle_r2
+	
+	State handle_r2{
+		printCurrentMessage color  magenta
+		[# logger.info(  "${currentState.stateName} $currentMsg"  ) #]
+		onMsg( r2 : r2(X)){
+			[# val V = "answer"+payloadArg(0)  #]
+			[# logger.info(  "${currentState.stateName} reply to r2"  ) #]
+			replyTo r2 with rr2: rr2( $V )
+		}
+		//[# val V = "answer"+currentMsg.msgContent()  #]
+		
+		//delay 500
+		println("$name ENDS") color magenta
+		[# logger.info(  "${currentState.stateName} terminate"  ) #]
+		terminate 1	
+	}
+	
+	
+}

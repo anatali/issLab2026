@@ -1,4 +1,4 @@
-System  qakdemo24
+System  qakdemo26
 
 Request cmd        : cmd(X) //X=w|s|a|d|h
 Reply   replytocmd : replytocmd(X)
