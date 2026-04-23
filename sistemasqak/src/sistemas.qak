@@ -1,0 +1,86 @@
+System sistemasqak 
+/*
+ * sistemas : un servizio che valuta il valore di una funzione
+ */
+
+Dispatch eval  : arg(V) 
+
+Request  evalr : argr(V)
+Reply evalreply: value(V) for evalr
+
+Context ctxsistemas ip [ host= "localhost" port= 8010 ]
+
+QActor sistemas context ctxsistemas {
+	[# 
+		fun eval(x: Double): String {
+		   val R = 3*x
+		   return ""+R
+		}
+	#]
+	
+	State s0 initial {
+		println("Hello world") color blue
+		[# val V = eval(2.0) #]
+		println("result=$V") color blue
+		println("now I'm waiting for a dispatch or request")
+	}
+	Transition t0 
+		whenMsg eval      -> handleEval
+		whenRequest evalr -> handleRequest
+		
+	State handleEval{
+		printCurrentMessage color green
+		
+		println("$name | currentMsg=$currentMsg") color magenta 
+		 
+		onMsg( eval : arg(X) ){
+			[# val VasString = payloadArg(0)  
+			   val V         = VasString.toDouble()
+			#]
+			println("$name | evauate $V") color green
+			[# val R = eval(V) #]
+			println("$name | result=$R") color magenta
+			
+		}
+	}
+	Transition t0 
+		whenMsg eval      -> handleEval
+		whenRequest evalr -> handleRequest
+	
+	State handleRequest{
+		printCurrentMessage color blue
+		[# var R = "" #]
+		onMsg( evalr : argr(X) ){
+			[# val VasString = payloadArg(0) 
+			   val V         = VasString.toDouble()
+			#]
+			println("$name | evauate $V") color blue
+			[# R = eval(V) #]
+			println("$name | result=$R") color blue			
+		}
+		replyTo evalr with evalreply : value($R) 
+		println("$name | handleRequest ends") color blue
+	}
+	Transition t0 
+		whenMsg eval      -> handleEval
+		whenRequest evalr -> handleRequest
+}
+
+QActor callermock context ctxsistemas{
+	State s0 initial{
+		println("$name | start ") color green
+		[# var V = "2.0" #]
+		forward sistemas -m eval : arg($V)		
+		request sistemas -m evalr : argr($V)
+	}
+	Transition t0 
+		whenReply evalreply -> handleReply 
+		
+	State handleReply{
+		printCurrentMessage color magenta
+		onMsg( evalreply : value(X) ){
+			[# val VasString = payloadArg(0) #]
+			println("$name | result received=$VasString" ) color magenta
+		}
+	}
+}
