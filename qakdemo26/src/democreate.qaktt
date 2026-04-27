@@ -21,7 +21,11 @@ QActor creator context ctxqakdemo26{
 		[# logger.info(  "${currentState.stateName} cretes producer_p1"  ) #]
 		create producer _"p1" 
 		[# logger.info(  "${currentState.stateName} cretes producer_p2"  ) #]
-		create producer _"p2"
+		[# 
+			isconfined = false
+			createActorDynamically( "producer", "_p2", isconfined)  
+		#]  //false
+		//create producer _"p2"
 		delay 2000 //Avoid premature exit
 		[# System.exit(0) #]
 	}
