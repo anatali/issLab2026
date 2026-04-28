@@ -1,0 +1,19 @@
+services:
+
+  griddisplay:
+    container_name: gridddisplay
+    #image: griddisplay-1.0
+    image: docker.io/natbodocker/griddisplay-1.0
+    ports:
+      - 8080:8080/tcp 
+    environment:
+      - MQTTBROKER=192.168.1.132		
+
+##    networks:
+##      - iss-network
+
+##networks:
+##  iss-network:
+##    external: true
+
+## docker-compose -f griddisplay.yaml  up

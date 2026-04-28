@@ -1,0 +1,50 @@
+System griddisplay 
+mqttBroker  "localhost" : 1883 eventTopic "grid" //"broker.hivemq.com" 
+
+Dispatch cellstate  : cellstate(X,Y,COLOR)     "commute cell state"
+Event    cellstate  : cellstate(X,Y,COLOR)     "commute cell state"
+
+Context ctxgrid ip [host="localhost" port=8050 ]
+
+QActor griddisplay context ctxgrid{
+ 	[#
+ 		val javalin = guiout.JavalinGuiHandler("javalinh", 8080) 
+ 		//javalin solo OUT: NON emette eventi cmd e cell
+ 		javalin.setUpPageGranular()
+ 	#]
+	State s0 initial{
+		println("$name | starts") color blue	
+	} 
+	Goto work 
+
+	State work{
+		println("$name | waiting ... ") color blue	
+	}	
+	Transition t0
+		whenMsg   cellstate -> handleCell
+		whenEvent cellstate -> handleCell
+		
+	State handleCell{
+		printCurrentMessage
+		onMsg( cellstate : cellstate(X,Y,C) ){
+			[# var X = payloadArg(0)  
+			   var Y = payloadArg(1) 
+			   var C = payloadArg(2) 
+			#]
+			println("X=$X Y=$Y C=$C")
+			[#  javalin.changeCellState(X,Y,C) #]
+		} 
+	}
+	Goto work 
+} 
+
+/* 
+QActor mock context ctxgrid{
+	State s0 initial{ 
+		delay 5000
+		println("$name | starts") color green
+		forward griddisplay -m cellstate : 	cellstate(10,10,1)
+	} 
+	
+}
+*/
