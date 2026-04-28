@@ -1,0 +1,54 @@
+System /* -trace */ firefly
+mqttBroker "192.168.1.132" : 1883 eventTopic "fireflyinput"
+/*
+ * fireflyPicow.qak
+ * L'actor firefly invia comandi all'actor esterno griddisplay 
+ * per visualizzare il suo stato corrente, che viene
+ * modificato a una frequenza fissa, ma stabilita in modo random
+ * 
+ * Diversamente da firefly0 pubblica lo stato anche sulla topic ff1
+ * 
+ * ATTIVARE griddisplay
+ */
+Dispatch cellstate : cellstate(X,Y,COLOR)     "commute cell state"
+Event    cellstate : cellstate(X,Y,COLOR)     "for Picow"
+
+Context ctxfirefly ip [ host="localhost"      port=8040 ] 
+//Context ctxgrid    ip [ host="192.168.1.80"  port=8050 ]
+//
+//ExternalQActor griddisplay context ctxgrid
+ 
+ QActor firefly1 context ctxfirefly  {     
+ 
+	[#   
+	   var  X          = 0
+	   var  Y          = 0
+	   var Timer       = 500L 
+	   var Topic       = "ff_"+X+"_"+Y
+ 	#] 
+	State s0 initial{
+		[# Timer = java.util.Random().nextLong(1000L,2000L )  #]  
+		println("$name | X=$X Y=$Y  Timer=$Timer") color magenta	
+	}
+	Goto flash
+	
+	State flash{
+		println("$name | publish 1 on $Topic") color cyan
+ 		//TurnoOn
+// 		forward griddisplay -m  cellstate : cellstate($X,$Y,1) 		
+ 		//publish "$Topic" -m cellstate : cellstate($X,$Y,1)		
+ 		[# publish("1", Topic)#] 
+ 		delay 500	
+		//TurnoOff
+// 		forward griddisplay -m  cellstate : cellstate($X,$Y,0) 	
+ 		//publish "$Topic" -m cellstate : cellstate($X,$Y,0)	
+ 		println("$name | publish 0 on $Topic") color black
+ 		[# publish("0", Topic) #]			
+	}
+	Transition t0 
+		whenTimeVar Timer -> flash         //non percepisco flash di altre
+ 	
+}
+
+
+ 

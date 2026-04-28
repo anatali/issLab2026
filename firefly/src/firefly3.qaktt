@@ -1,0 +1,95 @@
+System /* -trace */ firefly
+/*
+ * firefly3.qak
+ * L'actor firefly invia comandi all'actor esterno griddisplay 
+ * per visualizzare il suo stato corrente, che viene
+ * modificato a una frequenza fissa, ma stabilita in modo random
+ * 
+ * ATTIVARE griddisplay
+ */
+Dispatch cellstate : cellstate(X,Y,COLOR)     "commute cell state"
+
+Context ctxfirefly ip [ host="localhost"      port=8040 ] 
+Context ctxgrid    ip [ host="192.168.1.77"  port=8050 ]
+
+ExternalQActor griddisplay context ctxgrid
+ 
+ QActor firefly1 context ctxfirefly  {     
+ 
+	[#   
+	   var  X          = 10
+	   var  Y          = 10
+	   var Timer       = 500L 
+ 	#] 
+	State s0 initial{
+		[# Timer = java.util.Random().nextLong(1000L,2000L )  #]  
+		println("$name | X=$X Y=$Y  Timer=$Timer") color magenta	
+	}
+	Goto flash
+	State flash{
+		//delayVar Timer
+		//TurnoOn
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,1) 				
+ 		delay 500	
+		//TurnoOff
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,0) 				
+	}
+	Transition t0 
+		whenTimeVar Timer -> flash         //non percepisco flash di altre
+ 	
+}
+
+QActor firefly2 context ctxfirefly  {  
+ 
+	[# 
+	   var  X          = 5
+	   var  Y          = 5
+	   var Timer       = 500L 
+ 	#] 
+
+	State s0 initial{
+		[# Timer = java.util.Random().nextLong(1000L,2000L )  #]  
+		println("$name | X=$X Y=$Y  Timer=$Timer") color blue
+     } 
+    Goto flash
+ 
+	State flash{
+		//delayVar Timer
+		//TurnoOn
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,1) 				
+ 		delay 500	
+		//TurnoOff
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,0) 				
+	}
+	Transition t0 
+		whenTimeVar Timer -> flash         //non percepisco flash di altre
+ 		
+}
+
+QActor firefly3 context ctxfirefly  {  
+ 
+	[#  
+	   var  X          = 2
+	   var  Y          = 2
+	   var Timer       = 500L 
+ 	#] 
+
+	State s0 initial{
+		[# Timer = java.util.Random().nextLong(1000L,2000L )  #]  
+		println("$name | X=$X Y=$Y  Timer=$Timer") color blue
+     } 
+    Goto flash
+ 
+	State flash{
+		//delayVar Timer
+		//TurnoOn
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,1) 				
+ 		delay 500	
+		//TurnoOff
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,0) 				
+	}
+	Transition t0 
+		whenTimeVar Timer -> flash         //non percepisco flash di altre
+ 		
+}
+ 

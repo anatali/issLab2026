@@ -1,0 +1,51 @@
+System /* -trace */ firefly
+mqttBroker "192.168.1.132" : 1883 eventTopic "firefly" //"broker.hivemq.com" 
+
+/*
+ * firefly1mqtt.qak
+ * L'actor firefly invia comandi all'actor esterno griddisplay 
+ * per visualizzare il suo stato corrente, che viene
+ * modificato a una frequenza fissa, ma stabilita in modo random
+ * 
+ * ATTIVARE griddisplay
+ * La gui percpepisce l'evento cellstate pubblicato
+ * sulla topic 'grid'
+  */
+Dispatch cellstate : cellstate(X,Y,COLOR)     "commute cell state"
+Event    cellstate : cellstate(X,Y,COLOR)     "commute cell state"
+ 
+
+Context ctxfirefly ip [ host="localhost"      port=8040 ] 
+//Context ctxgrid    ip [ host="192.168.1.77"  port=8050 ]
+//
+//ExternalQActor griddisplay context ctxgrid
+ 
+ QActor firefly1 context ctxfirefly  {     
+ 
+	[#   
+	   var  X          = 1
+	   var  Y          = 1
+	   var Timer       = 500L 
+ 	#] 
+	State s0 initial{
+		[# Timer = java.util.Random().nextLong(1000L,2000L )  #]  
+		println("$name | X=$X Y=$Y  Timer=$Timer") color magenta	
+	}
+	Goto flash
+	
+	State flash{
+		delayVar Timer
+		//TurnoOn
+		println("$name | turnOn $Timer") color cyan
+  		publish "grid"	-m cellstate : cellstate($X,$Y,1) 
+ 		delayVar Timer	
+		//TurnoOff
+		//println("$name | turnOff $Timer") color cyan
+   		publish "grid"	-m cellstate : cellstate($X,$Y,0) 			
+	}
+	Transition t0 
+		whenTimeVar Timer -> flash         //non percepisco flash di altre
+ 	
+}
+
+  
