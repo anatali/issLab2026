@@ -1,9 +1,9 @@
 System griddisplay 
-mqttBroker  "localhost" : 1883 eventTopic "grid" //"broker.hivemq.com" 
+//mqttBroker  "localhost" : 1883 eventTopic "grid" //"broker.hivemq.com" 
 
-Dispatch cellstate  : cellstate(X,Y,COLOR)     "commute cell state"
-Event    cellstate  : cellstate(X,Y,COLOR)     "commute cell state"
-
+Dispatch cellstate  : cellstate(X,Y,COLOR)      
+Event    cellstate  : cellstate(X,Y,COLOR)      
+ 
 Context ctxgrid ip [host="localhost" port=8050 ]
 
 QActor griddisplay context ctxgrid{
