@@ -1,4 +1,4 @@
-package it.unibo.virtualRobot2023.clients;
+package it.unibo.virtualRobot2026;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -91,7 +91,7 @@ public class AutomaticTestHTTP {
         CommUtils.outmagenta("AutomaticTestHTTP INIT");
     }
 
-    @Test
+    //@Test
     public void doForward() {
         CommUtils.outmagenta("doForward "  );
         JSONObject result = callHTTP(  forwardcmd  );

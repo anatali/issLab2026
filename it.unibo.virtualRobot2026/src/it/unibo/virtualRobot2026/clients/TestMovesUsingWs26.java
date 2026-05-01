@@ -25,7 +25,7 @@ import unibo.basicomm23.ws.WsConnection;
  
 public class TestMovesUsingWs26 implements IObserver{
 //    private Session userSession      = null;
-    private  JSONParser simpleparser = new JSONParser();
+//    private  JSONParser simpleparser = new JSONParser();
 	 private  String turnrightcmd  = "{\"robotmove\":\"turnRight\"    , \"time\": \"300\"}";
 	 private  String turnleftcmd  = "{\"robotmove\":\"turnLeft\"     , \"time\": \"300\"}";
 	 private  String forwardcmd   = "{\"robotmove\":\"moveForward\"  , \"time\": \"1200\"}";
@@ -48,8 +48,6 @@ public class TestMovesUsingWs26 implements IObserver{
 				e.printStackTrace();
 			}
     }
-
-
 
     protected void callWS(String msg )   {
         CommUtils.outyellow("TestMovesUsingWs | callWS " + msg);
