@@ -1,0 +1,27 @@
+In PowerShell, il comando curl è spesso un alias di un altro comando chiamato Invoke-WebRequest. 
+Questo può causare problemi se provi a usare parametri specifici di curl (come -d o -H).
+
+Per essere sicuro di usare il vero curl (quello standard che trovi anche su Linux/Mac), scrivi curl.exe invece di solo curl
+
+L'operatore --% (stop-parsing) dice a PowerShell: "Non toccare nulla di quello che segue, passalo così com'è a curl".
+
+Forzare l'uso di IPv4 aggiungendo il parametro -4  (-v = verbose)
+-------------------------------------------------------------------------------------------------------------------------
+curl.exe --% -d  "{ \"robotmove\":\"turnLeft\",\"time\": \"300\"}" -H "Content-Type: application/json"
+     -X POST http://localhost:8090/api/move
+Answer: {"endmove":true,"move":"turnLeft"}
+
+
+curl.exe --%  -d  "{\"robotmove\":\"moveForward\" , \"time\": "1000"}" -H "Content-Type: application/json"
+     -X POST http://localhost:8090/api/move
+Answer: {"endmove":true,"move":"moveForward"}
+
+
+curl.exe --% .exe --% -X POST http://localhost:8090/api/move -d  "{\"robotmove\":\"alarm\",\"time\":\"10\"}" -H "Content-Type: application/json" 
+Answer:  {"endmove":"true","move":"haltnoop"}
+
+
+curl.exe --%  -d  "{\"robotmove\":\"alarm\" , \"time\": "10"}" -H "Content-Type: application/json"
+     -X POST http://localhost:8090/api/move
+Answer:  {"endmove":"true","move":"haltnoop"}
+
