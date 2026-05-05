@@ -756,6 +756,13 @@ contemporaneo sviluppo in Lab2 della <b>analisi dei seguenti requisiiti</b>:
 Costruire un sistema software che comanda un Differential Drive Robot (DDR) in modo che, 
 partendo dalla posizione iniziale HOME, il robot si sposti lungo il perimetro di una stanza rettangolare vuota. 
 Il DDR si deve fermare quando tornato in HOME.
+
+Il DDR è anche sensibile ai dati rilevati da un Radar.
+Quando il Radar rileva un 'intruso' a una distanza minore di una distanza prefissata ``DMIN``:
+  
+  - se il DDR si sta muovendo , il DDR si ferma fino a che il Radar non rileva più un 'intruso' così vicino 
+  - se il DDR è fermo in HOME, il DDR ruota su sè stesso fino a che un 'intruso' così vicino scompare
+	
 </pre>
 
 </li><li>
