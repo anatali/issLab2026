@@ -1,0 +1,198 @@
+System  /*-trace*/ firefly
+//mqttBroker "192.168.1.132" : 1883 eventTopic "firefly" 
+
+/*
+ * fireflySynchOrchestr.qak
+ * L'actor creator usa il metodo createActorDynamically
+ * per creare RowsN * ColsN istanze dell'actor firefly dichiarato dynamicOnly.
+ * 
+ * Ogni actor firefly creato ha nome firefly_X_Y, da cui 
+ * ricava le coordinate della cella sulla griglia 
+ * che visualizzerà il suo stato
+ */
+  
+Event start        : start(RowsN, ColsN)
+Event synch        : synch(TIME)              "emesso da orchestrator TIME=new timer"
+Dispatch cellstate : cellstate(X,Y,COLOR)     "commute cell state"
+
+Context ctxfirefly ip [ host="localhost"    port=8460 ] 
+Context ctxgrid    ip [ host="127.0.0.1"  port=8050 ]
+
+ExternalQActor griddisplay context ctxgrid
+   
+QActor creator context  ctxfirefly{
+import "org.json.simple.*"
+import "java.io.File"
+import "java.io.FileWriter"
+import "java.util.*"
+ 
+ [# 
+ 	var RowsN = 0
+ 	var ColsN = 0
+	
+	fun readGridConfig(fName: String) : Vector<Int>{
+        val outV = Vector<Int>()
+        val jsonParser = JSONParser()
+        val config     = File("${fName}").readText(Charsets.UTF_8)
+        //CommUtils.outred("${fName}   $config")
+        val jsonObject = jsonParser.parse(config) as JSONObject
+        val Rows  = jsonObject.get("rowsNum").toString().toInt()
+        val Cols  = jsonObject.get("colsNum").toString().toInt()
+        val CellSize = jsonObject.get("cellsize").toString().toInt()
+        outV.add( Rows )
+        outV.add( Cols )
+        outV.add( CellSize )
+        CommUtils.outyellow("GridSupport | readGridConfig RowsN=$RowsN, ColsN=$ColsN, CellSize=$CellSize")
+        return outV
+    }
+   #]
+	 
+  State s0 initial{
+	[# 
+		val res   = readGridConfig("gridConfig.json")
+		RowsN     = res.get(0)
+		ColsN     = res.get(1)
+ 	#]
+	
+	/*
+	 * Crea sRowsN * ColN lucciole
+	 * e poi emette l'evento locale start per attivarle,
+	 * passando come argomenti RowsN e ColsN, così che 
+	 * ogni lucciola possa sapere i nomi dei suoi vicini
+	 */
+    println("$name | RowsN=$RowsN ColsN=$ColsN") color cyan
+    [# 
+    	for( i in 0..RowsN-1 ){
+    		for( j in 0..ColsN-1 ){
+    			CommUtils.outcyan("$name | CREATES cell_${i}_${j}")  
+    			createActorDynamically( "firefly", "_${i}_${j}", false)
+    		}
+    	}
+    #]    
+    println("$name | ALL Firefly crrated $RowsN, $ColsN") color magenta
+    terminate 0 
+  }
+}
+
+/*
+ * Problematica: 
+ * - A) orchestrator invia un comando con nuovo Timer (shortest)
+ * - B) orchestrator segna il tempo con un suo Timer
+ */
+QActor orchestrator context ctxfirefly{
+	State s0 initial{
+		delay 5000		
+		println("$name | working" ) color red
+	}
+	Goto working
+	
+	State working{
+		emit synch : synch(1000)
+		delay 1000  //shortest time
+	}
+	Goto working  //Tolgo se ogni lucciola ha comportmento autonomo (problemi di scheduling?)
+	
+}
+
+QActor firefly context ctxfirefly  dynamicOnly { 
+/*
+ * Una volta creata con nome firefly_X_Y, ricava dal nome le 
+ * coordinate della cella della griglia  che visualiza il suo stato.
+ * 
+ * Poi la lucciola entra 
+ * in modo 'working' che consiste nel passare nello stato flashAsynch ogni Timer secondi.
+ * Il valore di Timer è fissato in modo random tra 1,1 e 2,1 secs.
+ * 
+ * Il valore di Timer viene ignorato se, prima della scadenza di questo intervallo temporale,
+ * la lucciola percepisce l'evento synch emesso dall'orchestrator, 
+ * che specifica un nuovo Timer = 1sec (shortest firefly time).
+ * 
+ * 
+ */
+
+	[#
+ 	   var  X          = 0
+	   var  Y          = 0
+ 	   var RowsN       = 0
+ 	   var ColsN       = 0
+ 	   var NumNeigh    = 0 
+
+	   var Timer       = 0L //Tempo di flashing. E il tempo di ricarica?
+  	   var SynchTime   = 0L
+ 
+
+ fun setCellCoords( )  {
+     val coords = name.replace("firefly_","").split("_")   
+     X = coords[0].toInt()
+     Y  = coords[1].toInt()        
+  }
+       
+	#]
+
+	State s0 initial{
+		[#   setCellCoords( )		                          #]     
+		[# Timer = java.util.Random().nextLong(1100L,2100L )  #]
+		println("$name STARTS | ${firefly.FFNum.ncellstart} Timer=$Timer $RowsN $ColsN")  color blue
+		
+    } 
+    Goto working
+     
+    State working {
+    }
+    Transition t0
+        whenTimeVar Timer -> turnOn  // lampeggia naturalmente
+        whenEvent  synch  -> elabSynch  
+    
+    State turnOn{
+    	forward griddisplay -m cellstate : cellstate($X,$Y,1) 
+    }
+    Transition t0
+        whenTimeVar Timer -> turnOff   
+		//whenEvent synch   -> elabSynch
+
+    State turnOff{
+    	forward griddisplay -m cellstate : cellstate($X,$Y,0) 
+    }
+    Transition t0
+        whenTimeVar Timer -> turnOn   
+		whenEvent synch   -> elabSynch
+
+    State elabSynch{
+    	onMsg( synch : synch(TIME)){
+    		[# Timer = payloadArg(0).toLong() #]
+    		println("$name | elabSynch DT=$Timer ") color blue
+    	}
+     }
+     Goto flashSynch //turnOn
+ 
+ 
+  	State flashSynch{
+ 	      forward griddisplay -m cellstate : cellstate($X,$Y,1) 	      
+  	      delayVar Timer
+   	      forward griddisplay -m cellstate : cellstate($X,$Y,0)	       		
+ 	}
+// 	Goto flashSynch  //ci sono problemi di scheduling
+    Transition t0
+         whenEvent  synch -> flashSynch  
+ 
+/*
+ * ------------------------------------------------------------
+ * Problematica: meglio due stati TurnOn e TurnOff o 
+ * un solo sato con delay interno?
+ * ------------------------------------------------------------
+ */
+     
+//    State flashAsynch{
+//  	      //println("$name | turnOn $Timer  ") color magenta
+// 	      forward griddisplay -m cellstate : cellstate($X,$Y,1) 	      
+// 	      [# var DT = Timer / 2 #]
+// 	      delayVar DT
+//  	      forward griddisplay -m cellstate : cellstate($X,$Y,0)	      
+//  	  } 
+//	  Goto working
+    
+    
+ 
+
+ }
+ 

@@ -45,13 +45,12 @@ dependencies {
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
 //CUSTOM unibo
-    //implementation name: '2p301'
-    //implementation name: 'uniboInterfaces'
+    implementation name: '2p301'
+    implementation name: 'uniboInterfaces'
     //implementation name: 'unibonoawtsupports'
-    //implementation name: 'unibo.qakactor22-3.4'
-    //implementation name: 'unibo.comm23-1.0-plain'
+    //implementation name: 'unibo.qakactor23-5.0'
     implementation name: 'unibo.basicomm23-1.0'
-	//implementation name: 'unibo.actor22-1.1'
+ 
 
    
 }

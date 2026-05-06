@@ -1,6 +1,0 @@
-![35mAutomaticTestHTTP INIT[0m
-[35mdoHalt [0m
--[32mThread[Thread-3,5,main] send alarm[0m
-4[32mThread[Thread-3,5,main] mycallHTTP starts[0m
-h[32mThread[Thread-3,5,main] mycallHTTP | jsonEndmove={"endmove":"true","move":"halt"} duration=14[0m
-Y[32mThread[Thread-3,5,main] sendAlarmAfter result={"endmove":"true","move":"halt"}[0m

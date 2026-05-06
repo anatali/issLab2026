@@ -1,0 +1,241 @@
+System  /*-trace*/ firefly
+//mqttBroker "192.168.1.132" : 1883 eventTopic "firefly" 
+
+/*
+ * fireflySynchCoreo.qak
+ * L'actor creator usa il metodo createActorDynamically
+ * per creare RowsN * ColsN istanze dell'actor firefly dichiarato dynamicOnly.
+ * 
+ * Ogni actor firefly creato ha nome firefly_X_Y, da cui 
+ * ricava le coordinate della cella sulla griglia 
+ * che visualizzerà il suo stato
+ */
+  
+
+Event start     : start(RowsN, ColsN)
+
+Event flashlamp    : flashlamp(NAME,TIME)
+Dispatch cellstate : cellstate(X,Y,COLOR)     "commute cell state"
+
+Context ctxfirefly ip [ host="localhost"    port=8460 ] 
+Context ctxgrid    ip [ host="127.0.0.1"  port=8050 ]
+
+ExternalQActor griddisplay context ctxgrid
+   
+QActor creator context  ctxfirefly{
+import "org.json.simple.*"
+import "java.io.File"
+import "java.io.FileWriter"
+import "java.util.*"
+/*
+ * L'actor creator usa il metodo createActorDynamically
+ * per creare RowsN * ColsN istanze dell'actor firefly dichiarato dynamicOnly.
+ * 
+ * Il numero di lucciole da creare è letto dal file gridConfig.json
+ * che contiene il numero di ricghe e colonne
+ * della matrice di visualizzazione delle lucciole
+ * 
+ * Ogni actor firefly creato ha nome firefly_X_Y, da cui 
+ * ricava le coordinate della cella sulla griglia 
+ * che visualizzerà il suo stato
+ */
+ 
+ [# 
+ 	var RowsN = 0
+ 	var ColsN = 0
+	
+	fun readGridConfig(fName: String) : Vector<Int>{
+        val outV = Vector<Int>()
+        val jsonParser = JSONParser()
+        val config     = File("${fName}").readText(Charsets.UTF_8)
+        //CommUtils.outred("${fName}   $config")
+        val jsonObject = jsonParser.parse(config) as JSONObject
+        val Rows  = jsonObject.get("rowsNum").toString().toInt()
+        val Cols  = jsonObject.get("colsNum").toString().toInt()
+        val CellSize = jsonObject.get("cellsize").toString().toInt()
+        outV.add( Rows )
+        outV.add( Cols )
+        outV.add( CellSize )
+        CommUtils.outyellow("GridSupport | readGridConfig RowsN=$RowsN, ColsN=$ColsN, CellSize=$CellSize")
+        return outV
+    }
+   #]
+	 
+  State s0 initial{
+	[# 
+		val res   = readGridConfig("gridConfig.json")
+		RowsN     = res.get(0)
+		ColsN     = res.get(1)
+ 	#]
+	
+	/*
+	 * Crea RowsN * ColN lucciole
+	 * e poi emette l'evento locale start per attivarle,
+	 * passando come argomenti RowsN e ColsN, così che 
+	 * ogni lucciola possa sapere i nomi dei suoi vicini
+	 */
+    println("$name | RowsN=$RowsN ColsN=$ColsN") color cyan
+    [# 
+    	for( i in 0..RowsN-1 ){
+    		for( j in 0..ColsN-1 ){
+    			CommUtils.outcyan("$name | CREATES cell_${i}_${j}")  
+    			createActorDynamically( "firefly", "_${i}_${j}", false)
+    		}
+    	}
+    #]    
+    println("$name | ALL Firefly crrated $RowsN, $ColsN") color magenta
+    delay 1000
+    emitlocal start : start($RowsN, $ColsN)
+    println("$name | ENDS") color magenta
+    terminate 0 
+  }
+}
+
+
+
+QActor firefly context ctxfirefly  dynamicOnly { 
+/*
+ * Una volta creata con nome firefly_X_Y, ricava dal nome le 
+ * coordinate della cella della griglia  che visualiza il suo stato.
+ * 
+ * Le relazioni di vicinanza delle lucciole sono legate a una loro 
+ * dislocazione spaziale a matrice RowsN e ColsN, i cui 
+ * valori sono resi noti alla lucciola mediante il payload
+ * dell'evento start inviato dal creator.
+ *
+ * Dopo avere elaborato l'evento start (stato configure), la lucciola entra 
+ * in modo 'working' che consiste nel passare nello stato flash ogni Timer secondi.
+ * Il valore di Timer è fissato in modo random tra 1 e 2 secs.
+ * 
+ * Il valore di Timer viene modificato se, prima della scadenza di questo intervallo temporale,
+ * la lucciola percepisce il fatto che una lucciola vicina ha enesso un flash prima di lei
+ * (event flashlamp). L'evento flashlamp è emesso da ogni lucciola al termine della
+ * sua fase di flash, per simulare che la percezione del flash da poarte delle lucciole contingue 
+ * non avviene subito al momento della sua accensione, ma un pò dopo.
+ * 
+ * 
+ */
+
+	[#
+	   //var MyState     = false
+	   var  X          = 0
+	   var  Y          = 0
+ 	   var RowsN       = 0
+ 	   var ColsN       = 0
+ 	   var NumNeigh    = 0 
+
+	   var Timer       = 500L 
+	   var Allended    = false
+ 
+   	   var NflashFinal = 0 
+
+
+ fun setCellCoords( )  {
+     val coords = name.replace("firefly_","").split("_")   
+     X = coords[0].toInt()
+     Y  = coords[1].toInt()        
+  }
+ 
+
+   fun genNeighborsNames( x: Int, y: Int): String? {
+        var outS : String
+        val nb   = java.lang.StringBuilder()
+        for (i in -1..1) {
+            for (j in -1..1) {
+                if ( (i == 0) and (j == 0) ) continue
+                val x1 = x + i
+                val y1 = y + j
+                if (x1 >= 0 && x1 < RowsN && y1 >= 0 && y1 < ColsN) {
+                    val firefly = ",_" + x1 + "_" + y1
+                    nb.append(firefly)
+                }
+            }
+        }
+        outS = nb.toString().replaceFirst(",".toRegex(), "")         
+        return "$outS"     
+    }
+ 
+ 
+     fun subscribeToNeighbors(  x:Int, y:Int ) : Int{
+       var Countnb = 0
+
+       val nblist = genNeighborsNames( x, y )!!.split(",")     
+       val nblistiter  = nblist.iterator()
+       while( nblistiter.hasNext() ){
+           Countnb++
+           val next = nblistiter.next().toString()
+           CommUtils.outblack("$name subscribes to  firefly$next")
+           subscribeTo( name, "firefly$next" )   
+       }
+       return Countnb
+   }       
+	#]
+
+	State s0 initial{
+		[#   setCellCoords( )		#]     
+		println("$name STARTS | ${firefly.FFNum.ncellstart} Timer=$Timer $RowsN $ColsN")  color blue
+		
+    } 
+    Transition t0
+    	whenEvent start -> configure
+     
+    State configure{
+    	//FISSO UN TImer RANDOM
+    	[# Timer = java.util.Random().nextLong(1000L,2000L )  #]  
+    	//printCurrentMessage color cyan
+    	onMsg( start : start(RN,CN)){
+    		[# RowsN = payloadArg(0).toInt() 
+    		   ColsN = payloadArg(1).toInt()
+    		   NumNeigh = subscribeToNeighbors( X,Y )
+    		#]
+    	}
+    	println("$name | configure $RowsN $ColsN $NumNeigh") color cyan
+    	forward griddisplay -m cellstate : cellstate($X,$Y,0)	
+      }
+    Goto working
+    
+    State working {
+    	/*
+    	 * La lucciola fa un flash quando scade Timer
+    	 * Il flash dura Timer / 2 ...
+    	 * 
+    	 */
+    }
+    Transition t0
+        whenTimeVar Timer    -> flash          // Tempo scaduto: lampeggia naturalmente
+        whenEvent  flashlamp -> elabFlashlamp  // Ha visto un'altra lucciola: accelera
+    
+    
+    //Goto flash
+    /*
+     * Attendo che tuute siano configurate prima di partire, 
+     * se no vi sono gli STRANGE
+     * che però posso semplicemente IGNORARE
+     */
+
+    State flash{
+  	      //println("$name | turnOn $Timer  ") color magenta
+ 	      forward griddisplay -m cellstate : cellstate($X,$Y,1) 	      
+  	      delay 500
+  	      forward griddisplay -m cellstate : cellstate($X,$Y,0)	      
+   	      //delayVar Timer	//Frequenza propria
+ 	      emitlocalstream flashlamp : flashlamp($MyName, $Timer)
+	  } 
+	  Goto working
+
+	  State elabFlashlamp{ 
+  	  	//println("$name | perceives ${currentMsg.msgContent()}") color green
+	  	onMsg( flashlamp:flashlamp(X,Y) ){
+	  		[# var TimerOther = payloadArg(1).toLong()   #]
+	  		[# var DeltaT     = Timer - TimerOther #]
+	  		//println("$name | perceives DeltaT=$DeltaT") color green
+	  		if [# DeltaT > 0 #]{
+	  			println("$name | ${currentMsg.msgSender()} faster $TimerOther}") color red
+	  			[# Timer = TimerOther #]
+	  		}
+	  	}
+  	  }//elabFlashlamp
+   	  Goto working
+
+ }
+ 
