@@ -1,7 +1,7 @@
-package adapters;
+package robots;
 
-interface IVrobotLLMoves {
-	void domove(String move) throws Exception; //move=w | s | l | a | r | d| h | p 
+interface IRobotBasicMoves {
+	//void domove(String move) throws Exception; //move=w | s | l | a | r | d| h | p 
     void turnLeft() throws Exception;
     void turnRight() throws Exception;
     void forward( int time ) throws Exception;

@@ -1,4 +1,4 @@
-package adapters;
+package robots;
 
 public class VrobotMsgs {
     public final static String turnrightcmd  = "{\"robotmove\":\"turnRight\",\"time\":\"300\"}";
@@ -7,7 +7,7 @@ public class VrobotMsgs {
     public final static String turnLeftMsg  =   turnleftcmd;
     public final static String forwardcmd   = "{\"robotmove\":\"moveForward\",\"time\":TIME}";
     public final static String backwardcmd  = "{\"robotmove\":\"moveBackward\",\"time\":TIME}";
-    public final static String haltcmd      = "{\"robotmove\":\"alarm\",\"time\":\"10\"}";
+    public final static String haltcmd      = "{\"robotmove\":\"alarm\",\"time\":\"1\"}";
     public final static String haltMsg      = haltcmd;
     public final static String stepcmd      = "{\"robotmove\":\"moveForward\",\"time\":\"350\"}";
 
