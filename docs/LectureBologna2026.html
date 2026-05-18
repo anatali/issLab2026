@@ -740,7 +740,7 @@ Fireflysynch</a>
 
 
 <!--
-    Week 11
+    Week 12
 -->
 <tr><td><em>Week 12</em></td><td></td><td></td></tr>    
     
@@ -765,9 +765,6 @@ Quando il Radar rileva un 'intruso' a una distanza minore di una distanza prefis
   - se il DDR è fermo in HOME, il DDR ruota su sè stesso fino a che un 'intruso' così vicino scompare
 	
 </pre>
-
- 
-
 
 </li>
 </ul>
@@ -805,19 +802,66 @@ Il <a href="https://anatali.github.io/issLab2026/chronicle/TemaFinale25.pdf" tar
 </tr>
 
 <!--
-    Week 12
+    Week 13
 -->
 <tr><td><em>Week 13	</em></td><td></td><td></td></tr>    
    
 <tr><td><m>12/05/2025 (12:00-15:00)</m></td><td>Lab2 </td> 
 <td> 
-
+<ul>
+<li>
+Modifica della libreria <b>unibo.basicomm23-1.0.jar</b>
+</li><li>
+Il progetto
+<a href="https://github.com/anatali/issLab2026/tree/main/vrUsage26" target="web">vrusage26</a>:
+esempi di uso del <a href="https://anatali.github.io/issLab2026/_static/docs/Protobook.pdf#chapter.25" target="web">
+VirtualRobot26</a> e del POJO  
+<a href="https://anatali.github.io/issLab2026/_static/docs/Protobook.pdf#chapter.26" target="web">
+RobotObj26</a> come oggetto <b>osservabile</b>.
+	</li><li>Uso del virtual robot mediante websocket: <tt>TestMovesUsingWs26.java</tt>  e  
+	<a href="https://github.com/anatali/issLab2026/blob/main/vrUsage26/src/it/unibo/virtualRobot2026/clients/BoundaryWalkNaiveUsingWs26.java" target="web">
+      BoundaryWalkNaiveUsingWs26.java</a>.	
+	 Analisi del log files e dei thread di esecuzione.
+	</li><li>
+	Uso del POJO <i>RobotObj26</i>:  
+	<a href="https://github.com/anatali/issLab2026/blob/main/vrUsage26/src/appls/BoundaryWithBasicMoves.java" target="web">
+      BoundaryWithBasicMoves.java</a>.
+	La nuova operazione 
+	<a href="https://anatali.github.io/issLab2026/_static/docs/Protobook.pdf#subsection.26.1.6" target="web">
+	step</a> e sua calibrazione: <tt>TuneSteptime.java</tt>
+	</li><li>Calcolo della lungheza dei lati della stanza in unità robotiche:	<tt>RoomSideLength.java</tt>
+ </li><li>
+ WORKTODO: Realizzare il sistema proposto il 5/05 usando un sonar collegato a un Raspberry PICOW</li>
+ 
+</li>
+</ul>
 </td>
 </tr>  
    
 <tr><td><m>13/05/2025 (11:30-14:30)</m></td><td>Lab2 </td> 
 <td> 
+<ul>
+<li>
+La semplificazione introdotta dal movimento <b>step</b> di 
+<a href="https://anatali.github.io/issLab2026/_static/docs/Protobook.pdf#chapter.26" target="web">
+RobotObj26</a> : 
+<a href="https://github.com/anatali/issLab2026/blob/main/vrUsage26/src/appls/BoundaryWithStep.java" target="web">
+BoundaryWithStep.java</a>. Confronto con <a href="https://github.com/anatali/issLab2026/blob/main/vrUsage26/src/it/unibo/virtualRobot2026/clients/BoundaryWalkNaiveUsingWs26.java" target="web">
+BoundaryWalkNaiveUsingWs26.java</a>.	Analisi del log files e dei thread di esecuzione.
+</li><li>
+Verso un <b>robot come servizio</b> 
+(<a href="https://anatali.github.io/issLab2026/_static/docs/Protobook.pdf#chapter.27" target="web">robotservice26</a>)  fruibile via rete e 
+<b>osservabile mediante eventi</b>: inserzione di oggetti Java antro attori qak
+(<a href="https://anatali.github.io/issLab2026/_static/docs/Protobook.pdf#section.22.7" target="web">Demo UsingObjects</a>)
+</li><li>
+<a href="https://val.unibo.it/" target="web">Rilevazione</a> delle opinioni degli studenti
 
+</li><li>
+WORKTODO:<br/> utilizzare <tt>RobotService26</tt> per costruire una <b>mappa della stanza</b> in cui si muove il robot,
+nella ipotesi di ostacoli fissi e bordi perimetrali liberi da ostacoli (su una fascia di larghezza robotica).
+
+</li>
+</ul>
 
 </td>
 </tr>
@@ -831,7 +875,14 @@ Il <a href="https://anatali.github.io/issLab2026/chronicle/TemaFinale25.pdf" tar
 
 <tr><td><m>19/05/2025 (12:00-15:00)</m></td><td>Lab2 </td> 
 <td> 
-
+<ul>
+<li><a href="https://github.com/anatali/issLab2026/tree/main/Picow" target="web">Esempi di uso</a>
+di un Raspberry PICOW. Attivazione di sonar <tt>HC-SR04</tt> e acquisizione dei dati rilevati.
+</li><li> 
+<a href="https://anatali.github.io/issLab2026/_static/docs/Protobook.pdf#section.23.7" target="web">
+Sistema sperimentale di N lucciole</a>: proposta per la impostazione di un progetto.
+</li>
+</ul>
 </td>
 </tr>  
    
