@@ -1,0 +1,127 @@
+  System boundaryworker 
+  
+  /*
+   * boundaryworker_finalmap.qak
+   */
+  
+  
+  Dispatch move : move(M) "M = l|r|a|d|h mosse aril ok"
+
+  Request cmd     : cmd(MOVE,T) "MOVE = w|s mosse aril asynch"
+  Reply cmddone   : cmddone(R) for cmd
+  Reply cmdfailed : cmdfailed(T,CAUSE) for cmd
+
+  Request step     : step(TIME)
+  Reply stepdone   : stepdone(V) for step 
+  Reply stepfailed : stepfailed(DURATION, CAUSE) for step
+   
+  
+  Context ctxboundary         ip [host="localhost"     port=8120]
+ 
+  QActor boundaryworker context ctxboundary 
+                  withobj room using "location.RoomMap()"{   
+                  	
+    [#
+    	val NR = room.getNr()
+    	val NC = room.getNc()
+    #]
+    State s0 initial{
+    	println("$name | starts with map rows=$NR cols=$NC " ) color magenta
+    	println("$room" ) color magenta
+     	[# clearlog("./logs/ddrboundary.log") 	//vedi src/main/resources/logback.xml #]
+    	[# logger.info(  "${currentState.stateName}: starts"  ) #]
+    } 
+    //Goto buildFinalMap
+    Goto testStep
+    
+    State testStep{
+    	[#
+    		room.setRobotAtHome()
+     		//PERIMETRO
+    		for( i in 1..NR-1 ){
+    			room.doStep()
+    		}
+     		room.turnLeft() 
+            room.showMap()
+     		
+    		//CommUtils.outblue("1 down ${room.getDir()}")
+    		for( i in 1..NC-1 ){  
+    			room.doStep()
+    		}
+   			room.turnLeft() 
+    		room.showMap()
+      		for( i in 1..NR-1){
+    			room.doStep()
+    		}   		
+    		room.turnLeft() 
+    		room.showMap()
+     		for( i in 1..NC-1 ){  
+    			room.doStep()
+    		}
+    		room.turnLeft()     		
+     		room.showMap()		    		
+             
+   	#]
+   	delay 1000 //give time to show
+   	//[# System.exit(0)  #]
+    }
+    Goto buildFinalMap
+    
+    State buildFinalMap{
+    	//x VERT | y ORIZ
+    	[#  room.setRobotAtHome()
+    	#]
+    	println("Initial room map" ) color magenta
+    	println("Percorso 'mentale' utile per testing.")
+    	println("Quando muovero' il robot, aggiornerò passo-passo una mappa M.")
+    	println("Al termine controllero' che M sia uguale a questa mappa.")
+    	[#
+    		room.showMap() 
+    		
+    		//PERIMETRO
+    		for( x in 0..NR-1 ){
+    			room.setFree(x,0)
+    		}
+    		room.turnLeft() 
+    		//CommUtils.outblue("1 down ${room.getDir()}")
+    		for( y in 0..NC-1 ){  
+    			room.setFree(NR-1,y)
+    		}
+    		room.turnLeft() 
+     		for( x in NR-1 downTo 0){
+    			room.setFree(x,NC-1)
+    		}
+    		room.turnLeft() 
+     		for( y in NC-1 downTo 0 ){  
+    			room.setFree(0,y)
+    		}
+    		room.turnLeft()     		
+     		room.setRobot(0,0)   		    		
+    	#]
+    	
+     	println("Final room map" ) color magenta
+    	[# room.showMap() #]
+    	
+    	/*
+    	 * Salvo la mappa su file
+    	 */   	
+    	[# room.saveRoomMap("logs/boundaryDoneMap") #]
+    	
+//    	[# room.saveRoomMapProlog("logs/boundaryDoneMap") #] //no suffix
+    	
+    	/*
+    	 * Leggo la mappa salvata
+    	 */
+    	[# val savedMap = room.loadRoomMap("logs/boundaryDoneMap")  #] //no suffix  	
+    	println("Saved room map" ) color magenta
+    	[# savedMap.showMap() #]
+    	
+    	
+    	
+    	[# System.exit(0) #]
+    }
+  } 
+   
+ 
+
+ 

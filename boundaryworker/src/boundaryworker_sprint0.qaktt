@@ -1,0 +1,56 @@
+  System boundaryworker 
+  
+  /*
+   * boundaryworker_sprint.qak
+   * 
+   * Modello dei requisiti con robotactor e radaractor locali
+   * per definire la logica di interazione tra i componenti
+   * prima di passare alla versione distribuita.
+   * 
+   * Gli attori robotactor e radaractor sono nano-servizi locali
+   */
+   
+  
+  Dispatch move : move(M) "M = l|r|a|d|h mosse aril ok"
+
+  Request cmd     : cmd(MOVE,T) "MOVE = w|s mosse aril asynch"
+  Reply cmddone   : cmddone(R) for cmd
+  Reply cmdfailed : cmdfailed(T,CAUSE) for cmd
+
+  Request step     : step(TIME)
+  Reply stepdone   : stepdone(V) for step 
+  Reply stepfailed : stepfailed(DURATION, CAUSE) for step
+   
+  
+  Context ctxboundary         ip [host="localhost"     port=8120]
+  //Context ctxrobotservice26   ip [host="127.0.0.1"     port=8125] //stesso nodo
+  //Context ctxradar            ip [host="192.168.1.xxx" port=8135] //stesso nodo
+  
+  //ExternalQActor robotactor context ctxrobotservice26
+
+  QActor boundaryworker context ctxboundary 
+                  withobj room using "location.RoomMap(6,5)"{   
+    State s0 initial{
+    	println("$name | starts with map:" ) color magenta
+    	println("$room" ) color magenta
+     	[# clearlog("./logs/ddrboundary.log") 	//vedi src/main/resources/logback.xml #]
+    	[# logger.info(  "${currentState.stateName}: starts"  ) #]
+    } 
+  } 
+   
+  QActor robotactor context ctxboundary   
+  		withobj robot  using "robots.RobotObjForQak(myself, \"logs/ddrboundary.log\")"{
+    State s0 initial{
+    	println("$name | start using robot" ) color blue
+    	[#  logger.info(  "${currentState.stateName}: starts"  ) #] 
+    	//[# robot.connect(\"localhost\" )#]  //TODO later 
+    }   	
+  }
+
+  QActor radaractor context ctxboundary 
+  		withobj picoadapter using "adapters.PicoAdapter()"{
+    State s0 initial{
+    	println("$name | start ") color green
+    	[#  logger.info(  "${currentState.stateName}: starts"  ) #]
+    }
+  }
