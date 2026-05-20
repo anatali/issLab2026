@@ -2,6 +2,7 @@ package adapters;
 
 import it.unibo.kactor.GuiColors;
 import location.MapUtil;
+import location.RoomMap.Direction;
 import unibo.basicomm23.utils.CommUtils;
  
 /**
@@ -143,6 +144,28 @@ public class AdapterGui {
     		s = s+"|"; // Row separator
     	}
     	return s;
+    }
+    
+    public void showDir(int X, int Y, Direction dir) {
+    	switch( dir ) {
+    		case DOWN:{
+    			displayOnGui( Y,X, GuiColors.SUD);
+    			break;
+    		}
+    		case UP:{
+    			displayOnGui( Y,X, GuiColors.NORD);
+    			break;
+    		}
+    		case LEFT:{
+    			displayOnGui( Y,X, GuiColors.WEST);
+    			break;
+    		}
+    		case RIGHT:{
+    			displayOnGui( Y,X, GuiColors.EST);
+    			break;
+    		}
+    	}
+    	
     }
  
 }//AdapterGui

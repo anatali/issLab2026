@@ -104,6 +104,13 @@ public class RoomMap implements Serializable {
 	public void setRobotPos(int x, int y) {
 		setRobotPos(x,y,curDir,cellvalue.ROBOT);
 	}
+	
+	public int getPosX() {
+		return curPos.x;
+	}
+	public int getPosY() {
+		return curPos.y;
+	}
 	public void setRobotPos(int x, int y, Direction dir, cellvalue v ) {
 		curPos        = new Pos(x,y);
         curDir        = dir;

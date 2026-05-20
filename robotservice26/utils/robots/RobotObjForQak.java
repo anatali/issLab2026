@@ -1,0 +1,28 @@
+package robots;
+
+import it.unibo.kactor.ActorBasic;
+import it.unibo.kactor.MsgUtil;
+import unibo.basicomm23.interfaces.IApplMessage;
+import unibo.basicomm23.utils.CommUtils;
+
+public class RobotObjForQak extends RobotObj26{
+private ActorBasic owner;
+
+	public RobotObjForQak(String vitualRobotIp, ActorBasic owner, String logFName) {
+		super(vitualRobotIp, null,logFName);
+		this.owner = owner;
+ 	}
+
+    protected void emitInfo(IApplMessage info) {
+    	if( owner != null) {
+    		CommUtils.aboutThreads("emitinfo");
+     	    if( tracing) CommUtils.outyellow("     RobotObjForQak  | emitLocalStreamEvent " + info.msgContent() );
+    		if( info.msgContent().contains("collision")) return;
+    		//MsgUtil.emitLocalEvent(info,owner,null); 
+    		MsgUtil.emitLocalStreamEvent(info, owner, null); 
+      	}else {
+    		CommUtils.outmagenta("     RobotObjForQak  | emitInfo " + info );
+     	}
+     }
+
+}

@@ -7,15 +7,15 @@
    */
   
   
-  Dispatch move : move(M) "M = l|r|a|d|h mosse aril ok"
-
-  Request cmd     : cmd(MOVE,T) "MOVE = w|s mosse aril asynch"
-  Reply cmddone   : cmddone(R) for cmd
-  Reply cmdfailed : cmdfailed(T,CAUSE) for cmd
-
-  Request step     : step(TIME)
-  Reply stepdone   : stepdone(V) for step 
-  Reply stepfailed : stepfailed(DURATION, CAUSE) for step
+//  Dispatch move : move(M) "M = l|r|a|d|h mosse aril ok"
+//
+//  Request cmd     : cmd(MOVE,T) "MOVE = w|s mosse aril asynch"
+//  Reply cmddone   : cmddone(R) for cmd
+//  Reply cmdfailed : cmdfailed(T,CAUSE) for cmd
+//
+//  Request step     : step(TIME)
+//  Reply stepdone   : stepdone(V) for step 
+//  Reply stepfailed : stepfailed(DURATION, CAUSE) for step
    
    
   Context ctxboundary ip [host="localhost"     port=8120]
@@ -35,14 +35,13 @@
     	[# logger.info(  "${currentState.stateName}: starts"  ) #]
     } 
     Goto testStep
+ 
     
     State testStep{
         [# gui.showTheRoom() #]
         
-        [# gui.displayOnGui(0,0,`it.unibo.kactor`.GuiColors.SUD) #]
-        
-        [# gui.displayOnGui(2,4,`it.unibo.kactor`.GuiColors.TARGET) #]  //x ORIZ, y VERT
-        
+        [# gui.displayOnGui(0,0,`it.unibo.kactor`.GuiColors.SUD) #]        
+        [# gui.displayOnGui(2,4,`it.unibo.kactor`.GuiColors.TARGET) #]  //x ORIZ, y VERT      
         [# gui.displayOnGui(4,3,`it.unibo.kactor`.GuiColors.MAGENTA) #]
         
         

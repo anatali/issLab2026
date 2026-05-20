@@ -27,4 +27,8 @@ with Diagram('boundaryworkerArch', show=False, outformat='png', graph_attr=graph
 ### see https://renenyffenegger.ch/notes/tools/Graphviz/attributes/label/HTML-like/index
      with Cluster('ctxboundary', graph_attr=nodeattr):
           boundaryworker=Custom('boundaryworker','./qakicons/symActorWithobjSmall.png')
+     with Cluster('ctxrobotservice26', graph_attr=nodeattr):
+          robotactor=Custom('robotactor(ext)','./qakicons/externalQActor.png')
+     boundaryworker >> Edge(color='magenta', style='solid', decorate='true', label='<step<font color="darkgreen"> stepdone stepfailed</font> &nbsp; >',  fontcolor='magenta') >> robotactor
+     boundaryworker >> Edge(color='blue', style='solid',  decorate='true', label='<move &nbsp; >',  fontcolor='blue') >> robotactor
 diag
