@@ -154,9 +154,9 @@ task dovesiamo {
 
 distributions {
     main {
-        distributionBaseName = 'ddrboundary'
+        distributionBaseName = 'boundaryworker'
         contents { 
-             from './ddrboundary.pl'
+             from './boundaryworker.pl'
              from './sysRules.pl'
              from './facadeConfig.json'
         }
