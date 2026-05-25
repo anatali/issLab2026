@@ -29,90 +29,10 @@ class Boundaryworker ( name: String, scope: CoroutineScope, isconfined: Boolean=
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
 		//val interruptedStateTransitions = mutableListOf<Transition>()
 		//IF actor.withobj !== null val actor.withobj.name� = actor.withobj.method�ENDIF
-		val room = location.RoomMap(5,6)
-		val gui = adapters.AdapterGui.create("tf25map.txt")
-		
-		    	val NR = room.getNr()
-		    	val NC = room.getNc()
-		    	val StepTime = 345
-		    	var CURX = 0
-		    	var CURY = 0
-		    	var NLAP = 0
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
-						CommUtils.outmagenta("$name | starts with map NR=$NR NC=$NC")
-						CommUtils.outmagenta("$room")
-						 clearlog("./logs/ddrboundary.log") 	//vedi src/main/resources/logback.xml  
-						 logger.info(  "${currentState.stateName}: starts"  )  
-						 room.setRobotAtHome()  
-						 gui.showTheRoom()      
-						 gui.displayOnGui(CURX,CURY,`it.unibo.kactor`.GuiColors.SUD)  
-						//genTimer( actor, state )
-					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition( edgeName="goto",targetState="doboundary", cond=doswitch() )
-				}	 
-				state("doboundary") { //this:State
-					action { //it:State
-						CommUtils.outblue("$name | doboundary $NLAP")
-						request("step", "step($StepTime)" ,"robotactor" )  
-						delay(500) 
-						//genTimer( actor, state )
-					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition(edgeName="t00",targetState="stepok",cond=whenReply("stepdone"))
-					transition(edgeName="t01",targetState="hitwall",cond=whenReply("stepfailed"))
-				}	 
-				state("stepok") { //this:State
-					action { //it:State
-						 logger.info(  "${currentState.stateName}: step ddone"  )  
-						 gui.displayOnGui(CURY,CURX,`it.unibo.kactor`.GuiColors.ACQUA)  
-						 	room.doStep()  		       //passo mentale
-						   	    	CURX = room.getPosX() 
-						   	 		CURY = room.getPosY()
-						 room.showMap()  
-						 gui.showDir(CURX,CURY,room.getDir() )  
-						//genTimer( actor, state )
-					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition( edgeName="goto",targetState="doboundary", cond=doswitch() )
-				}	 
-				state("hitwall") { //this:State
-					action { //it:State
-						 var TDONE = "0"  
-						if( checkMsgContent( Term.createTerm("stepfailed(DURATION,CAUSE)"), Term.createTerm("stepfailed(T,CAUSE)"), 
-						                        currentMsg.msgContent()) ) { //set msgArgList
-								  TDONE = payloadArg(0)  
-								CommUtils.outmagenta("$name | hit wall after: $TDONE")
-						}
-						 logger.info(  "${currentState.stateName}: step failed $NLAP"  )  
-						 room.showMap()  
-						 gui.displayOnGui(CURY,CURX,`it.unibo.kactor`.GuiColors.ACQUA)  
-						forward("move", "move(l)" ,"robotactor" ) 
-						 room.turnLeft()  		       //passo mentale
-						     	   gui.showDir(CURX,CURY,room.getDir() ) 
-						 NLAP = NLAP + 1  
-						//genTimer( actor, state )
-					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition( edgeName="goto",targetState="doboundary", cond=doswitchGuarded({ NLAP < 4  
-					}) )
-					transition( edgeName="goto",targetState="end", cond=doswitchGuarded({! ( NLAP < 4  
-					) }) )
-				}	 
-				state("end") { //this:State
-					action { //it:State
-						delay(1000) 
-						 System.exit(0)  
+						CommUtils.outblack("$name | start")
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
