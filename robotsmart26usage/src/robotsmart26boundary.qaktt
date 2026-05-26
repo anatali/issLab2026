@@ -28,6 +28,9 @@ Dispatch setrobotstate: setpos(X,Y,D) 		"set robot position to (X,Y) direction D
 Request setdirection : dir( D )  			"set robot direction to D=up|down|left|right" 
 Reply setdirectiondone : pos(PX,PY) for setdirection
 
+Request tuneAtHome   : tuneAtHome(X)                  "reposition in home X don't care"
+Reply tuneDone       : tuneDone(X)  for tuneAtHome
+
 Request getrobotstate : getrobotstate(ARG)		"request robot state ARG unused"
 Reply robotstate      : robotstate(POS,DIR)  for getrobotstate  "POS->pos(X,Y) DIR->up|down|left|right"
 
@@ -90,12 +93,18 @@ QActor robotsnartusage context ctxrobotsmartusage{
      	delay 500
      }
      Goto walkAlomgBoundary if [# NLAP < 4 #] else end
- 		
+ 		 
  	  
 	 State end{ 
-	 	//forward robotsmart -m move : move(l)
-	 	delay 1000
-	 	println("$name | BYE ") color blue
-	 	[# System.exit(0) #]
-	 }
+// 		request robotsmart -m tuneAtHome : tuneAtHome( end )
+ 		printCurrentMessage color magenta
+ 	}
+ 	Goto bye
+// 	Transition t0
+// 		whenReply tuneDone -> bye
+ 
+ 	State bye{
+ 		println("$name | bye ") color blue
+ 		[# System.exit(0) #] 		
+ 	}
 }
