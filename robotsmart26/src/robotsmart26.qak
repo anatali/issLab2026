@@ -1,5 +1,5 @@
 System robotsmart26
-	mqttBroker "192.168.1.163" : 1883 eventTopic "robotsmart26in"  //SE definita MQTTBROKER, usa quell'addr
+	//mqttBroker "192.168.1.163" : 1883 eventTopic "robotsmart26in"  //SE definita MQTTBROKER, usa quell'addr
 /* 
  * ------------------------------------------------
  * Handled by robotsmart

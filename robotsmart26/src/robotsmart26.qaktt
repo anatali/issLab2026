@@ -1,5 +1,5 @@
 System robotsmart26
-	mqttBroker "172.31.96.1" : 1883 eventTopic "robotsmart26in"  //SE definita MQTTBROKER, usa quell'addr
+	//mqttBroker "192.168.1.163" : 1883 eventTopic "robotsmart26in"  //SE definita MQTTBROKER, usa quell'addr
 /* 
  * ------------------------------------------------
  * Handled by robotsmart
@@ -380,7 +380,7 @@ QActor robotmnemo context ctxrobotsmart
     		[# rpos.doMove( "l" )        #]
     		println("$name |  ${rpos.getCurDir()}" )
     	}  
-    	else{ if [# Dir == "left" #]{
+    	if [# Dir == "left" #]{
      		[# res = robot.step( 300 )  #]
     		println("$name | tuneAtHome leftDir dostep1 res=$res ") color yellow
     		//delay 300
@@ -392,11 +392,8 @@ QActor robotmnemo context ctxrobotsmart
      		[# rpos.doMove( "l" )        #]
     		[# robot.turnLeft()  #]
     		[# rpos.doMove( "l" )        #]
-    	}else{ if [# Dir == "down" #]{
-    		println("$name | tuneAtHome down. Perhaps ok ") color magenta
-    		}
-    	}
-    	}
+     		
+    	}  
         println("$name | tuneAtHome done ") color yellow
         replyTo tuneAtHome with tuneDone : tuneDone(ok)
      } 		
@@ -428,7 +425,7 @@ QActor robotmnemo context ctxrobotsmart
 							//non cambia posizione
 //						}						
 					}else{
-						println("$name | reply asynchstep done") color cyan
+						//println("$name | reply asynchstep done") color cyan
 						replyTo step with stepdone : stepdone(ok)
 						[# rpos.forwardStep()    #]  //update map
 					} 			
