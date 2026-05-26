@@ -29,6 +29,6 @@ with Diagram('robotsmart26usageArch', show=False, outformat='png', graph_attr=gr
           robotsnartusage=Custom('robotsnartusage','./qakicons/symActorWithobjSmall.png')
      with Cluster('ctxrobotsmart', graph_attr=nodeattr):
           robotsmart=Custom('robotsmart(ext)','./qakicons/externalQActor.png')
-     robotsnartusage >> Edge(color='magenta', style='solid', decorate='true', label='<step<font color="darkgreen"> stepdone stepfailed</font> &nbsp; >',  fontcolor='magenta') >> robotsmart
-     robotsnartusage >> Edge(color='blue', style='solid',  decorate='true', label='<setrobotstate &nbsp; move &nbsp; >',  fontcolor='blue') >> robotsmart
+     robotsnartusage >> Edge(color='magenta', style='solid', decorate='true', label='<moverobot<font color="darkgreen"> moverobotdone moverobotfailed</font> &nbsp; tuneAtHome<font color="darkgreen"> tuneDone</font> &nbsp; >',  fontcolor='magenta') >> robotsmart
+     robotsnartusage >> Edge(color='blue', style='solid',  decorate='true', label='<setrobotstate &nbsp; setplanbuildelay &nbsp; >',  fontcolor='blue') >> robotsmart
 diag

@@ -21,7 +21,7 @@ Reply doplanfailed  : doplanfailed( PLANTODO )  for doplan
 Request step       : step(TIME)	                        "step command for TIME duration"
 Reply stepdone     : stepdone(V)                 for step
 Reply stepfailed   : stepfailed(DURATION, CAUSE) for step
-
+ 
 Dispatch move      : move(M)  "MOVE = l|r|a|d|h   mosse aril sincrone ok"
 Dispatch setrobotstate: setpos(X,Y,D) 		"set robot position to (X,Y) direction D=up|down|left|right" 
 
@@ -60,10 +60,11 @@ QActor robotsnartusage context ctxrobotsmartusage{
 		[# logger.info(  "${currentState.stateName}: move(r)"  ) #]
 		forward robotsmart -m move : move(r)
    	 	delay 500
- 	}
+ 	}  
  	Goto walkAlomgBoundary
  	
     State walkAlomgBoundary{
+     delay 300  //avoid too fast
    	 println("$name | walkAlomgBoundary $NLAP") color blue
    	 request robotsmart -m step : step( $StepTime ) 
     }
@@ -72,7 +73,7 @@ QActor robotsnartusage context ctxrobotsmartusage{
     	whenReply stepfailed -> hitwall
     
     State stepok{
-    	[# logger.info(  "${currentState.stateName}: step ddone"  ) #]
+    	[# logger.info(  "${currentState.stateName}: step done"  ) #]
     }
     Goto walkAlomgBoundary
     
@@ -86,6 +87,7 @@ QActor robotsnartusage context ctxrobotsmartusage{
     	[# logger.info(  "${currentState.stateName}: step failed $NLAP"  ) #]   	
     	forward robotsmart -m move : move(l)
      	[# NLAP = NLAP + 1 #] 
+     	delay 500
      }
      Goto walkAlomgBoundary if [# NLAP < 4 #] else end
  		

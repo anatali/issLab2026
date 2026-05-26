@@ -10,22 +10,22 @@ import unibo.basicomm23.ws.WsConnection;
 import java.awt.Desktop;
 import java.net.URI;
 
-public class OutInWs implements IObserver{
-	private static OutInWs instance = null;
+public class OutInWsGuimap implements IObserver{
+	private static OutInWsGuimap instance = null;
     private Interaction conn;
     
-    public static OutInWs getResource(String port) {
-    	//CommUtils.outyellow("OutInWs getResource instance=" + instance);
+    public static OutInWsGuimap getResource(String port) throws Exception {
+    	//CommUtils.outyellow("OutInWsGuimap getResource instance=" + instance);
     	if( instance != null ) return instance;
-    	else return new OutInWs(port);
+    	else return new OutInWsGuimap(port);
     }
     
-    private OutInWs(String port) { 
+    private OutInWsGuimap(String port) throws Exception { 
       	
-        try {     	
+//        try {     	
 //        	Runtime.getRuntime().exec("docker-compose -f actorgridgui.yaml up");   	
 //        	CommUtils.delay(5000);
-//        	CommUtils.outcyan("OutInWs actorgridgui OPEN http://localhost:"+port);
+//        	CommUtils.outcyan("OutInWsGuimap actorgridgui OPEN http://localhost:"+port);
 
         	/*
         	 * Desktop.isDesktopSupported() FALSE in docker
@@ -39,15 +39,15 @@ public class OutInWs implements IObserver{
         	}
 			*/
         	connectToRobotMind(port); //DEVE ESSERE PARTITA LA FACADE ...
-        } catch (Exception e) {
-        	CommUtils.outred("OutInWs | ERROR:" +e.getMessage());
-        }    	   	
+//        } catch (Exception e) {
+//        	CommUtils.outred("OutInWsGuimap | ERROR:" +e.getMessage());
+//        }    	   	
     }
     
-    public void connectToRobotMind(String port) {
-    	try {
+    public void connectToRobotMind(String port) throws Exception {
+//    	try {
         	
-//        	CommUtils.outcyan("OutInWs connectToRobotMind STARTED ---------------------------- " + port);
+//        	CommUtils.outcyan("OutInWsGuimap connectToRobotMind STARTED ---------------------------- " + port);
         	//conn = ConnectionFactory.createClientSupport(ProtocolType.ws, "localhost:"+port, "wsupdates");
         	if( CommUtils.getEnvvarValue("VIRTUAL_ENV") != null) { //In docker ...
         		CommUtils.delay(4000); //Gve time to start the gui
@@ -56,62 +56,46 @@ public class OutInWs implements IObserver{
         	else{
         		conn = WsConnection.create("localhost:"+port,"wsupdates");
         	}
-	        CommUtils.outcyan("               OutInWs connected to " + port);	        
+	        CommUtils.outcyan("OutInWsGuimap | OutInWsGuimap connected to " + port);	        
 	        ((WsConnection) conn).addObserver(this); 		
-        } catch (Exception e) {
-        	CommUtils.outred("               connectToRobotMind | ERROR:" +e.getMessage());
-        	connectToRobotMind(  port );
-        }    	   	
+//        } catch (Exception e) {
+//        	CommUtils.outred("OutInWsGuimap | connectToRobotMind | ERROR:" +e.getMessage());
+//        	connectToRobotMind(  port );
+//        }    	   	
     }
     
     public void send(String msg) {
         try {
-        	//CommUtils.outyellow("		OutInWs send " + msg );	   
-        	conn.forward(msg);   
+        	//CommUtils.outyellow("		OutInWsGuimap send " + msg );	   
+        	if( conn != null ) conn.forward(msg);   
         } catch (Exception e) {
-        	CommUtils.outred("               OutInWs | ERROR:" +e.getMessage());
+        	CommUtils.outred("               OutInWsGuimap | ERROR:" +e.getMessage());
         }     	
     }
 
      
-//    public void workWithGui( ) {
-//        try {
-//        	CommUtils.outblue("workWithGui cell");
-//        	//conn.forward("clear");       	
-//        	//CommUtils.delay(2000);     	
-////        	conn.forward("stop");
-//        	
-//        	conn.forward("cell(1,2,1)");
-//        	conn.forward("cell(3,1,1)");
-//          
-////            CommUtils.delay(1000);
-////            CommUtils.outblue("workWithGui clear");
-////            conn.forward("clear");    
-//            
-//        	CommUtils.delay(10000); //To chcek broadcasted messages
-//         	CommUtils.outmagenta("OutInWs | BYE" );
-//            System.exit(0);
-//        
-//        } catch (Exception e) {
-//        	CommUtils.outred("OutInWs | ERROR:" +e.getMessage());
-//        }    	
-//    }
+ 
     
 	@Override 
 	public void update(Observable o, Object arg) {
-		//CommUtils.outyellow("OutInWs | riceve da observale: " + o + " la info:" + arg);		
+		//CommUtils.outyellow("OutInWsGuimap | riceve da observale: " + o + " la info:" + arg);		
 		update(arg.toString() );
 	}
 
 
 	@Override
 	public void update(String message) {
-		//CommUtils.outcyan("OutInWs | update elabora: " + message);
+		//CommUtils.outcyan("OutInWsGuimap | update elabora: " + message);
 	}
  
 
     public static void main(String[] args) {
-    	OutInWs caller = new OutInWs("8085");
+    	try {
+			OutInWsGuimap caller = new OutInWsGuimap("8085");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	//caller.workWithGui(); 
     }
     

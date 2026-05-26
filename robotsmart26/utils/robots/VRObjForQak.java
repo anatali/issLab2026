@@ -16,7 +16,7 @@ private ActorBasic owner;
 
     protected void emitInfo(IApplMessage info) {
     	if( owner != null) {
-    		CommUtils.aboutThreads("emitinfo");
+    		//CommUtils.aboutThreads("RobotObjForQak  | emitinfo");
      	    if( tracing) CommUtils.outyellow("     RobotObjForQak  | emitLocalStreamEvent " + info.msgContent() );
     		if( info.msgContent().contains("collision")) return;
     		//MsgUtil.emitLocalEvent(info,owner,null); 

@@ -2,7 +2,7 @@
   
     <!-- Appender per scrivere i log in un file -->
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>logs/basicrobot26.log</file>
+        <file>logs/robotsmart26.log</file>
         <append>true</append>
         <encoder>
              <!-- <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern> -->

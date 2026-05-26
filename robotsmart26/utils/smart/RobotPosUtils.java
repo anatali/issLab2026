@@ -1,12 +1,10 @@
 package smart;
 import java.util.List;
-
-import gui.AdapterGui;
+import gui.AdapterGuiForMindrep;
 import it.unibo.kactor.GuiColors;
 import location.RoomMap;
 import location.RoomMap.Direction;
-import planner.Node;
-//import main.java.RoomMap.Direction;
+import planning.Node;
 import unibo.basicomm23.utils.CommUtils;
 
  
@@ -20,10 +18,11 @@ public class RobotPosUtils {
 	/** Current robot position */
 	private Node curPos;
 	/** GUI adapter for visualization */
-	protected AdapterGui gui;
+	protected AdapterGuiForMindrep gui;
 	
 	public static RobotPosUtils getInstance( ) {
- 		return getInstance( AdapterGui.create() );
+		AdapterGuiForMindrep gui = AdapterGuiForMindrep.create();
+ 		return getInstance( AdapterGuiForMindrep.create() );
 	}
 
 	/**
@@ -32,8 +31,9 @@ public class RobotPosUtils {
 	 * @param gui The GUI adapter for visualization
 	 * @return The singleton RobotPathUtils instance
 	 */
-	public static RobotPosUtils getInstance(AdapterGui gui) {
+	public static RobotPosUtils getInstance(AdapterGuiForMindrep gui) {
 		if( instance == null ) instance = new RobotPosUtils(gui);
+		//gui.showTheRoom();
 		return instance;
 	}
 	
@@ -42,7 +42,8 @@ public class RobotPosUtils {
 	 * 
 	 * @param gui The GUI adapter for visualization
 	 */
-	public RobotPosUtils(AdapterGui gui) {
+	public RobotPosUtils(AdapterGuiForMindrep gui) {	
+//		CommUtils.outred("RobotPosUtils guiiiiiiiiiiiiiiiiiii = " + gui);	
 		gui.showTheRoom();
 		this.gui = gui;
 	}
@@ -189,7 +190,7 @@ public class RobotPosUtils {
     }
 
     public void forwardStep() {
-    	CommUtils.outyellow("RobotPosUtil | forwarStep curdir=" + curdir + " curPos=" + curPos);
+    	//CommUtils.outyellow("RobotPosUtil | forwarStep curdir=" + curdir + " curPos=" + curPos);
     	if( curPos.x == 0 && curPos.y == 0 ){
     		//CommUtils.outred("RobotPosUtil | at home ");
     		if( curdir == curdir.LEFT ||  curdir == curdir.UP ) return;
@@ -214,10 +215,10 @@ public class RobotPosUtils {
 				          }
 		//default    :  ;
     	}
-    	CommUtils.outyellow("RobotPosUtil | forwarStep curdir=" + curdir + " curPos=" + curPos);
+    	//CommUtils.outyellow("RobotPosUtil | forwarStep curdir=" + curdir + " curPos=" + curPos);
     }
  
-    public String setTheDirection(String dir){
+    public String planToSetDirection(String dir){
         String plan ="";
         String direction = getCurDir();
         if( direction.equals("up") ) {
@@ -280,7 +281,7 @@ public class RobotPosUtils {
                     break;
             }
         }
-        //CommUtils.outmagenta("RobotPathUtils | setTheDirection " + dir + " while " + direction + "=" +plan);
+        CommUtils.outmagenta("RobotPathUtils | setTheDirection " + dir + " while " + direction + "=" +plan);
         return plan;
     }
 
@@ -295,6 +296,11 @@ public class RobotPosUtils {
    public int getPosY() {
 	   return curPos.y;
    }    
+   
+   public String getMapRep() {
+	   return gui.getMapRep();
+   }
+   
    public void setCurdir(RoomMap.Direction dir) {
    	curdir =dir;
    }
@@ -308,7 +314,16 @@ public class RobotPosUtils {
 	   }
    }
    
-   public void setRobotState(String X, String Y, String DIR) {
+   public void setRobotState(int X, int Y, String DIR) {
+	   setCurPos(X,Y);
+	   switch(DIR) {
+		   case "down"  : { curdir = Direction.DOWN;  break; }
+		   case "up"    : { curdir = Direction.UP;  break;   }
+		   case "left"  : { curdir = Direction.LEFT;  break;	 }
+		   case "right" : { curdir = Direction.RIGHT;  break;	 }	    
+	   }
+	   gui.showTheRoom();
+	   showTheRobotState();
 	   
    }
     public void doMove(String move) {
@@ -370,5 +385,14 @@ public class RobotPosUtils {
  
     	
     }
+    
+    public void showTheRobotState() {
+    	switch (curdir) {	
+			case DOWN  : {  gui.displayOnGui(curPos.y, curPos.x, GuiColors.SUD); break; }
+			case RIGHT : {  gui.displayOnGui(curPos.y, curPos.x, GuiColors.EST); break; }
+			case LEFT  : {  gui.displayOnGui(curPos.y, curPos.x, GuiColors.WEST); break;}
+			case UP    : {  gui.displayOnGui(curPos.y, curPos.x, GuiColors.NORD); break;}
+    	}
+     }
 	
 }

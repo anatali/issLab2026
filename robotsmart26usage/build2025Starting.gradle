@@ -154,9 +154,9 @@ task dovesiamo {
 
 distributions {
     main {
-        distributionBaseName = 'robotsmart26'
+        distributionBaseName = 'robotsmart26usage'
         contents { 
-             from './robotsmart26.pl'
+             from './robotsmart26usage.pl'
              from './sysRules.pl'
              from './facadeConfig.json'
         }

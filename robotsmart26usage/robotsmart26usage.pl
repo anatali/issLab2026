@@ -1,6 +1,7 @@
 %====================================================================================
 % robotsmart26usage description   
 %====================================================================================
+mqttBroker("192.168.1.163", "1883", "robotsmartusage26in").
 request( buildPlan, buildPlan(PX,PY,TX,TY) ). %create plan from (PX,PY) to (TX,TY)
 reply( buildPlanDone, buildPlanDone(PLAN) ).  %%for buildPlan
 request( moverobot, moverobot(TARGETX,TARGETY,STEPTIME) ). %move from current pos to (TARGETX,TARGETY)
@@ -18,6 +19,8 @@ dispatch( move, move(M) ). %MOVE = l|r|a|d|h   mosse aril sincrone ok
 dispatch( setrobotstate, setpos(X,Y,D) ). %set robot position to (X,Y) direction D=up|down|left|right
 request( setdirection, dir(D) ). %set robot direction to D=up|down|left|right
 reply( setdirectiondone, pos(PX,PY) ).  %%for setdirection
+request( tuneAtHome, tuneAtHome(X) ). %reposition in home X don't care
+reply( tuneDone, tuneDone(X) ).  %%for tuneAtHome
 request( getrobotstate, getrobotstate(ARG) ). %request robot state ARG unused
 reply( robotstate, robotstate(POS,DIR) ). %%for getrobotstate | POS->pos(X,Y) DIR->up|down|left|right
 %====================================================================================

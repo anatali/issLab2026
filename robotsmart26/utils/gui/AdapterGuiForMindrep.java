@@ -1,11 +1,11 @@
 package gui;
 
 import it.unibo.kactor.GuiColors;
-import planner.Node;
+import planning.Node;
 import unibo.basicomm23.utils.CommUtils;
  
 /**
- * AdapterGui - GUI Adapter for Robot Visualization
+ * AdapterGuiForMindrep - GUI Adapter for Robot Visualization
  * 
  * This class provides a bridge between the robot control system and the graphical user interface.
  * It handles the display of the robot's environment, position, and movement paths on a grid-based GUI.
@@ -20,9 +20,9 @@ import unibo.basicomm23.utils.CommUtils;
  * @author Unibo BasicRobot25 Team
  * @version 2025
  */
-public class AdapterGui {
-	/** Singleton instance of AdapterGui */
-	private static AdapterGui instance = null;
+public class AdapterGuiForMindrep {
+	/** Singleton instance of AdapterGuiForMindrep */
+	private static AdapterGuiForMindrep instance = null;
 	
 	/** Utility for map operations and grid management */
 	protected MapUtil maputil = new MapUtil();
@@ -40,16 +40,16 @@ public class AdapterGui {
 	protected int NC;		
 	
 	/** WebSocket connection for GUI communication on port 8085 */
-	protected OutInWs outinws = OutInWs.getResource("8085");
+	protected OutInWsGuimap outinws ;
 	
 	/**
-	 * Creates or returns the singleton instance of AdapterGui
+	 * Creates or returns the singleton instance of AdapterGuiForMindrep
 	 * 
-	 * @return The singleton AdapterGui instance
+	 * @return The singleton AdapterGuiForMindrep instance
 	 */
-	public static AdapterGui create() {
+	public static AdapterGuiForMindrep create() {
 		if( instance == null ) { 
-			instance = new AdapterGui();
+			instance = new AdapterGuiForMindrep();
 		}
 		return instance;
 	}
@@ -58,11 +58,18 @@ public class AdapterGui {
 	 * Constructor initializes the grid from map file and sets up dimensions
 	 * Loads the environment map from "tf25map.txt" and initializes grid dimensions
 	 */
-	public AdapterGui() {
-		// Load grid from map file and initialize dimensions
-		grid = maputil.createGridFromMapInFile("tf25map.txt");
-	    NR = grid.length;
-	    NC = grid[0].length;
+	public AdapterGuiForMindrep() {
+		try {
+			grid = maputil.createGridFromMapInFile("tf25map.txt");
+		    NR = grid.length;
+		    NC = grid[0].length;
+		    //La robotoutgui25 sulla 8085 potrebbe non essere attiva:
+		    //La mente esiste ma non ha una rappresentazione
+			outinws = OutInWsGuimap.getResource("8085");
+		} catch (Exception e) {
+			CommUtils.outred("AdapterGuiForMindrep | WARNING: working without map gui");
+ 		}
+		
 	}
 
 	/**
@@ -76,7 +83,7 @@ public class AdapterGui {
     public void displayOnGui( int X, int Y, GuiColors c) {
     	// Format message for GUI: "cell(X,Y,Z)" where Z is color ordinal
     	String msg = "cell(X,Y,Z)".replace("X",""+X).replace("Y",""+Y).replace("Z",""+c.ordinal());
-    	outinws.send(msg);
+    	if( outinws != null) outinws.send(msg);
     }
 
     /**
@@ -142,4 +149,4 @@ public class AdapterGui {
     	return s;
     }
  
-}//AdapterGui
+}//AdapterGuiForMindrep

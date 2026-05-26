@@ -33,7 +33,7 @@ import unibo.basicomm23.ws.WsConnection;
  *
  * ------------------------------------------------------------------------
 */
-public class VRObj26   { //implements IRobotBasicMoves
+public class VRObj26  implements IRobotBasicMoves { 
     protected Interaction conn;
 	protected WsconnObserver wsconn;
     protected int elapsed             = 0;      
@@ -60,8 +60,17 @@ public class VRObj26   { //implements IRobotBasicMoves
     }
     
     public void connect(String virtualRobotIp) {
-        wsconn    = new WsconnObserver(virtualRobotIp,this); 
-        conn      = wsconn.getConn();   	
+    	try {
+    	if( CommUtils.getEnvvarValue("VIRTUAL_ENV") != null) { //In docker ...
+    		CommUtils.delay(4000); //Gve time to start the gui
+    		conn = WsConnection.create("robotoutgui25:8085","wsupdates");
+    	}else {
+	        wsconn    = new WsconnObserver(virtualRobotIp,this); 
+	        conn      = wsconn.getConn();  
+    	}
+    	}catch( Exception e) {
+    		CommUtils.outred("VRObj26 | error:"+e.getMessage());
+    	}
     }   
     public Interaction getConn() {
         return conn;
@@ -70,17 +79,17 @@ public class VRObj26   { //implements IRobotBasicMoves
         tracing = v;
         wsconn.setTrace(v);
     } 
-    
+    @Override
     public void turnLeft() throws Exception {
         requestSynch(VrobotMsgs.turnleftcmd);
     }
 
-   
+    @Override
     public void turnRight() throws Exception {
         requestSynch(VrobotMsgs.turnrightcmd);
     }
 
-   
+    @Override
     public void forward(int time) throws Exception {
         String forwardMsg = VrobotMsgs.forwardcmd.replace("TIME", "" + time);
         if( tracing ) CommUtils.outgreen("VRObj26 | forwardMsg= " + forwardMsg);
@@ -88,13 +97,13 @@ public class VRObj26   { //implements IRobotBasicMoves
         conn.forward( forwardMsg );
     }
 
- 
+    @Override
     public void backward(int time) throws Exception {
         startTimer();
         conn.forward(VrobotMsgs.backwardcmd.replace("TIME", "" + time));
     }
 
-     
+    @Override
     public void halt()   {
     	try {
 	        conn.forward(VrobotMsgs.haltcmd);
@@ -194,7 +203,7 @@ public class VRObj26   { //implements IRobotBasicMoves
  * --------------------------------------------
  */
 
-   
+    @Override
     public boolean step(long time) throws Exception {
         doingStepSynch = true;
         String cmd    = VrobotMsgs.forwardcmd.replace("TIME", "" + time);
@@ -281,8 +290,9 @@ class WsconnObserver implements IObserver{
        this.conn = 
         	ConnectionFactory.createClientSupport(ProtocolType.ws,vitualRobotIp+":8091","");
         //SET itself as ath observer over the WSconnection
+   		//CommUtils.outred("WsconnObserverrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr " + conn);
         ((WsConnection) conn).addObserver(  this );
-        CommUtils.outgreen("WsconnObserver | CREATED in " + Thread.currentThread().getName());
+        //CommUtils.outgreen("WsconnObserver | CREATED in " + Thread.currentThread().getName());
     }
 
     public void setTrace(boolean v){

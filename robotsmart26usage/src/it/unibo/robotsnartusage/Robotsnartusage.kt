@@ -35,79 +35,55 @@ class Robotsnartusage ( name: String, scope: CoroutineScope, isconfined: Boolean
 				state("s0") { //this:State
 					action { //it:State
 						CommUtils.outblue("$name | starts ")
-						 clearlog("./logs/robotsmart26usage.log") 			//vedi src/main/resources/logback.xml  
+						 clearlog("./logs/robotsmart26usage.log") //vedi src/main/resources/logback.xml  
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition( edgeName="goto",targetState="swing", cond=doswitch() )
+					 transition( edgeName="goto",targetState="posrobotbeforeslot", cond=doswitch() )
 				}	 
-				state("swing") { //this:State
+				state("posrobotbeforeslot") { //this:State
 					action { //it:State
 						 logger.info(  "${currentState.stateName}: setrobotstate at HOME"  )  
 						forward("setrobotstate", "setpos(0,0,down)" ,"robotsmart" ) 
-						 logger.info(  "${currentState.stateName}: move(i)"  )  
-						CommUtils.outblue("$name | swing ")
-						forward("move", "move(l)" ,"robotsmart" ) 
 						delay(500) 
-						 logger.info(  "${currentState.stateName}: move(r)"  )  
-						forward("move", "move(r)" ,"robotsmart" ) 
-						delay(500) 
+						forward("setplanbuildelay", "value(250)" ,"robotsmart" ) 
+						request("moverobot", "moverobot(3,1,345)" ,"robotsmart" )  
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition( edgeName="goto",targetState="walkAlomgBoundary", cond=doswitch() )
+					 transition(edgeName="t00",targetState="backtohome",cond=whenReply("moverobotdone"))
+					transition(edgeName="t01",targetState="end",cond=whenReply("moverobotfailed"))
 				}	 
-				state("walkAlomgBoundary") { //this:State
+				state("backtohome") { //this:State
 					action { //it:State
-						CommUtils.outblue("$name | walkAlomgBoundary $NLAP")
-						request("step", "step($StepTime)" ,"robotsmart" )  
+						request("moverobot", "moverobot(0,0,345)" ,"robotsmart" )  
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t00",targetState="stepok",cond=whenReply("stepdone"))
-					transition(edgeName="t01",targetState="hitwall",cond=whenReply("stepfailed"))
-				}	 
-				state("stepok") { //this:State
-					action { //it:State
-						 logger.info(  "${currentState.stateName}: step ddone"  )  
-						//genTimer( actor, state )
-					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition( edgeName="goto",targetState="walkAlomgBoundary", cond=doswitch() )
-				}	 
-				state("hitwall") { //this:State
-					action { //it:State
-						 var TDONE = "0"  
-						if( checkMsgContent( Term.createTerm("stepfailed(DURATION,CAUSE)"), Term.createTerm("stepfailed(T,CAUSE)"), 
-						                        currentMsg.msgContent()) ) { //set msgArgList
-								  TDONE = payloadArg(0)  
-								CommUtils.outmagenta("$name | hit wall after: $TDONE")
-						}
-						 logger.info(  "${currentState.stateName}: step failed $NLAP"  )  
-						forward("move", "move(l)" ,"robotsmart" ) 
-						 NLAP = NLAP + 1  
-						//genTimer( actor, state )
-					}
-					//After Lenzi Aug2002
-					sysaction { //it:State
-					}	 	 
-					 transition( edgeName="goto",targetState="walkAlomgBoundary", cond=doswitchGuarded({ NLAP < 4  
-					}) )
-					transition( edgeName="goto",targetState="end", cond=doswitchGuarded({! ( NLAP < 4  
-					) }) )
+					 transition(edgeName="t02",targetState="end",cond=whenReply("moverobotdone"))
+					transition(edgeName="t03",targetState="end",cond=whenReply("moverobotfailed"))
 				}	 
 				state("end") { //this:State
 					action { //it:State
-						delay(1000) 
-						CommUtils.outblue("$name | BYE ")
+						request("tuneAtHome", "tuneAtHome(end)" ,"robotsmart" )  
+						CommUtils.outmagenta("$name in ${currentState.stateName} | $currentMsg | ${Thread.currentThread().getName()} n=${Thread.activeCount()}")
+						 	   
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t04",targetState="bye",cond=whenReply("tuneDone"))
+				}	 
+				state("bye") { //this:State
+					action { //it:State
+						CommUtils.outblue("$name | bye ")
 						 System.exit(0)  
 						//genTimer( actor, state )
 					}
