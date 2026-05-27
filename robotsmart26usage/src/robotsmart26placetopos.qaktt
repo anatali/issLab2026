@@ -63,8 +63,9 @@ QActor robotsnartusage context ctxrobotsmartusage{
 		[# logger.info(  "${currentState.stateName}: setrobotstate at HOME"  ) #]
 		forward robotsmart -m setrobotstate : setpos(0,0,down)		
     	delay 500
-    	forward robotsmart -m setplanbuildelay : value(250)
-    	request robotsmart -m moverobot : moverobot(3,1,345)
+    	//Visualizzazione di A*
+    	forward robotsmart -m setplanbuildelay : value(150)
+    	request robotsmart -m moverobot : moverobot(3,5,345)
  
  	}
  	Transition t0 

@@ -1,10 +1,10 @@
 System robotsmart26
-	//mqttBroker "192.168.1.163" : 1883 eventTopic "robotsmart26in"  //SE definita MQTTBROKER, usa quell'addr
+	//mqttBroker "localhost" : 1883 eventTopic "robotsmart26in"  //SE definita MQTTBROKER, usa quell'addr
 /* 
  * ------------------------------------------------
  * Handled by robotsmart
  * ------------------------------------------------
-*/
+*/ 
 Request  buildPlan   : buildPlan( PX,PY,TX,TY  )		"create plan from (PX,PY) to (TX,TY)"
 Reply buildPlanDone  : buildPlanDone( PLAN ) for buildPlan
 
@@ -103,7 +103,7 @@ QActor robotsmart context ctxrobotsmart {
 		var TargetY   = ""		 
 		var X         = ""
 		var Y         = "" 		
-		var StepTime = "345"
+		var StepTime = "335"
 	#]  
 	State s0 initial{ 
 		[# clearlog("./logs/robotsmart26.log") 			//vedi src/main/resources/logback.xml #]
@@ -146,7 +146,7 @@ QActor robotsmart context ctxrobotsmart {
 	Goto waitinputmsg    
  	    
     State domoverobot{
-    	printCurrentMessage
+    	printCurrentMessage color green
 	 		onMsg(moverobot : moverobot(X,Y,STEPTIME)) {
 				[# TargetX  = payloadArg(0)
 				   TargetY  = payloadArg(1)
@@ -246,9 +246,9 @@ QActor robotmnemo context ctxrobotsmart
 		withobj robot using "robots.VRObjForQak(myself,\"logs/robotsmart26.log\")"{  
 		
  	[# var doingAsynchStep = false   
- 	   val stepTime        = 345L     
+ 	   //val stepTime        = 345L     
  	   var CurTime         = 0L	   
- 	   var StepTime        = 345
+ 	   var StepTime        = 335
  	   var Plan            = ""
  	#]  
 	State s0 initial{
@@ -365,10 +365,9 @@ QActor robotmnemo context ctxrobotsmart
     	 #]
     	println("$name | tuneAtHome Dir=$Dir") color magenta
     	//DOvrei essere in home => la mente viene aggiornata
-    	[#  
-    	   rpos.doMove( "w") 
-    	#] 
+    	
     	if [# Dir == "up" #]{
+    		[#  rpos.doMove( "w")  #] 
     		println("$name | tuneAtHome upDir ") color yellow
     		[# res = robot.step( 300 ) #]
     		println("$name | tuneAtHome updDir res=$res ") color yellow
@@ -379,20 +378,25 @@ QActor robotmnemo context ctxrobotsmart
     		[# robot.turnLeft()          #]
     		[# rpos.doMove( "l" )        #]
     		println("$name |  ${rpos.getCurDir()}" )
-    	}  
-    	if [# Dir == "left" #]{
-     		[# res = robot.step( 300 )  #]
-    		println("$name | tuneAtHome leftDir dostep1 res=$res ") color yellow
-    		//delay 300
-    		[# robot.turnRight()       #]
-    		[# rpos.doMove( "r" )      #]
-    		[# robot.step( 300 )       #]
-     		println("$name | tuneAtHome leftDir dostep2 res=$res ") color yellow
-     		[# robot.turnLeft()  #]
-     		[# rpos.doMove( "l" )        #]
-    		[# robot.turnLeft()  #]
-    		[# rpos.doMove( "l" )        #]
-     		
+    	} else{ 
+    		if [# Dir == "left" #]{
+    			[#  rpos.doMove( "w")  #] 
+	     		[# res = robot.step( 300 )  #]
+	    		println("$name | tuneAtHome leftDir dostep1 res=$res ") color yellow
+	    		//delay 300
+	    		[# robot.turnRight()       #]
+	    		[# rpos.doMove( "r" )      #]
+	    		[# robot.step( 300 )       #]
+	     		println("$name | tuneAtHome leftDir dostep2 res=$res ") color yellow
+	     		[# robot.turnLeft()  #]
+	     		[# rpos.doMove( "l" )        #]
+	    		[# robot.turnLeft()  #]
+	    		[# rpos.doMove( "l" )        #]
+     	    }else{ 
+    			if [# Dir == "down" #]{
+    			
+    			}
+    	}
     	}  
         println("$name | tuneAtHome done ") color yellow
         replyTo tuneAtHome with tuneDone : tuneDone(ok)
@@ -405,7 +409,7 @@ QActor robotmnemo context ctxrobotsmart
         --------------------------------------------
 	*/    
 	State handleVrinfoMsgReply{
-		//printCurrentMessage
+		//printCurrentMessage color green
 		[# var NOW = 0L; var TDONE = 0L #]
 		memoCurrentTime NOW
 		//println("$name | handleVrinfoMsgReply $currentMsg") color red
@@ -415,13 +419,19 @@ QActor robotmnemo context ctxrobotsmart
  					if [# S.contains("ko") #] { 
 						[# TDONE = NOW - CurTime #]
  						println("$name | reply asynchstep failed after $R DT=$TDONE") color magenta
+						[# var DT = TDONE.toInt() / 2 #] //EURISTICA
+						
+						[# robot.backward( DT) #]
+						delay 300
+						[# robot.halt()        #]
+
 //						if [# TDONE < 100 #]{
 //							println("$name | reply asynchstep almost correcttttttttttttttttt") color cyan
 //							//replyTo step with stepfailed : stepfailed($TDONE,almostcorrect)
 //							replyTo step with stepdone : stepdone(almostcorrect)
 //							[# rpos.forwardStep()    #]  //update mind							
 //						}else{
-							replyTo step with stepfailed : stepfailed($TDONE,toofar)
+							replyTo step with stepfailed : stepfailed($TDONE,obst)
 							//non cambia posizione
 //						}						
 					}else{
@@ -496,7 +506,7 @@ QActor planexec context ctxrobotsmart {  //withobj robot using "uniborobots.robo
 		var PlanOrig      = ""
 		var Plantodo      = ""
 		var CurMoveTodo   = ""		
-		var StepTime      = "345"
+		var StepTime      = "335"
 		var ExecDelay     = 70L   //(B)
    	#]
 	State s0 initial{
@@ -565,7 +575,7 @@ QActor planexec context ctxrobotsmart {  //withobj robot using "uniborobots.robo
 	Goto work 
 	
 	State planinterruptedobstacle{  
-		//printCurrentMessage
+		//printCurrentMessage color green
  		println("$name |  planinterruptedobstacle CurMoveTodo=$CurMoveTodo Plan=$Plan StepTime=$StepTime")	color magenta
  		[#  Plantodo =  CurMoveTodo + Plan
  		#]
@@ -607,155 +617,4 @@ QActor planexec context ctxrobotsmart {  //withobj robot using "uniborobots.robo
  	Goto work
 }
 
- /*
- * ------------------------------
- * robotusagemock
- * ------------------------------
- */ 
- /* 
-QActor robotusagemock context ctxrobotsmart{
-    [#
-    	val StepTime = 345
-    	var NLAP     = 0
-    	var Plan     = "wwwwlwwwww" 
-    #]
-   	State s0 initial{
-		[# logger.info(  "${currentState.stateName}: starts"  ) #]
-		delay 3000
- 		println("$name | starts ") color blue
-        //request robotsmart -m step : step( 345 )	
-        
-        request robotmnemo -m getenvmap : getenvmap(begin)
-        
-//        forward robotsmart -m move : move( r )
-//        
-//        request robotsmart -m 	tuneAtHome : tuneAtHome(start)
-	} 
-	Transition t0
-		whenReply tuneDone -> test
-		whenReply envmap   -> showEnvMap
-	//Goto test 
-   //Goto doplan
-   
-   State showEnvMap{
-   	printCurrentMessage color green
-   	publish "robotinfo" -m sonardata : sonar(10)
-   }
-   
-   State doplan{
-   		request robotsmart -m buildPlan : buildPlan(0,0,2,1)
-   }
-   Transition t0
-   	 whenReply buildPlanDone -> action
-   	   
-   	 
-   State action{ 
-   	 onMsg( buildPlanDone : buildPlanDone(PLAN)){
-   	 	[# Plan = payloadArg(0) #]
-   	 	println("$name | built Plan=$Plan") color magenta
-   	 	if [# ! Plan.isEmpty() #]{
-   	 		request planexec -m doplan : doplan( $Plan,$StepTime)
-
-   	 	}
-   	 }
-   }
-   Transition t0
-   	whenReply doplandone -> end
-   	whenReply doplanfailed -> end
-   
-   State test{
-   		printCurrentMessage color green
-     	request robotsmart -m doplan : doplan( $Plan,$StepTime)
-     	[# emitWithDelay("alarm","alarm(fire)",3500) #]
-   }
-   Transition t0
-//   		whenEvent alarm -> test
-   		whenReply doplandone   -> end
-   		whenReply doplanfailed -> end
-   	
-   	State test1{
-   		printCurrentMessage color magenta
-   		request planexec -m doplan : doplan( llwrwrr,$StepTime)
-   	}
  
-   	State test2{
-  		//request robotsmart -m moverobot : moverobot(1,1)
-  		forward robotsmart -m setplanbuildelay : value(0)
-  		delay 1000
-   		forward robotsmart -m move : move( l )
-//   		delay 2000
-//   		forward robotsmart -m move : move( r )
-//   		delay 1000 
-    	request robotsmart -m moverobot : moverobot(2,3,345)  //2,4 obstacle
-   	} 
-   	Transition t0
-   		whenReply moverobotdone   -> testpos
-   		whenReply moverobotfailed -> endfailed 
-  
-  	State testpos{
-  		request robotsmart -m getrobotstate : getrobotstate(now)
-  	}
-  	Transition t0
-  		whenReply robotstate -> showstate
-  		
-  	State showstate{
-  		printCurrentMessage color magenta
-  	}
-  	Goto end
-   	
-   	
-   	State endfailed{
-   		printCurrentMessage color red
-    	delay 1000
-    	[# System.exit(0) #]
-   	}
-   	
-   	
-   	State end{
-   		printCurrentMessage color blue
-   		
-   		request robotsmart -m getrobotstate : getrobotstate(end)
-
-    }
-    Transition t0
-    	whenReply robotstate -> finalend
-    	 
-    
-    State finalend{
-    	printCurrentMessage color magenta
-    	delay 1000
-    	[# System.exit(0) #]    	
-    }
-   
-   //Goto doboundary
-   
-   State doboundary{
-   	 println("$name | doboundary $NLAP") color blue
-   	 request robotmnemo -m step : step( $StepTime ) 
-   	 delay 500
-    }
-    Transition t0 
-    	whenReply stepdone   -> stepok
-    	whenReply stepfailed -> hitwall
-    
-    State stepok{
-    	[# logger.info(  "${currentState.stateName}: step ddone"  ) #]
-
-    }
-    Goto doboundary
-    
-    State hitwall{
-    	[# var TDONE = "0" #]
-    	//println("$name | hitwall ") color magenta
-    	onMsg( stepfailed : stepfailed(T,CAUSE) ){
-    		[#  TDONE = payloadArg(0) #]
-    		println("$name | hit wall after: $TDONE") color magenta
-    	}    	
-    	[# logger.info(  "${currentState.stateName}: step failed $NLAP"  ) #]   	
-    	forward robotsmart -m move : move(l)
-     	[# NLAP = NLAP + 1 #]
-     }
-     Goto doboundary if [# NLAP < 4 #] else end
-	
-}
-*/
