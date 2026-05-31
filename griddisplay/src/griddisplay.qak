@@ -1,5 +1,5 @@
 System griddisplay 
-//mqttBroker  "localhost" : 1883 eventTopic "grid" //"broker.hivemq.com" 
+	mqttBroker  "localhost" : 1883 eventTopic "grid" //"broker.hivemq.com" 
 
 Dispatch cellstate  : cellstate(X,Y,COLOR)      
 Event    cellstate  : cellstate(X,Y,COLOR)      
@@ -11,7 +11,7 @@ QActor griddisplay context ctxgrid{
  		val javalin = guiout.JavalinGuiHandler("javalinh", 8080) 
  		//javalin solo OUT: NON emette eventi cmd e cell
  		javalin.setUpPageGranular()
- 	#]
+ 	#] 
 	State s0 initial{
 		println("$name | starts") color blue	
 	} 
