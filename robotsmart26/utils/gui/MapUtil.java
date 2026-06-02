@@ -20,10 +20,9 @@ public class MapUtil {
 		String[] m1 = map.split("@");
 		NR = m1.length; 
 		NC = m1[0].length();
-		CommUtils.outblue("NR=" + NR + " NC="+ NC);
+		CommUtils.outblue("createGridFromMapInFile NR=" + NR + " NC="+ NC);
 		createTheGrid(m1);
-//		CommUtils.outblue("FROM MAP TO grid" );
-//		showTheGrid();		
+ //		showTheGrid();		
 		return grid;
 	}
 

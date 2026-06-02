@@ -20,9 +20,12 @@ public class RobotPosUtils {
 	/** GUI adapter for visualization */
 	protected AdapterGuiForMindrep gui;
 	
-	public static RobotPosUtils getInstance( ) {
-		AdapterGuiForMindrep gui = AdapterGuiForMindrep.create();
- 		return getInstance( AdapterGuiForMindrep.create() );
+	protected static String guiIp;
+	
+	public static RobotPosUtils getInstance(  String ip ) {
+		AdapterGuiForMindrep gui = AdapterGuiForMindrep.create(ip);
+		guiIp = ip;
+ 		return getInstance( AdapterGuiForMindrep.create(ip) );
 	}
 
 	/**
@@ -33,7 +36,10 @@ public class RobotPosUtils {
 	 */
 	public static RobotPosUtils getInstance(AdapterGuiForMindrep gui) {
 		if( instance == null ) instance = new RobotPosUtils(gui);
-		//gui.showTheRoom();
+		return instance;
+	}
+	//May2026 Called by AStarPathfinding che deve mostrare le ricerche del path
+	public static RobotPosUtils getInstance(  ) {
 		return instance;
 	}
 	
@@ -46,6 +52,10 @@ public class RobotPosUtils {
 //		CommUtils.outred("RobotPosUtils guiiiiiiiiiiiiiiiiiii = " + gui);	
 		gui.showTheRoom();
 		this.gui = gui;
+	}
+	
+	public String getGuiIp() {
+		return guiIp;
 	}
 
     /**
@@ -327,7 +337,7 @@ public class RobotPosUtils {
 	   
    }
     public void doMove(String move) {
-    	CommUtils.outblack("RobotPathUtils | move=" + move);
+    	//CommUtils.outblack("RobotPathUtils | doMove=" + move);
     	switch(move) {
 	    	case "r","d" : {turnRight();  break; }
 	    	case "l","a" : {turnLeft();   break; }

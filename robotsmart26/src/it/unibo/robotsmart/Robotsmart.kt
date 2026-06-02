@@ -36,15 +36,23 @@ class Robotsmart ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 				var TargetY   = ""		 
 				var X         = ""
 				var Y         = "" 		
-				var StepTime = "345"
+				var StepTime = "335"
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
 						 clearlog("./logs/robotsmart26.log") 			//vedi src/main/resources/logback.xml  
 						CommUtils.outblue("$name | starts ")
 						 logger.info(  "${currentState.stateName}: starts"  )  
-						CommUtils.outblack("$name | WAIT  before delegate ")
-						delay(2000) 
+						CommUtils.outyellow("$name | WAIT  before delegate ")
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
+					 transition(edgeName="t00",targetState="finishstart",cond=whenDispatch("partnerstarted"))
+				}	 
+				state("finishstart") { //this:State
+					action { //it:State
 						delegate("step", "robotmnemo") 
 						delegate("move", "robotmnemo") 
 						delegate("tuneAtHome", "robotmnemo") 
@@ -52,7 +60,7 @@ class Robotsmart ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 						delegate("getenvmap", "robotmnemo") 
 						delegate("setrobotstate", "robotmnemo") 
 						delegate("doplan", "planexec") 
-						  planner = planning.AStarPathfinding( )  
+						  planner = planning.AStarPathfinding(  )  
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
@@ -68,20 +76,17 @@ class Robotsmart ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t00",targetState="buildPlan",cond=whenRequest("buildPlan"))
-					transition(edgeName="t01",targetState="domoverobot",cond=whenRequest("moverobot"))
-					transition(edgeName="t02",targetState="dosetplanbuildelay",cond=whenDispatch("setplanbuildelay"))
+					 transition(edgeName="t01",targetState="buildPlan",cond=whenRequest("buildPlan"))
+					transition(edgeName="t02",targetState="domoverobot",cond=whenRequest("moverobot"))
+					transition(edgeName="t03",targetState="dosetplanbuildelay",cond=whenDispatch("setplanbuildelay"))
 				}	 
 				state("dosetplanbuildelay") { //this:State
 					action { //it:State
-						CommUtils.outgreen("$name in ${currentState.stateName} | $currentMsg | ${Thread.currentThread().getName()} n=${Thread.activeCount()}")
-						 	   
 						if( checkMsgContent( Term.createTerm("value(V)"), Term.createTerm("value(V)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
-								CommUtils.outblack("$name | dosetplanbuildelayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy   ")
+								CommUtils.outgreen("$name | dosetplanbuildelay done  ")
 								 planner.setPlanBuildDelay( payloadArg(0).toInt() )  
 						}
-						CommUtils.outblack("$name | dosetplanbuildelay done  ")
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
@@ -91,7 +96,7 @@ class Robotsmart ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 				}	 
 				state("domoverobot") { //this:State
 					action { //it:State
-						CommUtils.outcyan("$name in ${currentState.stateName} | $currentMsg | ${Thread.currentThread().getName()} n=${Thread.activeCount()}")
+						CommUtils.outgreen("$name in ${currentState.stateName} | $currentMsg | ${Thread.currentThread().getName()} n=${Thread.activeCount()}")
 						 	   
 						if( checkMsgContent( Term.createTerm("moverobot(TARGETX,TARGETY,STEPTIME)"), Term.createTerm("moverobot(X,Y,STEPTIME)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
@@ -99,14 +104,14 @@ class Robotsmart ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 												   TargetY  = payloadArg(1)
 												   StepTime = payloadArg(2)
 								request("setdirection", "dir(down)" ,"robotmnemo" )  
-								CommUtils.outblack("$name | setdirecton requested -----------------------------  ")
+								CommUtils.outyellow("$name | setdirecton requested -----------------------------  ")
 						}
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t03",targetState="planAndDomoves",cond=whenReply("setdirectiondone"))
+					 transition(edgeName="t04",targetState="planAndDomoves",cond=whenReply("setdirectiondone"))
 				}	 
 				state("planAndDomoves") { //this:State
 					action { //it:State
@@ -129,9 +134,9 @@ class Robotsmart ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t04",targetState="noplanfound",cond=whenDispatch("noplan"))
-					transition(edgeName="t05",targetState="endMOveok",cond=whenReply("doplandone"))
-					transition(edgeName="t06",targetState="endko",cond=whenReply("doplanfailed"))
+					 transition(edgeName="t05",targetState="noplanfound",cond=whenDispatch("noplan"))
+					transition(edgeName="t06",targetState="endMOveok",cond=whenReply("doplandone"))
+					transition(edgeName="t07",targetState="endko",cond=whenReply("doplanfailed"))
 				}	 
 				state("noplanfound") { //this:State
 					action { //it:State

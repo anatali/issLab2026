@@ -14,13 +14,13 @@ public class OutInWsGuimap implements IObserver{
 	private static OutInWsGuimap instance = null;
     private Interaction conn;
     
-    public static OutInWsGuimap getResource(String port) throws Exception {
+    public static OutInWsGuimap getResource(String ip, String port) throws Exception {
     	//CommUtils.outyellow("OutInWsGuimap getResource instance=" + instance);
     	if( instance != null ) return instance;
-    	else return new OutInWsGuimap(port);
+    	else return new OutInWsGuimap(ip,port);
     }
     
-    private OutInWsGuimap(String port) throws Exception { 
+    private OutInWsGuimap(String ip, String port) throws Exception { 
       	
 //        try {     	
 //        	Runtime.getRuntime().exec("docker-compose -f actorgridgui.yaml up");   	
@@ -38,13 +38,13 @@ public class OutInWsGuimap implements IObserver{
         	    desktop.browse(uri); 
         	}
 			*/
-        	connectToRobotMind(port); //DEVE ESSERE PARTITA LA FACADE ...
+        	connectToRobotMind(ip,port); //DEVE ESSERE PARTITA LA FACADE ...
 //        } catch (Exception e) {
 //        	CommUtils.outred("OutInWsGuimap | ERROR:" +e.getMessage());
 //        }    	   	
     }
     
-    public void connectToRobotMind(String port) throws Exception {
+    public void connectToRobotMind(String ip, String port) throws Exception {
 //    	try {
         	
 //        	CommUtils.outcyan("OutInWsGuimap connectToRobotMind STARTED ---------------------------- " + port);
@@ -54,7 +54,7 @@ public class OutInWsGuimap implements IObserver{
         		conn = WsConnection.create("robotoutgui25:"+port,"wsupdates");
         	}
         	else{
-        		conn = WsConnection.create("localhost:"+port,"wsupdates");
+        		conn = WsConnection.create(ip+":"+port,"wsupdates");
         	}
 	        CommUtils.outcyan("OutInWsGuimap | OutInWsGuimap connected to " + port);	        
 	        ((WsConnection) conn).addObserver(this); 		
@@ -89,15 +89,15 @@ public class OutInWsGuimap implements IObserver{
 	}
  
 
-    public static void main(String[] args) {
-    	try {
-			OutInWsGuimap caller = new OutInWsGuimap("8085");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	//caller.workWithGui(); 
-    }
+//    public static void main(String[] args) {
+//    	try {
+//			OutInWsGuimap caller = new OutInWsGuimap("8085");
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//    	//caller.workWithGui(); 
+//    }
     
     
     /*

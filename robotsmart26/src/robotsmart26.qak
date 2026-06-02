@@ -1,10 +1,15 @@
-System robotsmart26
-	//mqttBroker "localhost" : 1883 eventTopic "robotsmart26in"  //SE definita MQTTBROKER, usa quell'addr
-/* 
+System /*-trace*/ robotsmart26
+	mqttBroker "localhost" : 1883 eventTopic "robotsmart26in"  //SE definita MQTTBROKER, usa quell'addr
+	
+/*
+ * WARNING: gl eventi emessi 
+ */	
+	
+/*   
  * ------------------------------------------------
  * Handled by robotsmart
- * ------------------------------------------------
-*/ 
+ * ------------------------------------------------ 
+*/  
 Request  buildPlan   : buildPlan( PX,PY,TX,TY  )		"create plan from (PX,PY) to (TX,TY)"
 Reply buildPlanDone  : buildPlanDone( PLAN ) for buildPlan
 
@@ -15,7 +20,8 @@ Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO) for moverobot
 Dispatch noplan           : noplan(X)       //autodispatch  
 Dispatch setplanbuildelay : value(V)		"parameter = V >= 0"
 
-
+Dispatch partnerstarted : partnerstarted(NAME)
+  
 //Delegated by robotsmart
 /*
         delegate step          to robotmnemo 
@@ -73,6 +79,8 @@ Dispatch setrobotstate: setpos(X,Y,D) 		"set robot position to (X,Y) direction D
 Request setdirection : dir( D )  			"set robot direction to D=up|down|left|right" 
 Reply setdirectiondone : pos(PX,PY) for setdirection
 
+Dispatch changedir     : changedir(X)       //autodispatch  
+
 Request getrobotstate : getrobotstate(ARG)		"request robot state ARG unused"
 Reply robotstate      : robotstate(POS,DIR)  for getrobotstate  "POS->pos(X,Y) DIR->up|down|left|right"
 
@@ -88,14 +96,14 @@ Event  sonaralarm : distance( DISTANCE ) 	"emesso ad uso di enti esterni al sist
  
 Context ctxrobotsmart ip [host="localhost" port=8020]
 
-/* 
+/*  
  * ------------------------------
  * robotsmart
  * ------------------------------
  */ 
 QActor robotsmart context ctxrobotsmart {
 	//	withobj planner using "planning.AStarPathfinding( )"{
-
+ 
 	[# lateinit var planner : planning.AStarPathfinding   //Note lateinit		
 		var Plan      = ""	
 		var Caller    = ""
@@ -109,19 +117,24 @@ QActor robotsmart context ctxrobotsmart {
 		[# clearlog("./logs/robotsmart26.log") 			//vedi src/main/resources/logback.xml #]
  		println("$name | starts ") color blue
 		[# logger.info(  "${currentState.stateName}: starts"  ) #]
-
-		println("$name | WAIT  before delegate ")  
- 		delay 2000 //(B) attende creazione attori locali robotPos con  è lento
-
+		println("$name | WAIT  before delegate ")  color yellow
+ 		//delay 4000 //(B) attende creazione attori locali robotPos con  è lento
+    }
+    Transition t0
+    	whenMsg partnerstarted -> finishstart
+    	
+ 
+    
+    State finishstart{
         delegate step          to robotmnemo 
         delegate move          to robotmnemo
-        delegate tuneAtHome    to robotmnemo
+        delegate tuneAtHome    to robotmnemo 
         delegate getrobotstate to robotmnemo
         delegate getenvmap     to robotmnemo
         delegate setrobotstate to robotmnemo
         delegate doplan        to planexec
         
-        [#  planner = planning.AStarPathfinding( ) #]   //inizaliza planner
+        [#  planner = planning.AStarPathfinding(  ) #]   //inizaliza planner
  	}
     Goto waitinputmsg
  	
@@ -136,12 +149,10 @@ QActor robotsmart context ctxrobotsmart {
  	    
  	    
  	State dosetplanbuildelay{
-		printCurrentMessage color green
 			onMsg( setplanbuildelay:value(V)){
-				println("$name | dosetplanbuildelayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy   ")
+				println("$name | dosetplanbuildelay done  ") color green
 				[# planner.setPlanBuildDelay( payloadArg(0).toInt() ) #]
 			}			
-		println("$name | dosetplanbuildelay done  ")
     } 
 	Goto waitinputmsg    
  	    
@@ -153,7 +164,7 @@ QActor robotsmart context ctxrobotsmart {
 				   StepTime = payloadArg(2)
 	 		    #]
               request robotmnemo -m setdirection : dir(down)
-	 		  println("$name | setdirecton requested -----------------------------  ")
+	 		  println("$name | setdirecton requested -----------------------------  ") color yellow
 	 		}
 //		}
     }
@@ -176,7 +187,7 @@ QActor robotsmart context ctxrobotsmart {
 		}
 //		println("$name | Plan=$Plan from ($PX,$PY) to ($TargetX,$TargetY)") color green
 //		updateResource [# "doplan: $Plan" #] 
-		}
+		} 
 	}
 	Transition t0 
 	    whenMsg noplan         -> noplanfound
@@ -242,25 +253,26 @@ QActor robotsmart context ctxrobotsmart {
  * ------------------------------
  */  
 QActor robotmnemo context ctxrobotsmart 
-        withobj rpos  using "smart.RobotPosUtils.getInstance()"
+        withobj rpos  using "smart.RobotPosUtils.getInstance(\"localhost\")"   //\"192.168.1.214\"
 		withobj robot using "robots.VRObjForQak(myself,\"logs/robotsmart26.log\")"{  
 		
  	[# var doingAsynchStep = false   
- 	   //val stepTime        = 345L     
- 	   var CurTime         = 0L	   
+  	   var CurTime         = 0L	   
  	   var StepTime        = 335
- 	   var Plan            = ""
+ 	   var Plan            = "" 
+ 	   var MoveForDir      = ""
  	#]  
-	State s0 initial{
-		println("$name STARTS") color blue
+	State s0 initial{ 
+		forward robotsmart -m partnerstarted : partnerstarted($MyName)
+		println("$name STARTS ${rpos.getGuiIp() }") color blue
 		[# clearlog("./logs/robotmnemo.log") 	//vedi src/main/resources/logbdomoveack.xml #]
  		//[# robot.setTrace(true) #] 
  		subscribeTo robotmnemo for sonardata
   		subscribeTo robotmnemo for vrinfo
 		println("$name subscribe to myself done") color blue
-		[# robot.connect("localhost") #]
-		println("$name | at home ") color blue		
-		[#  rpos.robotAtHome(   ) #]
+		[# robot.connect( rpos.getGuiIp() ) #]             //CONNECTION TO robotoutgui with ip given by rpos
+		println("$name | at home. GUI on ...") color blue		
+		[#  rpos.robotAtHome(   ) #] 
 		delay 500 //planexec must be started
 		delegate doplan to planexec     //nel caso di richieste dirette
 	} 
@@ -329,6 +341,7 @@ QActor robotmnemo context ctxrobotsmart
 		printCurrentMessage color blue
 		onMsg( move : move(M) ){
 			[# val Move = payloadArg(0);  #]
+			updateResource [# "$name doing $Move" #]
 			if [# Move == "h" #] { [# robot.halt()         #]  }
  			if [# Move == "a" || Move == "l" #]{ 
 				[# robot.turnLeft()   #]
@@ -351,10 +364,10 @@ QActor robotmnemo context ctxrobotsmart
 			//memoCurrentTime SonardataDT
 			println("$name | handleSonarData ") color green 
 			[# var D = payloadArg(0) #]
-			println("$name |  sonarval:distance($D) ----- EMIT sonar alarm ------  ") color red 
+			println("$name |  sonaralarm:distance($D) ----- EMIT ------  ") color red 
 	//			[#  mqtt.publish("vrevents", "msg(sonarval,event,robotmnemo,ANY,distance(4),0)" ) #]
  	    	emit sonaralarm :  distance($D)  
-		    //questo contesto NON SA che esiste altro => evento non propagato in assenza di MQTT			
+		    //questo contesto NON SA che esiste altro => evento non propagato in assenza di MQTT !!!			
 		} 
 		returnFromInterrupt
 	} 
@@ -452,15 +465,42 @@ QActor robotmnemo context ctxrobotsmart
 		    		autodispatch noplan : noplan(ok)
 		    	}
 		    	else { 
-		    		request planexec -m doplan : doplan( $Plan, $StepTime )
-		    		//WARNING: richiama robotmnemo
+		    		//request planexec -m doplan : doplan( $Plan, $StepTime )
+		    		//WARNING: planexec richiama robotmnemo per move => eseguo direttamente le rotazioni
+		    		autodispatch changedir : changedir(ok)
 		    	}			
 			}
     }
   	Transition t0 
-  	    whenMsg move           -> execDirMove
- 	    whenMsg noplan         -> setDirReply
+  	    whenMsg changedir      -> changeDirection
+  	    whenMsg noplan         -> setDirReply
 
+	State changeDirection{
+		[#
+		   if( Plan.length > 0  ){
+			   	MoveForDir =  Plan.elementAt(0).toString() 
+			   	Plan       =  Plan.removePrefix(MoveForDir)
+		   }else{
+			   	MoveForDir  = ""
+			   	Plan        = ""
+		   }
+		#]        	
+       	//println("$name | changeDirectionnnnnnnnnnnnnn $MoveForDir Plan=$Plan") color yellow
+      }
+    Goto nextMove if [# MoveForDir  != "" #] else setDirReply
+	
+	State nextMove{ 
+		if [# MoveForDir == "a" || MoveForDir  == "l" #]{ 
+				[# robot.turnLeft()   #]
+				[# rpos.turnLeft()    #]  //update mind
+			}
+		if [# MoveForDir == "d" || MoveForDir  == "r" #]{ 
+				[# robot.turnRight()   #]
+				[# rpos.turnRight()    #]  //update mind
+			}
+	    //[# Plan  =  Plan.removePrefix(MoveForDir) #]
+	}
+	Goto changeDirection
 
 	State setDirReply{
 		[# val PX = rpos.getPosX() 
@@ -471,29 +511,30 @@ QActor robotmnemo context ctxrobotsmart
 	Goto waitinputmsg
 	 
 	
-    State execDirMove{
-		printCurrentMessage color gray
-		onMsg( move : move(M) ){
-			[# val Move = payloadArg(0);  #]
-			if [# Move == "h" #] { [# robot.halt()         #]  }
- 			if [# Move == "a" || Move == "l" #]{ 
-				[# robot.turnLeft()   #]
-				[# rpos.turnLeft()    #]  //update mind
-			}
-			if [# Move == "d" || Move == "r" #]{ 
-				[# robot.turnRight()   #]
-				[# rpos.turnRight()    #]  //update mind
-			}
-		}    	
-    }
-    Transition t0
-     	whenReply doplandone   -> setDirReply //directionSet  
-	    whenReply doplanfailed -> fatalerror
+//    State execDirMove{
+//		//	printCurrentMessage color gray
+//		onMsg( move : move(M) ){
+//			[# val Move = payloadArg(0);  #]
+//			if [# Move == "h" #] { [# robot.halt()         #]  }
+// 			if [# Move == "a" || Move == "l" #]{ 
+//				[# robot.turnLeft()   #]
+//				[# rpos.turnLeft()    #]  //update mind
+//			}
+//			if [# Move == "d" || Move == "r" #]{ 
+//				[# robot.turnRight()   #]
+//				[# rpos.turnRight()    #]  //update mind
+//			}
+//		}    	
+//    }
+//    Transition t0
+//  	    whenMsg move           -> execDirMove  //Un piano può avere più mosse
+//     	whenReply doplandone   -> setDirReply //directionSet  
+//	    whenReply doplanfailed -> fatalerror
     
-    State fatalerror{
-    	println("$name | fatalerror:   ") color red
-    }
-    Goto waitinputmsg
+//    State fatalerror{
+//    	println("$name | fatalerror:   ") color red
+//    }
+//    Goto waitinputmsg
  }
  
  /*
@@ -526,7 +567,8 @@ QActor planexec context ctxrobotsmart {  //withobj robot using "uniborobots.robo
 			   StepTime   = payloadArg(1)          //if int ...
     		   val Caller = currentMsg.msgSender() //payloadArg(1) 
       		#]
-      		//println("$name | execAPlan nnnnnnnnnnnnnnn $StepTime Plan=$Plan")
+      		updateResource [# "$name doing Plan=$Plan" #]
+      		println("$name | execAPlan nnnnnnnnnnnnnnn $StepTime Plan=$Plan") color yellow
     	}     	
     }
     Goto nextMove
@@ -550,9 +592,8 @@ QActor planexec context ctxrobotsmart {  //withobj robot using "uniborobots.robo
 	 			delayVar ExecDelay //avoid too fast ...
 	 			//Il supporto non fa step-back
 	 			request robotmnemo -m step : step($StepTime)	//mentre fa doplan ...		
-			 }else{
-				//println("$name | doMoveTurn $CurMoveTodo")  
-				//run robot.move(  CurMoveTodo )  //DEVO MODIFICARE ANCHE MIND ...
+			 }else{ //ROTAZIONE
+				println("$name | doMoveTurn $CurMoveTodo")  color yellow
 				forward robotmnemo -m move : move($CurMoveTodo)
 				delay 500
 				forward planexec -m nextmove : nextmove(goon)
@@ -562,9 +603,9 @@ QActor planexec context ctxrobotsmart {  //withobj robot using "uniborobots.robo
 	Transition t0  whenReply stepfailed -> planinterruptedobstacle
 				   whenEvent alarm      -> planinterrupted
 	               whenMsg nomoremove   -> planend
-	               whenMsg nextmove     -> nextMove 
+	               whenMsg nextmove     -> nextMove  
 	               whenReply stepdone   -> nextMove 
-				  //alarm gestito solo se non esiste stepfailed
+				  
  	
 	State planend{ 
 		//printCurrentMessage color red
@@ -599,7 +640,7 @@ QActor planexec context ctxrobotsmart {  //withobj robot using "uniborobots.robo
 
 	State nonextmovesincealarm{
  		println("$name |  nonextmovesincealarm $CurMoveTodo plantodo=$Plan") color magenta
- 		//updateResource [# "planfailed($PlanOrig,$Plan )" #] 
+ 		updateResource [# "planfailed($PlanOrig,$Plan )" #] 
  		if [# Plan.length == 0 #]{ //Piano esaurito nonostante l'allarme
  			replyTo doplan with doplandone : doplandone($PlanOrig)
  		}else{ //Piano interrotto; da fare ancora: Plan

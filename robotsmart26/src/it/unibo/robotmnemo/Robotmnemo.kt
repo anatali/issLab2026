@@ -29,23 +29,24 @@ class Robotmnemo ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
 		//val interruptedStateTransitions = mutableListOf<Transition>()
 		//IF actor.withobj !== null val actor.withobj.name� = actor.withobj.method�ENDIF
-		val rpos = smart.RobotPosUtils.getInstance()
+		val rpos = smart.RobotPosUtils.getInstance("localhost")
 		val robot = robots.VRObjForQak(myself,"logs/robotsmart26.log")
 		 var doingAsynchStep = false   
-		 	   val stepTime        = 345L     
-		 	   var CurTime         = 0L	   
-		 	   var StepTime        = 345
-		 	   var Plan            = ""
+		  	   var CurTime         = 0L	   
+		 	   var StepTime        = 335
+		 	   var Plan            = "" 
+		 	   var MoveForDir      = ""
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
-						CommUtils.outblue("$name STARTS")
+						forward("partnerstarted", "partnerstarted($MyName)" ,"robotsmart" ) 
+						CommUtils.outblue("$name STARTS ${rpos.getGuiIp() }")
 						 clearlog("./logs/robotmnemo.log") 	//vedi src/main/resources/logbdomoveack.xml  
 						subscribeToLocalActor("robotmnemo") 
 						subscribeToLocalActor("robotmnemo") 
 						CommUtils.outblue("$name subscribe to myself done")
-						 robot.connect("localhost")  
-						CommUtils.outblue("$name | at home ")
+						 robot.connect( rpos.getGuiIp() )  
+						CommUtils.outblue("$name | at home. GUI on ...")
 						  rpos.robotAtHome(   )  
 						delay(500) 
 						delegate("doplan", "planexec") 
@@ -64,13 +65,13 @@ class Robotmnemo ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t07",targetState="domove",cond=whenDispatch("move"))
-					transition(edgeName="t08",targetState="dosetrobotstate",cond=whenDispatch("setrobotstate"))
-					transition(edgeName="t09",targetState="dosetrobotdirection",cond=whenRequest("setdirection"))
-					transition(edgeName="t010",targetState="dogetrobotstate",cond=whenRequest("getrobotstate"))
-					transition(edgeName="t011",targetState="doAsynchStep",cond=whenRequest("step"))
-					transition(edgeName="t012",targetState="doGetEnvMap",cond=whenRequest("getenvmap"))
-					transition(edgeName="t013",targetState="tuneAtHome",cond=whenRequest("tuneAtHome"))
+					 transition(edgeName="t08",targetState="domove",cond=whenDispatch("move"))
+					transition(edgeName="t09",targetState="dosetrobotstate",cond=whenDispatch("setrobotstate"))
+					transition(edgeName="t010",targetState="dosetrobotdirection",cond=whenRequest("setdirection"))
+					transition(edgeName="t011",targetState="dogetrobotstate",cond=whenRequest("getrobotstate"))
+					transition(edgeName="t012",targetState="doAsynchStep",cond=whenRequest("step"))
+					transition(edgeName="t013",targetState="doGetEnvMap",cond=whenRequest("getenvmap"))
+					transition(edgeName="t014",targetState="tuneAtHome",cond=whenRequest("tuneAtHome"))
 				}	 
 				state("dogetrobotstate") { //this:State
 					action { //it:State
@@ -116,8 +117,8 @@ class Robotmnemo ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 interrupthandle(edgeName="t014",targetState="handleSonarData",cond=whenEvent("sonardata"),interruptedStateTransitions)
-					transition(edgeName="t015",targetState="handleVrinfoMsgReply",cond=whenEvent("vrinfo"))
+					 interrupthandle(edgeName="t015",targetState="handleSonarData",cond=whenEvent("sonardata"),interruptedStateTransitions)
+					transition(edgeName="t016",targetState="handleVrinfoMsgReply",cond=whenEvent("vrinfo"))
 				}	 
 				state("doGetEnvMap") { //this:State
 					action { //it:State
@@ -139,6 +140,8 @@ class Robotmnemo ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 						if( checkMsgContent( Term.createTerm("move(M)"), Term.createTerm("move(M)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								 val Move = payloadArg(0);   
+								updateResourceRep( "$name doing $Move"  
+								)
 								if(  Move == "h"  
 								 ){ robot.halt()          
 								}
@@ -164,7 +167,7 @@ class Robotmnemo ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								CommUtils.outgreen("$name | handleSonarData ")
 								 var D = payloadArg(0)  
-								CommUtils.outred("$name |  sonarval:distance($D) ----- EMIT sonar alarm ------  ")
+								CommUtils.outred("$name |  sonaralarm:distance($D) ----- EMIT ------  ")
 								emit("sonaralarm", "distance($D)" ) 
 						}
 						returnFromInterrupt(interruptedStateTransitions)
@@ -179,10 +182,9 @@ class Robotmnemo ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 						 val Dir  = rpos.getCurDir()
 						    		var res = false
 						CommUtils.outmagenta("$name | tuneAtHome Dir=$Dir")
-						  
-						    	   rpos.doMove( "w") 
 						if(  Dir == "up"  
-						 ){CommUtils.outyellow("$name | tuneAtHome upDir ")
+						 ){  rpos.doMove( "w")   
+						CommUtils.outyellow("$name | tuneAtHome upDir ")
 						 res = robot.step( 300 )  
 						CommUtils.outyellow("$name | tuneAtHome updDir res=$res ")
 						 robot.turnLeft()           
@@ -193,18 +195,25 @@ class Robotmnemo ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 						 rpos.doMove( "l" )         
 						CommUtils.outblack("$name |  ${rpos.getCurDir()}")
 						}
-						if(  Dir == "left"  
-						 ){ res = robot.step( 300 )   
-						CommUtils.outyellow("$name | tuneAtHome leftDir dostep1 res=$res ")
-						 robot.turnRight()        
-						 rpos.doMove( "r" )       
-						 robot.step( 300 )        
-						CommUtils.outyellow("$name | tuneAtHome leftDir dostep2 res=$res ")
-						 robot.turnLeft()   
-						 rpos.doMove( "l" )         
-						 robot.turnLeft()   
-						 rpos.doMove( "l" )         
-						}
+						else
+						 {if(  Dir == "left"  
+						  ){  rpos.doMove( "w")   
+						  res = robot.step( 300 )   
+						 CommUtils.outyellow("$name | tuneAtHome leftDir dostep1 res=$res ")
+						  robot.turnRight()        
+						  rpos.doMove( "r" )       
+						  robot.step( 300 )        
+						 CommUtils.outyellow("$name | tuneAtHome leftDir dostep2 res=$res ")
+						  robot.turnLeft()   
+						  rpos.doMove( "l" )         
+						  robot.turnLeft()   
+						  rpos.doMove( "l" )         
+						 }
+						 else
+						  {if(  Dir == "down"  
+						   ){}
+						  }
+						 }
 						CommUtils.outyellow("$name | tuneAtHome done ")
 						answer("tuneAtHome", "tuneDone", "tuneDone(ok)"   )  
 						//genTimer( actor, state )
@@ -225,7 +234,11 @@ class Robotmnemo ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 								if(  S.contains("ko")  
 								 ){ TDONE = NOW - CurTime  
 								CommUtils.outmagenta("$name | reply asynchstep failed after $R DT=$TDONE")
-								answer("step", "stepfailed", "stepfailed($TDONE,toofar)"   )  
+								 var DT = TDONE.toInt() / 2  
+								 robot.backward( DT)  
+								delay(300) 
+								 robot.halt()         
+								answer("step", "stepfailed", "stepfailed($TDONE,obst)"   )  
 								}
 								else
 								 {answer("step", "stepdone", "stepdone(ok)"   )  
@@ -250,7 +263,7 @@ class Robotmnemo ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 								 ){forward("noplan", "noplan(ok)" ,name ) 
 								}
 								else
-								 {request("doplan", "doplan($Plan,$StepTime)" ,"planexec" )  
+								 {forward("changedir", "changedir(ok)" ,name ) 
 								 }
 						}
 						//genTimer( actor, state )
@@ -258,51 +271,51 @@ class Robotmnemo ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t016",targetState="execDirMove",cond=whenDispatch("move"))
-					transition(edgeName="t017",targetState="setDirReply",cond=whenDispatch("noplan"))
+					 transition(edgeName="t017",targetState="changeDirection",cond=whenDispatch("changedir"))
+					transition(edgeName="t018",targetState="setDirReply",cond=whenDispatch("noplan"))
 				}	 
-				state("setDirReply") { //this:State
+				state("changeDirection") { //this:State
 					action { //it:State
-						 val PX = rpos.getPosX() 
-								   val PY = rpos.getPosY()
-						answer("setdirection", "setdirectiondone", "pos($PX,$PY)"   )  
+						
+								   if( Plan.length > 0  ){
+									   	MoveForDir =  Plan.elementAt(0).toString() 
+									   	Plan       =  Plan.removePrefix(MoveForDir)
+								   }else{
+									   	MoveForDir  = ""
+									   	Plan        = ""
+								   }
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition( edgeName="goto",targetState="waitinputmsg", cond=doswitch() )
+					 transition( edgeName="goto",targetState="nextMove", cond=doswitchGuarded({ MoveForDir  != ""  
+					}) )
+					transition( edgeName="goto",targetState="setDirReply", cond=doswitchGuarded({! ( MoveForDir  != ""  
+					) }) )
 				}	 
-				state("execDirMove") { //this:State
+				state("nextMove") { //this:State
 					action { //it:State
-						CommUtils.outgray("$name in ${currentState.stateName} | $currentMsg | ${Thread.currentThread().getName()} n=${Thread.activeCount()}")
-						 	   
-						if( checkMsgContent( Term.createTerm("move(M)"), Term.createTerm("move(M)"), 
-						                        currentMsg.msgContent()) ) { //set msgArgList
-								 val Move = payloadArg(0);   
-								if(  Move == "h"  
-								 ){ robot.halt()          
-								}
-								if(  Move == "a" || Move == "l"  
-								 ){ robot.turnLeft()    
-								 rpos.turnLeft()     
-								}
-								if(  Move == "d" || Move == "r"  
-								 ){ robot.turnRight()    
-								 rpos.turnRight()     
-								}
+						if(  MoveForDir == "a" || MoveForDir  == "l"  
+						 ){ robot.turnLeft()    
+						 rpos.turnLeft()     
+						}
+						if(  MoveForDir == "d" || MoveForDir  == "r"  
+						 ){ robot.turnRight()    
+						 rpos.turnRight()     
 						}
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t018",targetState="setDirReply",cond=whenReply("doplandone"))
-					transition(edgeName="t019",targetState="fatalerror",cond=whenReply("doplanfailed"))
+					 transition( edgeName="goto",targetState="changeDirection", cond=doswitch() )
 				}	 
-				state("fatalerror") { //this:State
+				state("setDirReply") { //this:State
 					action { //it:State
-						CommUtils.outred("$name | fatalerror:   ")
+						 val PX = rpos.getPosX() 
+								   val PY = rpos.getPosY()
+						answer("setdirection", "setdirectiondone", "pos($PX,$PY)"   )  
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002

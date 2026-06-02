@@ -55,16 +55,16 @@ public class AStarPathfinding {
     /** GUI adapter for visualization */
     protected AdapterGuiForMindrep gui; // = AdapterGui.create(); 
     /** Robot path utilities for movement conversion */
-    protected RobotPosUtils robot; // = RobotPosUtils.getInstance(gui); 
+    protected RobotPosUtils robotposutil;  
     
     /**
      * Default constructor - reads planner parameters from JSON configuration
      */
-    public AStarPathfinding() {
-    	CommUtils.outcyan("AStarPathfinding ------------------------------------------------");
-    	gui = AdapterGuiForMindrep.create(); 
-    	//grid = AdapterGui.grid;
-    	robot = RobotPosUtils.getInstance(gui); 
+    public AStarPathfinding( ) {
+    	CommUtils.outcyan("AStarPathfinding -------AdapterGuiForMindrep should be alreday created");
+    	gui = AdapterGuiForMindrep.getInstance(); 
+     	//robot = RobotPosUtils.getInstance(gui);    //SENZA gui: 
+     	robotposutil = RobotPosUtils.getInstance( );    //SENZA gui: TODO
     	readPlannerParams();
     }
     
@@ -308,7 +308,7 @@ public class AStarPathfinding {
            path = findPath( start, target);
 
            if (path != null) {
-               moves = robot.FromPathToMoves(path,start,target);
+               moves = robotposutil.FromPathToMoves(path,start,target);
                //lwwwwrwlwrwwrw
 //               CommUtils.outmagenta("Movesssssssssssssssssssssssssssssss="+moves);
            } else {
@@ -332,7 +332,7 @@ public class AStarPathfinding {
     
     public void doPlan(String moves) {
     	gui.showTheRoom( );
-    	robot.doPlan(moves,start,target);
+    	robotposutil.doPlan(moves,start,target);
     }
 
     
@@ -340,38 +340,38 @@ public class AStarPathfinding {
     	setEndNodes( new Node(STARTX, STARTY) , new Node(TARGETX, TARGETY) );    	
     }
     
-    public static void main(String[] args) {
-    	AStarPathfinding appl = new AStarPathfinding( );
-    	
-//    	appl.setEndNodes(new Node(0,0), new Node(4,0));
-//    	String movesHomeInput = appl.calculatePath(   );      
-    	String movesHomeInput =  appl.planForGoal(0,0,4,0);
-        //CommUtils.delay(1000);
-        CommUtils.waitTheUser("HIT fot next"); 
-        appl.doPlan(movesHomeInput);
-        CommUtils.delay(1000);
-        
-        
-        
-//        appl.setEndNodes(new Node(4,0), new Node(3,4));       	
-//        String movesInputTo34 = appl.calculatePath(   );
-        String movesInputTo34 = appl.planForGoal(4,0,3,4);
-        //CommUtils.delay(1000);
- 	    CommUtils.waitTheUser("HIT fot next"); 
-        appl.doPlan(movesInputTo34);
-	    CommUtils.delay(1000);
-	    
-
-       
-//        appl.setEndNodes(new Node(3,4), new Node(0,0));    
-//        String moves34Home = appl.calculatePath(   );
-	    String moves34Home =   appl.planForGoal(3,4,0,0);
-        //CommUtils.delay(1000);
-        CommUtils.waitTheUser("HIT fot next"); 
-        appl.doPlan(moves34Home);
-   	//appl.impossiblePath();
-               	System.exit(0);
-    }
+//    public static void main(String[] args) {
+//    	AStarPathfinding appl = new AStarPathfinding( );
+//    	
+////    	appl.setEndNodes(new Node(0,0), new Node(4,0));
+////    	String movesHomeInput = appl.calculatePath(   );      
+//    	String movesHomeInput =  appl.planForGoal(0,0,4,0);
+//        //CommUtils.delay(1000);
+//        CommUtils.waitTheUser("HIT fot next"); 
+//        appl.doPlan(movesHomeInput);
+//        CommUtils.delay(1000);
+//        
+//        
+//        
+////        appl.setEndNodes(new Node(4,0), new Node(3,4));       	
+////        String movesInputTo34 = appl.calculatePath(   );
+//        String movesInputTo34 = appl.planForGoal(4,0,3,4);
+//        //CommUtils.delay(1000);
+// 	    CommUtils.waitTheUser("HIT fot next"); 
+//        appl.doPlan(movesInputTo34);
+//	    CommUtils.delay(1000);
+//	    
+//
+//       
+////        appl.setEndNodes(new Node(3,4), new Node(0,0));    
+////        String moves34Home = appl.calculatePath(   );
+//	    String moves34Home =   appl.planForGoal(3,4,0,0);
+//        //CommUtils.delay(1000);
+//        CommUtils.waitTheUser("HIT fot next"); 
+//        appl.doPlan(moves34Home);
+//   	//appl.impossiblePath();
+//               	System.exit(0);
+//    }
 }
 
 

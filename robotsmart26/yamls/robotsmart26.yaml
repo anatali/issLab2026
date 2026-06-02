@@ -2,16 +2,21 @@ services:
   mosquitto:
     image: eclipse-mosquitto:1.6.15
     container_name: mosquitto
-    environment:
-        - MQTT_ALLOW_ANONYMOUS=true   # Permette connessioni anonime
+#    volumes:
+#        - ./mosquitto.conf:/mosquitto/config/mosquitto.conf	
+#    environment:
+#        - MQTT_ALLOW_ANONYMOUS=true   # Permette connessioni anonime
     ports:
         - 1883:1883
-        - 9001:9001                   # Optional:Utilizzata per WebSocket MQTT
+#- 9001:9001                   # Optional:Utilizzata per WebSocket MQTT
+    restart: always		
+    networks:
+        - iss-network
 
   wenv:
     container_name: wenv
-    image: docker.io/natbodocker/virtualrobotdisi25:2.2
-    #image: virtualrobotdisi25:2.3
+    image: docker.io/natbodocker/virtualrobotdisi26:1.0
+    #image: virtualrobotdisi26:1.0
     ports:
       - 8090:8090 
       - 8091:8091/tcp
@@ -30,8 +35,8 @@ services:
 
   robotsmart26:
     container_name: robotsmart26
-    #image: docker.io/natbodocker/robotsmart26:1.0
-    image: robotsmart26:1.0
+    image: docker.io/natbodocker/robotsmart26:1.0
+    #image: robotsmart26:1.0
     mem_limit: 512m
     ports:
       - "8020:8020/tcp"
@@ -39,6 +44,8 @@ services:
     environment:
       - VIRTUAL_ENV=wenv       #Used by VRObj26 connect
       - MQTTBROKER=mosquitto
+    depends_on:
+      - wenv  
     networks:
       - iss-network
 

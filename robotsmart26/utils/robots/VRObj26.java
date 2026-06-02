@@ -61,13 +61,18 @@ public class VRObj26  implements IRobotBasicMoves {
     
     public void connect(String virtualRobotIp) {
     	try {
-    	if( CommUtils.getEnvvarValue("VIRTUAL_ENV") != null) { //In docker ...
-    		CommUtils.delay(4000); //Gve time to start the gui
-    		conn = WsConnection.create("robotoutgui25:8085","wsupdates");
-    	}else {
-	        wsconn    = new WsconnObserver(virtualRobotIp,this); 
-	        conn      = wsconn.getConn();  
-    	}
+    		String dockerEnv = CommUtils.getEnvvarValue("VIRTUAL_ENV");
+	    	if(  dockerEnv != null) { //In docker ...
+	    		CommUtils.outmagenta("VRObj26 | connect VIRTUAL_ENV="+ dockerEnv);
+	    		CommUtils.delay(4000); //Gve time to start the gui
+	    		//conn = WsConnection.create("robotoutgui25:8085","wsupdates");
+	    		wsconn    = new WsconnObserver(dockerEnv,this); 
+	    		conn      = wsconn.getConn();  
+	    	}else {
+	    		CommUtils.outmagenta("VRObj26 | connect virtualRobotIp="+  virtualRobotIp);
+		        wsconn    = new WsconnObserver(virtualRobotIp,this); 
+		        conn      = wsconn.getConn();  
+	    	}
     	}catch( Exception e) {
     		CommUtils.outred("VRObj26 | error:"+e.getMessage());
     	}
@@ -161,7 +166,7 @@ public class VRObj26  implements IRobotBasicMoves {
             } else {
             	String m = "stepFail("+elapsed+")";
                 IApplMessage stepFailEvent = CommUtils.buildEvent("VRObj26","stepFail",m );
-                CommUtils.outred("VRObj26 | handleMoveKO msg:" + stepFailEvent);
+                //CommUtils.outred("VRObj26 | handleMoveKO msg:" + stepFailEvent);
                 doingStepSynch = false;
                 emitInfo(stepFailEvent);
             }

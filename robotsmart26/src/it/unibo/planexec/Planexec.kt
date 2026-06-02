@@ -33,7 +33,7 @@ class Planexec ( name: String, scope: CoroutineScope, isconfined: Boolean=false,
 				var PlanOrig      = ""
 				var Plantodo      = ""
 				var CurMoveTodo   = ""		
-				var StepTime      = "345"
+				var StepTime      = "335"
 				var ExecDelay     = 70L   //(B)
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
@@ -52,7 +52,7 @@ class Planexec ( name: String, scope: CoroutineScope, isconfined: Boolean=false,
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t020",targetState="execAPlan",cond=whenRequest("doplan"))
+					 transition(edgeName="t019",targetState="execAPlan",cond=whenRequest("doplan"))
 				}	 
 				state("execAPlan") { //this:State
 					action { //it:State
@@ -62,6 +62,9 @@ class Planexec ( name: String, scope: CoroutineScope, isconfined: Boolean=false,
 											   PlanOrig   = Plan
 											   StepTime   = payloadArg(1)          //if int ...
 								    		   val Caller = currentMsg.msgSender() //payloadArg(1) 
+								updateResourceRep( "$name doing Plan=$Plan"  
+								)
+								CommUtils.outyellow("$name | execAPlan nnnnnnnnnnnnnnn $StepTime Plan=$Plan")
 						}
 						//genTimer( actor, state )
 					}
@@ -89,7 +92,8 @@ class Planexec ( name: String, scope: CoroutineScope, isconfined: Boolean=false,
 						 request("step", "step($StepTime)" ,"robotmnemo" )  
 						 }
 						 else
-						  {forward("move", "move($CurMoveTodo)" ,"robotmnemo" ) 
+						  {CommUtils.outyellow("$name | doMoveTurn $CurMoveTodo")
+						  forward("move", "move($CurMoveTodo)" ,"robotmnemo" ) 
 						  delay(500) 
 						  forward("nextmove", "nextmove(goon)" ,"planexec" ) 
 						  }
@@ -99,11 +103,11 @@ class Planexec ( name: String, scope: CoroutineScope, isconfined: Boolean=false,
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t021",targetState="planinterruptedobstacle",cond=whenReply("stepfailed"))
-					transition(edgeName="t022",targetState="planinterrupted",cond=whenEvent("alarm"))
-					transition(edgeName="t023",targetState="planend",cond=whenDispatch("nomoremove"))
-					transition(edgeName="t024",targetState="nextMove",cond=whenDispatch("nextmove"))
-					transition(edgeName="t025",targetState="nextMove",cond=whenReply("stepdone"))
+					 transition(edgeName="t020",targetState="planinterruptedobstacle",cond=whenReply("stepfailed"))
+					transition(edgeName="t021",targetState="planinterrupted",cond=whenEvent("alarm"))
+					transition(edgeName="t022",targetState="planend",cond=whenDispatch("nomoremove"))
+					transition(edgeName="t023",targetState="nextMove",cond=whenDispatch("nextmove"))
+					transition(edgeName="t024",targetState="nextMove",cond=whenReply("stepdone"))
 				}	 
 				state("planend") { //this:State
 					action { //it:State
@@ -141,13 +145,15 @@ class Planexec ( name: String, scope: CoroutineScope, isconfined: Boolean=false,
 					//After Lenzi Aug2002
 					sysaction { //it:State
 					}	 	 
-					 transition(edgeName="t026",targetState="nonextmovesincealarm",cond=whenDispatch("nextmove"))
-					transition(edgeName="t027",targetState="nonextmovesincealarm",cond=whenReply("stepdone"))
-					transition(edgeName="t028",targetState="planinterruptedobstacle",cond=whenReply("stepfailed"))
+					 transition(edgeName="t025",targetState="nonextmovesincealarm",cond=whenDispatch("nextmove"))
+					transition(edgeName="t026",targetState="nonextmovesincealarm",cond=whenReply("stepdone"))
+					transition(edgeName="t027",targetState="planinterruptedobstacle",cond=whenReply("stepfailed"))
 				}	 
 				state("nonextmovesincealarm") { //this:State
 					action { //it:State
 						CommUtils.outmagenta("$name |  nonextmovesincealarm $CurMoveTodo plantodo=$Plan")
+						updateResourceRep( "planfailed($PlanOrig,$Plan )"  
+						)
 						if(  Plan.length == 0  
 						 ){answer("doplan", "doplandone", "doplandone($PlanOrig)"   )  
 						}

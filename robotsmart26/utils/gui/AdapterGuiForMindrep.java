@@ -47,25 +47,33 @@ public class AdapterGuiForMindrep {
 	 * 
 	 * @return The singleton AdapterGuiForMindrep instance
 	 */
-	public static AdapterGuiForMindrep create() {
+	public static AdapterGuiForMindrep create(String ip) {
 		if( instance == null ) { 
-			instance = new AdapterGuiForMindrep();
+			instance = new AdapterGuiForMindrep(ip);
 		}
 		return instance;
+	}
+	public static AdapterGuiForMindrep getInstance( ) {
+		if( instance == null ) { 
+			CommUtils.outred("AdapterGuiForMindrep NOT YET CREATED");
+			return null;
+		}
+		else return instance;
 	}
 	
 	/**
 	 * Constructor initializes the grid from map file and sets up dimensions
 	 * Loads the environment map from "tf25map.txt" and initializes grid dimensions
 	 */
-	public AdapterGuiForMindrep() {
+	public AdapterGuiForMindrep(String ip) {
 		try {
 			grid = maputil.createGridFromMapInFile("tf25map.txt");
 		    NR = grid.length;
 		    NC = grid[0].length;
+		    CommUtils.outyellow("AdapterGuiForMindrep | map " + NR + " x " + NC);
 		    //La robotoutgui25 sulla 8085 potrebbe non essere attiva:
 		    //La mente esiste ma non ha una rappresentazione
-			outinws = OutInWsGuimap.getResource("8085");
+			outinws = OutInWsGuimap.getResource(ip,"8085");
 		} catch (Exception e) {
 			CommUtils.outred("AdapterGuiForMindrep | WARNING: working without map gui");
  		}
