@@ -16,19 +16,6 @@ import unibo.basicomm23.utils.ConnectionFactory;
 /**
  * Robotsmart26CallerCoap - COAP Client for Basic Robot Communication
  * 
- * This class implements a COAP client that can communicate with a basic robot system.
- * It provides functionality to send commands to the robot and observe robot state
- * changes through the COAP protocol using the Californium framework.
- * 
- * Key features:
- * - COAP connection management for robot communication
- * - Robot command sending and response handling
- * - Observer pattern for monitoring robot state changes
- * - Sonar sensor data monitoring with alarm detection
- * - Integration with RobotCmds for robot operations
- * 
- * The class uses COAP observe functionality to monitor robot state changes
- * and can detect sonar alarms for obstacle detection.
  * 
  * @author Unibo Robotsmart26 Team
  * @version 2026

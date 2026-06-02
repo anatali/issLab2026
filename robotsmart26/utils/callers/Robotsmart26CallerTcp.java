@@ -8,20 +8,6 @@ import unibo.basicomm23.utils.ConnectionFactory;
 /**
  * Robotsmart26CallerTcp - TCP Client for Basic Robot Communication
  * 
- * This class provides a TCP client implementation for communicating with the basic robot system.
- * It demonstrates how to establish TCP connections and send robot commands using the
- * Interaction interface and RobotCmds utility class.
- * 
- * Key features:
- * - TCP connection management to robot service
- * - Basic movement command execution
- * - Path following demonstration
- * - Error handling and connection validation
- * 
- * Usage examples:
- * - Basic movement commands (left, right, forward)
- * - Predefined path execution (tf25)
- * - Connection establishment and management
  * 
  * @author Unibo Robotsmart26 Team
  * @version 2026

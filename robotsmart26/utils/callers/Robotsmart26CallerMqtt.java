@@ -15,19 +15,6 @@ import unibo.basicomm23.msg.ApplMessage;
 /**
  * Robotsmart26CallerMqtt - MQTT Client for Basic Robot Communication
  * 
- * This class implements an MQTT client that can communicate with a basic robot system.
- * It provides functionality to send commands to the robot and receive responses/events
- * through the MQTT protocol using a callback-based approach.
- * 
- * Key features:
- * - MQTT connection management with automatic subscription
- * - Robot command sending and response handling
- * - Event-driven message processing via callbacks
- * - Integration with RobotCmds for robot operations
- * - Alarm event filtering and handling
- * 
- * The class implements IApplMsgHandlerMqtt interface to handle MQTT message callbacks,
- * providing a non-blocking approach to robot communication.
  * 
  * @author Unibo Robotsmart26 Team
  * @version 2026
