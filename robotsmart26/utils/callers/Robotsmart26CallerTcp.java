@@ -49,7 +49,8 @@ public class Robotsmart26CallerTcp  {
 		if( conn != null ) {
 			CommUtils.outcyan("connectService doSomeCmd");
 			conn.forward(Robotsmart26Cmds.setHome.toString());
-			conn.forward(Robotsmart26Cmds.setHome.toString()); 
+			//conn.forward(Robotsmart26Cmds.resesetplanbuildelay.toString()); 
+			//conn.forward(Robotsmart26Cmds.restoreplanbuildelay.toString());
 			// Send basic movement commands
 			conn.forward(Robotsmart26Cmds.cmdl.toString());  // Turn left
 			CommUtils.delay(1000);
