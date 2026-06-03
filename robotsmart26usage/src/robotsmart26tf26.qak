@@ -1,0 +1,181 @@
+System robotsmart26usage
+	mqttBroker "192.168.0.218" : 1883   eventTopic "robotsmart26usagein"  //SE definita MQTTBROKER, usa quell'addr
+/*
+ * WARNING: mqttBroker "localhost" non funziona se robotsmart usa mosquitto in doceker
+ * 192.168.0.245
+ */
+	
+
+/*
+ * ===========================================
+ * robotsmart26tf26.qak
+ * ===========================================
+*/ 
+/* 
+ * ------------------------------------------------
+ * Handled by robotsmart
+ * ------------------------------------------------
+*/
+Request  buildPlan   : buildPlan( PX,PY,TX,TY  )		"create plan from (PX,PY) to (TX,TY)"
+Reply buildPlanDone  : buildPlanDone( PLAN ) for buildPlan
+
+Request moverobot    :  moverobot(TARGETX, TARGETY,STEPTIME)  	"move from current pos to (TARGETX,TARGETY)"
+Reply moverobotdone  :  moverobotok(ARG)                    for moverobot
+Reply moverobotfailed:  moverobotfailed(PLANDONE, PLANTODO) for moverobot
+
+Dispatch noplan           : noplan(X)       //autodispatch  
+Dispatch setplanbuildelay : value(V)		"parameter = V >= 0"
+
+Request  doplan     : doplan( PLAN, STEPTIME )	"execute PLAN with STEPTIME"
+Reply doplandone    : doplandone( ARG )         for doplan
+Reply doplanfailed  : doplanfailed( PLANTODO )  for doplan
+
+Request step       : step(TIME)	                        "step command for TIME duration"
+Reply stepdone     : stepdone(V)                 for step
+Reply stepfailed   : stepfailed(DURATION, CAUSE) for step
+ 
+Dispatch move      : move(M)  "MOVE = l|r|a|d|h   mosse aril sincrone ok"
+Dispatch setrobotstate: setpos(X,Y,D) 		"set robot position to (X,Y) direction D=up|down|left|right" 
+
+Request setdirection : dir( D )  			"set robot direction to D=up|down|left|right" 
+Reply setdirectiondone : pos(PX,PY) for setdirection
+
+Request tuneAtHome   : tuneAtHome(X)                  "reposition in home X don't care"
+Reply tuneDone       : tuneDone(X)  for tuneAtHome
+
+
+Request getrobotstate : getrobotstate(ARG)		"request robot state ARG unused"
+Reply robotstate      : robotstate(POS,DIR)  for getrobotstate  "POS->pos(X,Y) DIR->up|down|left|right"
+
+Event  sonaralarm : distance( DISTANCE ) 	"emesso da robotsmart ad uso di enti esterni al sistema"
+
+Context ctxrobotsmartusage ip [host="localhost" port=8120]
+Context ctxrobotsmart      ip [host="127.0.0.1" port=8020] 
+
+ExternalQActor robotsmart context ctxrobotsmart
+//ExternalQActor robotmnemo context ctxrobotsmart
+//ExternalQActor planexec context ctxrobotsmart
+
+QActor robotsnartusage context ctxrobotsmartusage{
+	[# val StepTime = 345 
+	   var NLAP     = 0		
+	#]
+	State s0 initial{
+		println("$name | starts ") color blue
+		[# clearlog("./logs/robotsmart26usage.log") //vedi src/main/resources/logback.xml #]
+		subscribe "robotsmart26in_out"
+		println("$name | subscribed") color blue
+/*
+ * WARNING: la eventTopic è quella di robotsmart + il suffisso _out
+ * gli eventi (sonarlarm) emessi da robotmnemo sono ricevutipublished su questa topic
+ */		
+ 
+		forward robotsmart -m setrobotstate : setpos(0,0,down)		
+    	delay 500
+	}
+	Goto posrobotbeforeslot
+	
+	State posrobotbeforeslot{
+		[# logger.info(  "${currentState.stateName}: setrobotstate at HOME"  ) #]
+    	/*
+     	* -----------------------------------------------------
+    	* Visualizzazione di A*
+    	* -----------------------------------------------------
+    	*/
+    	forward robotsmart -m setplanbuildelay : value(0)
+    	request robotsmart -m moverobot : moverobot(2,5,$StepTime)
+ 
+ 	}
+ 	Transition t0 
+ 		whenInterruptEvent sonaralarm      ->  handleSonarWenv
+ 		whenReply moverobotdone            -> goSlot31
+ 		whenReply moverobotfailed          -> end
+ 		
+ 	State handleSonarWenv{
+ 		printCurrentMessage color green
+ 		returnFromInterrupt
+ 	}
+ 		
+ 	State goSlot31{
+ 		println("$name | goSlot31 ") color blue
+ 		delay 2000
+ 		request robotsmart -m moverobot : moverobot(3,1,$StepTime)
+ 	}
+  	Transition t0 
+ 		whenInterruptEvent sonaralarm      ->  handleSonarWenv
+ 		whenReply moverobotdone            -> backtohome
+ 		whenReply moverobotfailed          -> end
+ 	
+ 	State backtohome{ 
+ 		println("$name | backtohome ") color blue
+ 		delay 2000
+ 		request robotsmart -m moverobot : moverobot(0,0,$StepTime)
+ 	}
+ 	Transition t0 
+ 		whenInterruptEvent sonaralarm      ->  handleSonarWenv
+ 		whenReply moverobotdone            -> end
+ 		whenReply moverobotfailed          -> end
+
+ 	State end{
+ 		request robotsmart -m tuneAtHome : tuneAtHome( end )
+ 		printCurrentMessage color magenta
+ 	}
+ 	Transition t0 
+ 		whenReply tuneDone -> bye
+ 
+ 	State bye{
+ 		delay 1000
+ 		println("$name | bye ") color blue
+ 		//[# System.exit(0) #] 		
+ 	}
+ 	  
+ 	
+ }
+ 
+ 
+ QActor sentinel context ctxrobotsmartusage{
+ 	State s0 initial{
+ 		println("$name | start ") color cyan 
+ 		subscribe "robotsmart26in_out"  //per percepire sonaralarm emesso da robotsnart
+ 	}
+ 	Transition t0
+ 		whenEvent sonaralarm -> handle
+ 		
+ 	State handle{
+ 		printCurrentMessage color cyan
+ 	}
+ 	Transition t0
+ 		whenEvent sonaralarm -> handle
+ }
+ 
+ /*
+   Sono su un PC di IP=192.168.1.132 ed Ho attivato in docker un broker mosquitto medianate il file yaml allegato.
+   Il servizio robotsmart26 fa publish di un msg M sullla topic T
+   Ho anche attivato sul PC una applicazione Java A che fa subscribe sulla topic T.
+   Se A si connette al broker con forma tcp://localhost:1883, M non viene ricevuto d A,
+   mentre invece se A si connette al broker con forma tcp://192,168.1.132:1883, M arriva ad A
+   
+ 
+ 
+Dal punto di vista di Docker: Il broker Mosquitto sta girando in un container. 
+Anche se hai mappato la porta - 1883:1883 nel file YAML, il traffico che arriva su localhost (loopback) 
+a volte non viene instradato correttamente dal bridge di Docker verso il container, 
+specialmente se il mittente (Java) e il destinatario (il bridge Docker) hanno una percezione diversa di cosa sia "locale 
+ 
+Se la tua app Java A è fuori da Docker e "ascolta" su localhost, si aspetta che Mosquitto risponda sulla stessa interfaccia. 
+Ma Mosquitto, essendo "bridge-ato", preferisce comunicare attraverso il gateway della rete Docker. 
+
+
+
+Il servizio robotsmart26 si trova all'interno della rete Docker (iss-network).
+
+- Esso pubblica il messaggio M verso l'host mosquitto (grazie alla variabile MQTTBROKER=mosquitto).
+- All'interno di Docker, mosquitto è risolto con un IP interno (es. $172.18.0.x$).
+- Se la tua app Java A è fuori da Docker e "ascolta" su localhost, si aspetta che Mosquitto risponda 
+  sulla stessa interfaccia. Ma Mosquitto, essendo "bridge-ato", preferisce comunicare attraverso il gateway della rete Docker.
+ 
+Usa sempre l'IP reale: Nello sviluppo di sistemi distribuiti (come i tuoi nano-servizi), 
+l'uso di localhost è spesso fonte di errori. 
+Configura la tua app Java per leggere l'IP da un file di configurazione o da una variabile d'ambiente.  
+  
+   */
