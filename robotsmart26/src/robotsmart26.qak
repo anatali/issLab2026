@@ -186,7 +186,6 @@ QActor robotsmart context ctxrobotsmart {
 			request planexec -m doplan : doplan($Plan,  $StepTime)
 		}
 //		println("$name | Plan=$Plan from ($PX,$PY) to ($TargetX,$TargetY)") color green
-//		updateResource [# "doplan: $Plan" #] 
 		} 
 	}
 	Transition t0 
@@ -232,8 +231,7 @@ QActor robotsmart context ctxrobotsmart {
 			   //CommUtils.outcyan("$name | Plan-25 to reach ($TX,$TY) from ($PX,$PY) = $Plan")
 			#]		
 			println("$name | Plan to reach ($TX,$TY) from ($PX,$PY) = $Plan")
-			//updateResource [# "built: $Plan" #] 
-			replyTo buildPlan with buildPlanDone : buildPlanDone($Plan)
+ 			replyTo buildPlan with buildPlanDone : buildPlanDone($Plan)
 		}
 		
  	}
@@ -319,7 +317,7 @@ QActor robotmnemo context ctxrobotsmart
 	State doAsynchStep{
 		//println("$name | doAsynchStep $currentMsg") color blue
 		memoCurrentTime CurTime
-		updateResource [# "$name doing doAsynchStep" #]
+		updateResource [# "doing($name,doAsynchStep)" #]
 		onMsg( step:step(T)){
 			[# robot.forward(payloadArg(0).toInt() ) #]
 		}
@@ -341,7 +339,7 @@ QActor robotmnemo context ctxrobotsmart
 		printCurrentMessage color blue
 		onMsg( move : move(M) ){
 			[# val Move = payloadArg(0);  #]
-			updateResource [# "$name doing $Move" #]
+			updateResource [# "doing($name,$Move)" #]
 			if [# Move == "h" #] { [# robot.halt()         #]  }
  			if [# Move == "a" || Move == "l" #]{ 
 				[# robot.turnLeft()   #]
@@ -567,7 +565,7 @@ QActor planexec context ctxrobotsmart {  //withobj robot using "uniborobots.robo
 			   StepTime   = payloadArg(1)          //if int ...
     		   val Caller = currentMsg.msgSender() //payloadArg(1) 
       		#]
-      		updateResource [# "$name doing Plan=$Plan" #]
+      		updateResource [# "doing($name,plan=$Plan)" #]
       		println("$name | execAPlan nnnnnnnnnnnnnnn $StepTime Plan=$Plan") color yellow
     	}     	
     }

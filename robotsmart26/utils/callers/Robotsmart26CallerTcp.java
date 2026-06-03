@@ -15,7 +15,9 @@ import unibo.basicomm23.utils.ConnectionFactory;
 public class Robotsmart26CallerTcp  {
     /** Robot commands utility for accessing predefined robot operations */
     private Robotsmart26Cmds robot = new Robotsmart26Cmds();
-  
+
+    private Interaction conn;
+
     /**
      * Establishes a TCP connection to the robot service.
      * Creates a client connection using the ConnectionFactory with TCP protocol.
@@ -45,7 +47,7 @@ public class Robotsmart26CallerTcp  {
      * @throws Exception if communication fails
      */
 	public void doSomeCmd() throws Exception   {
-		Interaction conn = connectToService("localhost", "8020");
+		conn = connectToService("localhost", "8020");
 		if( conn != null ) {
 			CommUtils.outcyan("connectService doSomeCmd");
 			conn.forward(Robotsmart26Cmds.setHome.toString());
@@ -54,10 +56,11 @@ public class Robotsmart26CallerTcp  {
 			// Send basic movement commands
 			conn.forward(Robotsmart26Cmds.cmdl.toString());  // Turn left
 			CommUtils.delay(1000);
-//			conn.forward(Robotsmart26Cmds.cmdr.toString());  // Turn right
-//			CommUtils.delay(1000);
-			
-			String answer = conn.request(Robotsmart26Cmds.doplan.toString().replace("PLAN", "wwwwwwww"));  // 
+			conn.forward(Robotsmart26Cmds.cmdr.toString());  // Turn right
+			CommUtils.delay(1000); 
+			 
+			CommUtils.outcyan("connectService doSomePlan");
+			String answer = conn.request(Robotsmart26Cmds.doplan.toString().replace("PLAN", "lwwwwww"));  // 
 			CommUtils.outcyan("doSomeCmd doplan answer=" + answer);
 			CommUtils.delay(1000);
 

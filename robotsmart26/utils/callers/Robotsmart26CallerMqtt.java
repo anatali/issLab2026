@@ -22,7 +22,7 @@ import unibo.basicomm23.msg.ApplMessage;
 public class Robotsmart26CallerMqtt implements IApplMsgHandlerMqtt {
 	
 	/** MQTT broker URL - localhost for local development */
-	private final String MqttBroker = "tcp://192.168.1.132:1883";//"tcp://broker.hivemq.com"; //
+	private final String MqttBroker = "tcp://192.168.0.218:1883";//"tcp://broker.hivemq.com"; //
 	
 	/** MQTT topic for robot communication */
 	private String appltopicIn = "robotsmart26in";
@@ -42,14 +42,14 @@ public class Robotsmart26CallerMqtt implements IApplMsgHandlerMqtt {
 	 * 
 	 * @return Interaction object representing the MQTT connection, or null if connection fails
 	 */
-	protected Interaction connectToService() {
+	protected Interaction connectToService(String MqttBroker, String topic) {
 		try {			  
 			CommUtils.outblue("connectToService ......... " + MqttBroker);
-			MqttConnection mqttConn = MqttConnection.create(getName(), MqttBroker, appltopicIn, this);
+			MqttConnection mqttConn = MqttConnection.create(getName(), MqttBroker, topic, this);
   		      	// MqttConnection usa appltopicIn per publish
   		      	//e fa subscribe(appltopicIn+"_out",this)
   		      	// plus information (events) from wenv
-			mqttConn.cleartopic(appltopicIn);
+			mqttConn.cleartopic(topic);
 			return mqttConn;
  		} catch (Exception e) {
 			CommUtils.outred("ERROR:" + e.getMessage());
@@ -77,7 +77,7 @@ public class Robotsmart26CallerMqtt implements IApplMsgHandlerMqtt {
 	 * @throws Exception if communication fails
 	 */
 	public void doSomeCmd() throws Exception   {
-		conn = connectToService();
+		conn = connectToService("tcp://192.168.0.218:1883", "robotsmart26in");
 		if( conn != null ) {
 			CommUtils.outcyan("connectService doSomeCmd ...");
 			//setup

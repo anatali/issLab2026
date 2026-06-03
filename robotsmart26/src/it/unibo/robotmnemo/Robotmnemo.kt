@@ -106,7 +106,7 @@ class Robotmnemo ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 				state("doAsynchStep") { //this:State
 					action { //it:State
 						CurTime = getCurrentTime()
-						updateResourceRep( "$name doing doAsynchStep"  
+						updateResourceRep( "doing($name,doAsynchStep)"  
 						)
 						if( checkMsgContent( Term.createTerm("step(TIME)"), Term.createTerm("step(T)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
@@ -140,7 +140,7 @@ class Robotmnemo ( name: String, scope: CoroutineScope, isconfined: Boolean=fals
 						if( checkMsgContent( Term.createTerm("move(M)"), Term.createTerm("move(M)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
 								 val Move = payloadArg(0);   
-								updateResourceRep( "$name doing $Move"  
+								updateResourceRep( "doing($name,$Move)"  
 								)
 								if(  Move == "h"  
 								 ){ robot.halt()          

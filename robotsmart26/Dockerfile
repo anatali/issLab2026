@@ -2,7 +2,7 @@
 ## Dockerfile for unibo.robotsmart26
 ## ----------------------------------------------------------
 
-FROM eclipse-temurin:17.0.5_8-jre-focal as builder
+FROM eclipse-temurin:17.0.5_8-jre-focal AS builder
 ## EXPOSE 8020
 ## ADD extracts the tar
 ADD ./build/distributions/robotsmart26-1.0.tar /

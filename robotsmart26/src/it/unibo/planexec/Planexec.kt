@@ -62,7 +62,7 @@ class Planexec ( name: String, scope: CoroutineScope, isconfined: Boolean=false,
 											   PlanOrig   = Plan
 											   StepTime   = payloadArg(1)          //if int ...
 								    		   val Caller = currentMsg.msgSender() //payloadArg(1) 
-								updateResourceRep( "$name doing Plan=$Plan"  
+								updateResourceRep( "doing($name,plan=$Plan)"  
 								)
 								CommUtils.outyellow("$name | execAPlan nnnnnnnnnnnnnnn $StepTime Plan=$Plan")
 						}
